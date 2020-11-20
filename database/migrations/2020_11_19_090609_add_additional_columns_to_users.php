@@ -14,10 +14,10 @@ class AddAdditionalColumnsToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('is_active')->after('password');
-            $table->integer('balance')->after('is_active');
-            $table->timestamp('last_visit')->after('balance');
-            $table->string('avatar_image')->after('last_visit')->default('default.png');
+            $table->boolean('is_active')->nullable()->after('password');
+            $table->integer('balance')->nullable()->after('is_active');
+            $table->timestamp('last_visit')->nullable()->after('balance');
+            $table->string('avatar_image')->nullable()->after('last_visit')->default('default.png');
         });
     }
 
