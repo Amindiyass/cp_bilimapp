@@ -23,7 +23,7 @@ class AuthController extends Controller
             'school_id' => 'required|int',
             'class_id' => 'required|int',
             'language_id' => 'required|int',
-            'email' => 'required|unique',
+            'email' => 'required',
             'password' => 'required',
             'recommend_user_id' => 'int',
         ]);

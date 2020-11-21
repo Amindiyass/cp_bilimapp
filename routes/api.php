@@ -21,7 +21,7 @@ Route::post('login', 'Api\AuthController@login');
 Route::post('register', 'Api\AuthController@register');
 
 /**Route for details user API */
-Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['middleware' => ['excludeObligation','auth:api']], function () {
     Route::post('details', 'Api\AuthController@user_info');
 });
 
