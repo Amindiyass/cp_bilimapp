@@ -41,6 +41,7 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'is_active' => true,
                 'balance' => 0,
+                'last_visit' => date('Y-m-d H:i:s'),
             ];
             $user = User::create($new_user);
 
