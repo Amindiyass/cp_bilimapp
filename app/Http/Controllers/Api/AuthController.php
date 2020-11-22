@@ -59,12 +59,21 @@ class AuthController extends Controller
         $result = $this->redisGet($phone);
 
 
+        $validator = Validator::make($request->all(), [
+            'phone' => 'required|unique:users',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'message' => $validator->errors()]);
+        }
+
+
         if ($code != $result['code']) {
             return [
                 'success' => false,
                 'message' => 'Код пароль не совпадает! Попробуйте еще раз.'
             ];
         }
+
 
         try {
             DB::beginTransaction();
