@@ -33,7 +33,7 @@ class CreatePaymentsTable extends Migration
                 'user_id',
                 'subscription_id',
                 'created_at'
-            ]);
+            ], 'payments_index');
         });
     }
 
