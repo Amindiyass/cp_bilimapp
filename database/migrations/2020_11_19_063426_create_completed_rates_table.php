@@ -17,6 +17,7 @@ class CreateCompletedRatesTable extends Migration
             $table->id();
             $table->string('model_type');
             $table->integer('model_id');
+            $table->integer('rate');
             $table->foreignId('user_id')
                 ->constrained('users')
                 ->cascadeOnUpdate()

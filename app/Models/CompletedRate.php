@@ -13,11 +13,17 @@ class CompletedRate extends Model
         'model_type',
         'model_id',
         'user_id',
-        'is_checked'
+        'is_checked',
+        'rate'
     ];
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function scopeByUser($query)
+    {
+        return $query->where('user_id', auth()->id());
     }
 
 }
