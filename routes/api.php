@@ -19,9 +19,12 @@ Route::post('login', 'Api\AuthController@login');
 
 /**Route for register API */
 Route::post('register', 'Api\AuthController@register');
+Route::post('registration/send_code', 'Api\AuthController@sendConfirmationPhone');
+Route::post('registration/confirm_code', 'Api\AuthController@confirmAndRegister');
 
 /**Route for details user API */
-Route::group(['middleware' => ['excludeObligation','auth:api']], function () {
+Route::group(['middleware' => ['excludeObligation', 'auth:api']], function () {
+
     Route::post('details', 'Api\AuthController@user_info');
 });
 

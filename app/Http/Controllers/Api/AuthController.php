@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Mail\Send;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
 use App\User;
@@ -9,11 +10,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
+use phpseclib\Crypt\Random;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+
+    public function sendConfirmationPhone(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required',
@@ -23,29 +28,59 @@ class AuthController extends Controller
             'school_id' => 'required|int',
             'class_id' => 'required|int',
             'language_id' => 'required|int',
-            'email' => 'required',
+            'email' => 'required|email|unique:users',
+            'phone' => 'required|unique:users',
             'password' => 'required',
-            'recommend_user_id' => 'int',
+            'inviter_id' => 'int',
         ]);
-
         if ($validator->fails()) {
             return response()->json(['success' => false, 'message' => $validator->errors()]);
+        }
+
+        $phone = $request->phone;
+        $code = rand(1000, 9999);
+        $message = sprintf("Доступ на bilimapp.tk, Код: %s", $code);
+        $response = Send::request($phone, $message);
+
+        #TODO if response error
+        $this->redisSet($request->all(), $code);
+
+        return response()->json([
+            'success' => true,
+            'phone' => $phone,
+            'message' => null,
+        ]);
+    }
+
+    public function confirmAndRegister(Request $request)
+    {
+        $phone = $request->phone;
+        $code = $request->code;
+        $result = $this->redisGet($phone);
+
+
+        if ($code != $result['code']) {
+            return [
+                'success' => false,
+                'message' => 'Код пароль не совпадает! Попробуйте еще раз.'
+            ];
         }
 
         try {
             DB::beginTransaction();
 
             $new_user = [
-                'name' => $request->first_name,
-                'password' => Hash::make($request->password),
-                'email' => $request->email,
+                'name' => $result['first_name'],
+                'password' => Hash::make($result['password']),
+                'email' => $result['email'],
                 'is_active' => true,
                 'balance' => 0,
+                'phone' => $phone,
                 'last_visit' => date('Y-m-d H:i:s'),
             ];
             $user = User::create($new_user);
 
-            $new_student = $request->all();
+            $new_student = $result;
             $new_student['user_id'] = $user->id;
 
             Student::create($new_student);
@@ -72,7 +107,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = [
-            'email' => $request->email,
+            'phone' => $request->phone,
             'password' => $request->password
         ];
 
@@ -96,5 +131,41 @@ class AuthController extends Controller
         return response()->json(['success' => true, 'data' =>
             $user
         ], 200);
+    }
+
+    public function redisSet(array $array, $code)
+    {
+        $phone = $array['phone'];
+        Redis::hSet($phone, 'first_name', $array['first_name']);
+        Redis::hSet($phone, 'last_name', $array['last_name']);
+        Redis::hSet($phone, 'area_id', $array['area_id']);
+        Redis::hSet($phone, 'region_id', $array['region_id']);
+        Redis::hSet($phone, 'school_id', $array['school_id']);
+        Redis::hSet($phone, 'class_id', $array['class_id']);
+        Redis::hSet($phone, 'language_id', $array['language_id']);
+        Redis::hSet($phone, 'email', $array['email']);
+        Redis::hSet($phone, 'password', $array['password']);
+        Redis::hSet($phone, 'inviter_id', isset($array['inviter_id']) ? $array['inviter_id'] : 0);
+        Redis::hSet($phone, 'code', $code);
+    }
+
+    public function redisGet(int $phone)
+    {
+        $result = [
+            'first_name' => Redis::hGet($phone, 'first_name'),
+            'last_name' => Redis::hGet($phone, 'last_name'),
+            'area_id' => Redis::hGet($phone, 'area_id'),
+            'region_id' => Redis::hGet($phone, 'region_id'),
+            'school_id' => Redis::hGet($phone, 'school_id'),
+            'class_id' => Redis::hGet($phone, 'class_id'),
+            'language_id' => Redis::hGet($phone, 'language_id'),
+            'email' => Redis::hGet($phone, 'email'),
+            'password' => Redis::hGet($phone, 'password'),
+            'inviter_id' => Redis::hGet($phone, 'inviter_id'),
+            'code' => Redis::hGet($phone, 'code'),
+        ];
+
+        return $result;
+
     }
 }
