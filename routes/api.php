@@ -31,6 +31,7 @@ Route::group(['middleware' => ['excludeObligation', 'auth:api']], function () {
     Route::get('course/{course}/tests', 'Api\CourseController@tests');
     Route::get('profile', 'Api\StudentController@profile');
     Route::put('profile', 'Api\StudentController@update');
+    Route::post('profile/reconfirm_code', 'Api\AuthController@reconfirmCode');
 });
 //Route::middleware('auth:api')->group( function () {
 //});

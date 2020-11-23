@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
@@ -43,4 +45,20 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getAvatarImageAttribute($value)
+    {
+        return Storage::url($value);
+    }
+
+    public function associateRedisCodeAndPhone($phone, $code)
+    {
+        Redis::hset($phone, $code);
+    }
+
+    public function checkCode($phone, $code)
+    {
+        $originalCode = Redis::hget($phone);
+        return $originalCode === $code;
+    }
 }

@@ -9,12 +9,13 @@ class UserSeeder extends \Illuminate\Database\Seeder
 {
     public function run()
     {
-        User::create([
+        $user = User::create([
             'name' => 'User 1',
             'email' => 'user@app.com',
             'password' => Hash::make('password'),
             'is_active' => true,
-            'balance' => 0
+            'balance' => 0,
+            'phone' => '77770667303'
         ]);
         Student::create([
             'first_name' => 'First Name',
@@ -23,7 +24,7 @@ class UserSeeder extends \Illuminate\Database\Seeder
             'region_id' => 1,
             'school_id' => 1,
             'language_id' => 1,
-            'user_id' => 1,
+            'user_id' => $user->id,
             'class_id' => 1
         ]);
     }
