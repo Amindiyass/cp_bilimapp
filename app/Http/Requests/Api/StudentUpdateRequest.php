@@ -34,4 +34,9 @@ class StudentUpdateRequest extends FormRequest
             'email' => 'email'
         ];
     }
+
+    public function validationData()
+    {
+        return $this->post();
+    }
 }

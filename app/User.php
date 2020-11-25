@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\CompletedRate;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -60,5 +61,15 @@ class User extends Authenticatable
     {
         $originalCode = Redis::hget($phone);
         return $originalCode === $code;
+    }
+
+    public function students()
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function completedRates()
+    {
+        return $this->hasMany(CompletedRate::class);
     }
 }
