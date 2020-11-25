@@ -40,5 +40,15 @@ class LessonSeader extends \Illuminate\Database\Seeder
             'from_time' => now(),
             'till_time' => now()->addHours(3)
         ]);
+
+        Test::create([
+            'name_kz' => 'Test 2',
+            'name_ru' => 'Test 2',
+            'duration' => '70:00',
+            'lesson_id' => 1,
+            'subject_id' => 1,
+            'from_time' => now(),
+            'till_time' => now()->addHours(3)
+        ]);
     }
 }

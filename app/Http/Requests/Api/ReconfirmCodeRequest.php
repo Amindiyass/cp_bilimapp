@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StudentUpdateRequest extends FormRequest
+class ReconfirmCodeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,19 +24,8 @@ class StudentUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required|string',
-            'last_name' => 'string',
-            'region_id' => 'required|integer',
-            'area_id' => 'required|integer',
-            'school_id' => 'required|integer',
             'phone' => 'required',
-            'photo' => 'image',
-            'email' => 'email'
+            'code' => 'required'
         ];
-    }
-
-    public function validationData()
-    {
-        return $this->post();
     }
 }

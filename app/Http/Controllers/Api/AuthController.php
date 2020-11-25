@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Helpers\Mail\Send;
-use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\ReconfirmCodeRequest;
 use App\Models\Student;
 use App\User;
 use Illuminate\Http\Request;
@@ -12,10 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\View\View;
-use phpseclib\Crypt\Random;
 
-class AuthController extends Controller
+class AuthController extends BaseController
 {
 
     public function sendConfirmationPhone(Request $request)
@@ -167,5 +165,19 @@ class AuthController extends Controller
 
         return $result;
 
+    }
+
+    public function reconfirmCode(ReconfirmCodeRequest $request)
+    {
+        $user = auth()->user();
+        $phone = $request->get('phone');
+        $code  = $request->get('code');
+        if ($user->checkCode($phone, $code)) {
+            $user->phone = $phone;
+            $user->save();
+            return $this->sendResponse('Phone updated');
+        } else {
+            return $this->sendResponse('Error. Code not valid');
+        }
     }
 }

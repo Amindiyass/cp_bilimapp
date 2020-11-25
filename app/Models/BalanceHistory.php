@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class BalanceHistory extends Model
 {
+    protected $table = 'balance_history';
     # TODO complete Model
 }
