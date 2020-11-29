@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Filters\QueryFilter;
+use App\Search\ModelSearch;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -21,6 +24,7 @@ use Illuminate\Database\Eloquent\Model;
 class Course extends Model
 {
 
+
     protected $table = 'courses';
     protected $primaryKey = 'id';
     protected $fillable = [
@@ -35,7 +39,16 @@ class Course extends Model
 
     ];
 
-    # TODO write all relationships
+    public function scopeFilter(Builder $builder, QueryFilter $filters)
+    {
+        return $filters->apply($builder);
+    }
+
+    public function scopeSearch(Builder $builder, ModelSearch $search)
+    {
+        return $search->apply($builder);
+    }
+
     public function class()
     {
         return $this->belongsTo(EducationLevel::class, 'class_id', 'id');
@@ -64,5 +77,58 @@ class Course extends Model
     public function completedRate()
     {
         return $this->morphOne(CompletedRate::class, 'model');
+    }
+
+    public static function test_count()
+    {
+
+        $test_count = cache()->remember('test_count', '300', function () {
+            $result = [];
+            $courses = Course::all();
+            foreach ($courses as $course) {
+                $sectionsIds = Section::where(['course_id' => $course->id])->get()->pluck('id')->toArray();
+                $lessonIds = Lesson::whereIn('section_id', $sectionsIds)->get()->pluck('id')->toArray();
+                $count = Test::whereIn('lesson_id', $lessonIds)->count();
+                $result[$course->id] = $count;
+            }
+            return $result;
+        });
+        return $test_count;
+    }
+
+    public static function video_count()
+    {
+
+        $video_count = cache()->remember('video_count', '300', function () {
+            $result = [];
+            $courses = Course::all();
+            foreach ($courses as $course) {
+                $sectionsIds = Section::where(['course_id' => $course->id])->get()->pluck('id')->toArray();
+                $lessonIds = Lesson::whereIn('section_id', $sectionsIds)->get()->pluck('id')->toArray();
+                $count = Video::whereIn('lesson_id', $lessonIds)->count();
+                $result[$course->id] = $count;
+            }
+            return $result;
+        });
+
+        return $video_count;
+    }
+
+    public static function assignment_count()
+    {
+
+        $assignment_count = cache()->remember('assignment_count', '300', function () {
+            $result = [];
+            $courses = Course::all();
+            foreach ($courses as $course) {
+                $sectionsIds = Section::where(['course_id' => $course->id])->get()->pluck('id')->toArray();
+                $lessonIds = Lesson::whereIn('section_id', $sectionsIds)->get()->pluck('id')->toArray();
+                $count = Assignment::whereIn('lesson_id', $lessonIds)->count();
+                $result[$course->id] = $count;
+            }
+            return $result;
+        });
+
+        return $assignment_count;
     }
 }
