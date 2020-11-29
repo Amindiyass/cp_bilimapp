@@ -23,15 +23,17 @@ Route::post('registration/send_code', 'Api\AuthController@sendConfirmationPhone'
 Route::post('registration/confirm_code', 'Api\AuthController@confirmAndRegister');
 
 /**Route for details user API */
-Route::group(['middleware' => ['excludeObligation', 'auth:api']], function () {
+Route::group(['middleware' => [
+    'excludeObligation', 'auth:api',
+]], function () {
 
-    Route::get('courses/all', 'CourseController@all');
-    Route::get('courses/filter', 'CourseController@filter');
-    Route::get('courses/search', 'CourseController@search');
-    Route::get('course/filter/attributes', 'CourseController@filter_attributes');
-    Route::get('course/filter/variants', 'CourseController@filter_variants');
+    Route::get('courses/all', 'Api\CourseController@all');
+    Route::get('courses/filter', 'Api\CourseController@filter');
+    Route::get('courses/search', 'Api\CourseController@search');
+    Route::get('course/filter/attributes', 'Api\CourseController@filter_attributes');
+    Route::get('course/filter/variants', 'Api\CourseController@filter_variants');
 
-    Route::get('languages/all', 'LanguagesController@all');
+    Route::get('languages/all', 'LanguageController@all');
 
     Route::post('details', 'Api\AuthController@user_info');
     Route::get('course/{course}', 'Api\CourseController@show');

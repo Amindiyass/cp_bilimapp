@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\CompletedRate;
+use App\Models\UserSubscription;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -72,4 +73,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(CompletedRate::class);
     }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(UserSubscription::class);
+    }
+
 }
