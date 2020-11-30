@@ -6,5 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
-    # TODO complete Model
+    protected $casts = [
+        'right_variant_id' => 'array'
+    ];
+    public function variants()
+    {
+        return $this->hasMany(TestVariant::class);
+    }
 }

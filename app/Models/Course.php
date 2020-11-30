@@ -35,7 +35,6 @@ class Course extends Model
 
     ];
 
-    # TODO write all relationships
     public function class()
     {
         return $this->belongsTo(EducationLevel::class, 'class_id', 'id');
@@ -64,5 +63,20 @@ class Course extends Model
     public function completedRate()
     {
         return $this->morphOne(CompletedRate::class, 'model');
+    }
+
+    public function getCountTestsAttribute()
+    {
+        return Test::whereIn('lesson_id', $this->lessons()->select('lessons.id'))->count();
+    }
+
+    public function getCountVideosAttribute()
+    {
+        return Video::whereIn('lesson_id', $this->lessons()->select('lessons.id'))->count();
+    }
+
+    public function getLinkAttribute()
+    {
+        return route('course.show', ['course' => $this->id]);
     }
 }
