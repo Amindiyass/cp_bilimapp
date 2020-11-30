@@ -29,6 +29,8 @@ class Student extends Model
         return $this->belongsTo(User::class);
     }
 
-
-    # TODO  write all relationships
+    public function courses()
+    {
+        return $this->hasMany(Course::class, 'class_id', 'class_id');
+    }
 }
