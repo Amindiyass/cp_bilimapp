@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Filters\CourseFilter;
 use App\Models\Course;
+use App\Models\Student;
 use App\Models\EducationLevel;
 use App\Models\Language;
 use App\Models\Subject;
@@ -14,6 +15,15 @@ use Illuminate\Http\Request;
 
 class CourseController extends BaseController
 {
+    public function index()
+    {
+        /** @var Student $student */
+        $student = auth()->user()->student()->firstOrFail();
+        $courses = $student->courses()->with(['completedRate' => function($query) {
+            return $query->orderBy('rate', 'DESC');
+        }, 'language', 'class'])->get()->append(['count_tests', 'count_videos', 'link']);
+        return $this->sendResponse($courses);
+    }
     /**
      * Display the specified resource.
      *
@@ -32,7 +42,7 @@ class CourseController extends BaseController
                 'lessons_count' => $course->lessons()->count(),
                 'language_ru' => $course->language->name_ru,
                 'language_kz' => $course->language->name_kz,
-                'photo' => $course->photo,
+                'photo'       => $course->photo,
                 'complete_rate' => $completeRate->rate ?? 0
             ],
             'Предмет');
@@ -41,8 +51,10 @@ class CourseController extends BaseController
     public function details(Course $course)
     {
         $lessons = $course->lessons()
-            ->with('videos', 'conspectus', 'tests', 'completedRate')
-            ->get();
+                          ->with(['videos', 'conspectus', 'tests', 'completedRate', 'assignments' => function($query) {
+                              return $query->select('id, lesson_id');
+                          }])
+                          ->get();
         return $this->sendResponse($lessons, 'Содержимое курса');
     }
 

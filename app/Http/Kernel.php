@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\TestPassed;
+use App\Http\Middleware\UserHasSubscription;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -64,6 +66,8 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'excludeObligation' => \App\Http\Middleware\ExcludeObligationOfAccept::class,
+        'testPassed' => TestPassed::class,
+        'hasSubscription' => UserHasSubscription::class,
     ];
 
     protected $middlewarePriority = [

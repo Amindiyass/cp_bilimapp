@@ -3,6 +3,10 @@
 namespace App;
 
 use App\Models\CompletedRate;
+use App\Models\Student;
+use App\Models\Subscription;
+use App\Models\UserSubscription;
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -65,11 +69,51 @@ class User extends Authenticatable
 
     public function students()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(Student::class);
+    }
+
+    public function student()
+    {
+        return $this->hasOne(Student::class);
     }
 
     public function completedRates()
     {
         return $this->hasMany(CompletedRate::class);
+    }
+
+    public function subscriptions()
+    {
+        return $this->belongsToMany(Subscription::class, 'user_subscriptions');
+    }
+
+    public function isActiveSubscription()
+    {
+        $userSubscriptions = $this->subscriptions()->withPivot('created_at')->get();
+        foreach ($userSubscriptions as $userSubscription) {
+            $active = $userSubscription->pivot->created_at
+                    ->addWeeks($userSubscription->duration_in_week)
+                    ->addMonths($userSubscription->duration_in_month)
+                    ->addYear($userSubscription->duration_in_year) > Carbon::now();
+            if ($active) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getActiveSubscription()
+    {
+        $userSubscriptions = $this->subscriptions()->withPivot('created_at')->get();
+        foreach ($userSubscriptions as $userSubscription) {
+            $active = $userSubscription->pivot->created_at
+                    ->addWeeks($userSubscription->duration_in_week)
+                    ->addMonths($userSubscription->duration_in_month)
+                    ->addYear($userSubscription->duration_in_year) > Carbon::now();
+            if ($active) {
+                return $userSubscription;
+            }
+        }
+        return null;
     }
 }
