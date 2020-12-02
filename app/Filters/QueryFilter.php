@@ -37,6 +37,9 @@ abstract class QueryFilter
 
     protected function paramToArray($param)
     {
+        if (empty($param)) {
+            return [];
+        }
         return explode($this->delimiter, $param);
     }
 }

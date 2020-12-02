@@ -19,4 +19,9 @@ class Region extends Model
     {
         return $this->hasMany(School::class);
     }
+
+    public function get_name()
+    {
+    }
+
 }

@@ -23,5 +23,8 @@ Route::group([
     'prefix' => 'admin',
 ], function () {
     Route::get('home', 'HomeController@index')->name('home.index');
-});
 
+    Route::resource('student', 'StudentController');
+    Route::post('students/ajax', 'StudentController@ajax')->name('student.ajax');
+    Route::get('students/filter', 'StudentController@filter')->name('student.filter');
+});
