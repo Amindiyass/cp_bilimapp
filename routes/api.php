@@ -39,22 +39,22 @@ Route::group(['middleware' => ['excludeObligation', 'auth:api']], function () {
     Route::get('course/{course}/details', [CourseController::class, 'details']);
     Route::get('course/{course}/tests', [CourseController::class, 'tests']);
 
+
     Route::get('lesson/{lesson}', [LessonController::class, 'show'])->middleware('hasSubscription')->name('api.lesson');
 
     Route::get('profile', [StudentController::class, 'profile']);
     Route::put('profile', [StudentController::class, 'update']);
     Route::post('profile/reconfirm_code', [AuthController::class, 'reconfirmCode']);
 
-    Route::middleware('hasSubscription')->group(function() {
+    Route::middleware('hasSubscription')->group(function () {
         Route::get('test/{test}', [TestController::class, 'show'])->middleware('testPassed')->name('api.test');
         Route::post('test/check/{test}', [TestController::class, 'check'])->middleware('testPassed')->name('api.test.check');
-        Route::get('test/errors/{test}', [TestController::class, 'errors'])->middleware('testPassed')->name('api.test.check');
-
+        ## TODO route name not completed
+        Route::get('test/errors/{test}', [TestController::class, 'errors'])->middleware('testPassed')->name('api.test.error');
         Route::get('lesson/{lesson}/assignments', [LessonController::class, 'assignments'])->name('api.assignments');
         Route::get('assignment/{assignment}', [AssignmentController::class, 'show'])->name('api.task');
         Route::get('assignment/{assignment}/solution', [AssignmentController::class, 'solution'])->name('api.task.solutions');
         Route::get('assignments/search', [AssignmentController::class, 'search'])->name('api.assignments.search');
-
         Route::post('video/{video}/store-progress', [VideoController::class, 'storeProgress']);
     });
 
@@ -65,16 +65,8 @@ Route::group(['middleware' => ['excludeObligation', 'auth:api']], function () {
     Route::get('courses/search', 'CourseController@search');
     Route::get('course/filter/attributes', 'CourseController@filter_attributes');
     Route::get('course/filter/variants', 'CourseController@filter_variants');
-
     Route::get('languages/all', 'LanguagesController@all');
 
-    Route::post('details', 'Api\AuthController@user_info');
-    Route::get('course/{course}', 'Api\CourseController@show');
-    Route::get('course/{course}/details', 'Api\CourseController@details');
-    Route::get('course/{course}/tests', 'Api\CourseController@tests');
-    Route::get('profile', 'Api\StudentController@profile');
-    Route::put('profile', 'Api\StudentController@update');
-    Route::post('profile/reconfirm_code', 'Api\AuthController@reconfirmCode');
 });
 //Route::middleware('auth:api')->group( function () {
 //});
