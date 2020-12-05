@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Filters\StudentFilter;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StudentStoreRequest;
+use App\Http\Requests\Admin\StudentUpdatePasswordRequest;
 use App\Models\Area;
 use App\Models\Course;
 use App\Models\EducationLevel;
@@ -12,101 +14,101 @@ use App\Models\Region;
 use App\Models\School;
 use App\Models\Student;
 use App\Models\Subscription;
+use App\Models\UserSubscription;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
-     */
     public function index()
     {
-
-        $students = Student::all();
+        $students = (new \App\Models\Student)->get_students();
         $items = (new \App\Models\Student)->get_items();
         $items['students'] = $students;
 
         return view('admin.student.index', $items);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
-     */
+
     public function create()
     {
         $items = (new \App\Models\Student)->get_items();
         return view('admin.student.create', $items);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function password_change(StudentUpdatePasswordRequest $request)
     {
-        //
+        $result = (new \App\Models\Student)->password_change($request);
+        if ($result['success']) {
+            return redirect(route('student.index'))
+                ->with('success', 'Вы успешно изменили пароль');
+        }
+        return redirect(route('student.index'))
+            ->with('error', $result['message']);
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function add_subscription(Request $request)
     {
-        //
+        $result = (new \App\Models\Student)->add_subscription($request);
+        if ($result['success']) {
+            return redirect(route('student.index'))
+                ->with('success', 'Вы успешно добавили подписку');
+        }
+        return redirect(route('student.index'))
+            ->with('error', $result['message']);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
+
+    public function store(StudentStoreRequest $request)
+    {
+        $result = (new \App\Models\Student)->store($request->all());
+        if ($result['success']) {
+            return redirect(route('student.index'))
+                ->with('success', 'Вы успешно добавили пользователя');
+        }
+        return redirect(route('student.index'))
+            ->with('error', $result['message']);
+    }
+
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+        $items = (new \App\Models\Student)->get_items();
+        $items['user'] = $user;
+        return view('admin.student.edit', $items);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update(StudentStoreRequest $request, $id)
     {
-        //
+        $result = (new \App\Models\Student)->store($request->all());
+        if ($result['success']) {
+            return redirect(route('student.index'))
+                ->with('success', 'Вы успешно добавили пользователя');
+        }
+        return redirect(route('student.index'))
+            ->with('error', $result['message']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        User::find($id)->delete();
+        return redirect(route('student.index'))
+            ->with('success', 'Вы успешно удалили пользователя');
     }
 
     public function filter(StudentFilter $filters, Request $request)
     {
+        # TODO move to model
         $areas = !empty($request->input('area')) ? explode(',', $request->input('area')) : [];
         $regions = !empty($request->input('region')) ? explode(',', $request->input('region')) : [];
         $schools = !empty($request->input('school')) ? explode(',', $request->input('school')) : [];
         $classes = !empty($request->input('class')) ? explode(',', $request->input('class')) : [];
         $languages = !empty($request->input('language')) ? explode(',', $request->input('language')) : [];
 
-        $students = Student::filter($filters)->get();
+        $students = Student::filter($filters)->get()->pluck('user_id')->toArray();
+        $students = (new \App\Models\Student)->get_students($students);
         return redirect(route('student.index'))
             ->with('students', $students)
             ->with('areas', $areas)
@@ -126,7 +128,6 @@ class StudentController extends Controller
         $regions = $regions->get()->pluck('name_ru', 'id')->toArray();
 
         return $regions;
-
 
     }
 

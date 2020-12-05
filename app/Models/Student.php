@@ -6,10 +6,13 @@ use App\Filters\QueryFilter;
 use App\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class Student extends Model
 {
     protected $table = 'students';
+    protected $primaryKey = 'id';
     protected $fillable = [
         'first_name',
         'last_name',
@@ -20,6 +23,7 @@ class Student extends Model
         'user_id',
         'class_id',
     ];
+
 
     public function scopeFilter(Builder $builder, QueryFilter $filters)
     {
@@ -51,12 +55,23 @@ class Student extends Model
         return $this->belongsTo(Language::class);
     }
 
+    public function get_students($user_ids = null)
+    {
+        $students = User::whereHas("roles", function ($query) {
+            $query->where("name", "student");
+        });
+        if (isset($user_ids)) {
+            $students = $students->whereIn('id', $user_ids);
+        }
+        return $students->get();
+    }
+
     public function get_items()
     {
         $areas = Area::all()->pluck('name_ru', 'id')->toArray();
         $classes = EducationLevel::all()->pluck('order_number', 'id')->toArray();
         $languages = Language::all()->pluck('name_ru', 'id')->toArray();
-        $subscriptions = Subscription::where(['is_active' => true])->get()->pluck('name_ru', 'id');
+        $subscriptions = Subscription::where(['is_active' => true])->get()->pluck('name', 'id');
         sort($classes);
 
         $regions = Region::all()->pluck('name_ru', 'id')->toArray();
@@ -71,6 +86,92 @@ class Student extends Model
             'schools' => $schools,
         ];
         return $result;
+    }
+
+    public function store($request)
+    {
+        try {
+            DB::beginTransaction();
+            $new_user = [
+                'name' => $request['first_name'],
+                'password' => Hash::make('Amin'),
+                'email' => $request['email'],
+                'is_active' => true,
+                'balance' => 0,
+                'phone' => $request['phone'],
+                'last_visit' => date('Y-m-d H:i:s'),
+            ];
+            $user = User::create($new_user);
+
+            $user->assignRole('student');
+
+            $new_student = $request;
+            $new_student['user_id'] = $user->id;
+
+            Student::create($new_student);
+            DB::commit();
+
+            return [
+                'success' => true,
+                'message' => '',
+            ];
+
+        } catch (\Exception $exception) {
+            DB::rollBack();
+
+            $message = sprintf('%s, %s, %s', $exception->getMessage(), $exception->getFile(), $exception->getLine());
+            info($message);
+            return [
+                'success' => false,
+                'message' => $message,
+            ];
+        }
+    }
+
+    public function password_change($request)
+    {
+        try {
+            DB::table('users')
+                ->where(['id' => $request->user_id])
+                ->update([
+                    'password' => Hash::make($request->password),
+                ]);
+        } catch (\Exception $exception) {
+            $message = sprintf('%s %s %s', $exception->getFile(), $exception->getLine(), $exception->getMessage());
+            info($message);
+            return [
+                'success' => false,
+                'message' => $message
+            ];
+        }
+        return [
+            'success' => true,
+            'message' => '',
+        ];
+
+    }
+
+    public function add_subscription($request)
+    {
+        $result = UserSubscription::insert(
+            [
+                'user_id' => $request->user_id,
+                'subscription_id' => $request->subscription_id,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+                'is_active' => true,
+            ]
+        );
+        if ($result) {
+            return [
+                'success' => true,
+                'message' => '',
+            ];
+        }
+        return [
+            'success' => false,
+            'message' => 'Ошибка при добавление подписку',
+        ];
     }
 
 }

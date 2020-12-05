@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 Route::redirect('/home', 'admin/home');
+Route::redirect('/', 'login');
 
 Route::group([
     'middleware' => 'auth',
@@ -23,8 +24,10 @@ Route::group([
     'prefix' => 'admin',
 ], function () {
     Route::get('home', 'HomeController@index')->name('home.index');
-
     Route::resource('student', 'StudentController');
     Route::post('students/ajax', 'StudentController@ajax')->name('student.ajax');
     Route::get('students/filter', 'StudentController@filter')->name('student.filter');
+    Route::post('students/password/change', 'StudentController@password_change')->name('student.password.change');
+    Route::post('students/add/subscription', 'StudentController@add_subscription')->name('student.add.subscription');
+    Route::post('students/extend/subscription', 'StudentController@extend_subscription')->name('student.extend.subscription');
 });

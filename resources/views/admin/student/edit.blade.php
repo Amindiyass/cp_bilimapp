@@ -1,14 +1,15 @@
 @extends('adminlte::page')
 
-@section('title', 'Добавить ученика')
+@section('title', 'Редактировать ученика')
 
 @section('content_header')
-    <h1 class="m-0 text-dark">Добавить ученика</h1>
+    <h1 class="m-0 text-dark">Редактировать ученика</h1>
 @stop
 
 @section('content')
     <div class="card card-danger">
-        {!! Form::open(['route' => 'student.store','method' => 'POST']) !!}
+        {!! Form::open(['route' => ' admin/student/' . $user->id,'method' => 'POST']) !!}
+
         @csrf
         <div class="card-body">
             <div class="form-group">
@@ -17,7 +18,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="far fa-user"></i></span>
                     </div>
-                    <input name="first_name" type="text" class="form-control">
+                    <input name="first_name" type="text" class="form-control" value="{{$user->student->first_name}}">
                 </div>
             </div>
             <div class="form-group">
@@ -26,7 +27,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="far fa-user"></i></span>
                     </div>
-                    <input name="last_name" type="text" class="form-control">
+                    <input name="last_name" type="text" class="form-control" value="{{$user->student->last_name}}">
                 </div>
             </div>
             <div class="form-group">
@@ -36,7 +37,7 @@
                         <span class="input-group-text"><i class="fas fa-phone"></i></span>
                     </div>
                     <input name="phone" type="text" class="form-control" data-inputmask='"mask": "+7 (999) 999-9999"'
-                           data-mask>
+                           data-mask value="{{$user->phone}}">
                 </div>
             </div>
 
@@ -46,13 +47,13 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-phone"></i></span>
                     </div>
-                    <input name="email" type="text" class="form-control">
+                    <input name="email" type="text" class="form-control" value="{{$user->email}}">
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Выберите область *</label>
-                {!! Form::select('area_id',$areas, null,
+                {!! Form::select('area_id',$areas, $user->student->area_id,
                     [
                         'class' => 'form-control select2bs4',
                          'id' => 'area_id',
@@ -61,18 +62,18 @@
                          ]); !!}
             </div>
 
-            <div id="region_div" class="form-group d-none">
+            <div id="region_div" class="form-group">
                 <label>Выберите регион *</label>
-                {!! Form::select('region_id',[], null,
+                {!! Form::select('region_id',$regions,$user->student->region_id ,
                     ['class' => 'form-control select2bs4 ',
                     'id' => 'region_id',
                     'style' => 'width: 100%;',
                     ]); !!}
             </div>
 
-            <div id="school_div" class="form-group d-none">
+            <div id="school_div" class="form-group">
                 <label>Выберите школу *</label>
-                {!! Form::select('school_id',[], null,
+                {!! Form::select('school_id',$schools, $user->student->school_id,
                     ['class' => 'form-control select2bs4 ',
                     'id' =>'school_id',
                     'style' => 'width: 100%;']); !!}
@@ -80,13 +81,13 @@
 
             <div id="class_div" class="form-group">
                 <label>Выберите класс обучение *</label>
-                {!! Form::select('class_id',$classes, null,
+                {!! Form::select('class_id',$classes, $user->student->class_id,
                     ['class' => 'form-control select2bs4 ', 'style' => 'width: 100%;']); !!}
             </div>
 
             <div id="language_div" class="form-group">
                 <label>Выберите язык обучение *</label>
-                {!! Form::select('language_id',$languages, null,
+                {!! Form::select('language_id',$languages, $user->student->language_id,
                     ['class' => 'form-control select2bs4 ', 'style' => 'width: 100%;']); !!}
             </div>
 

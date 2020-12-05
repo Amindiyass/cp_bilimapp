@@ -3,17 +3,20 @@
 namespace App;
 
 use App\Models\CompletedRate;
+use App\Models\Student;
 use App\Models\UserSubscription;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Passport\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable;
+    use HasApiTokens, Notifiable, SoftDeletes, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -29,6 +32,7 @@ class User extends Authenticatable
         'recommend_user_id',
         'phone'
     ];
+    protected $softDelete = true;
 
     /**
      * The attributes that should be hidden for arrays.
@@ -64,9 +68,9 @@ class User extends Authenticatable
         return $originalCode === $code;
     }
 
-    public function students()
+    public function student()
     {
-        return $this->hasMany(User::class);
+        return $this->hasOne(Student::class);
     }
 
     public function completedRates()
