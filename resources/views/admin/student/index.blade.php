@@ -255,19 +255,6 @@
                     "autoWidth": false,
                 });
 
-                // $('#area_id').change(function () {
-                //     var type = 'get_regions';
-                //     var item_id = $(this).val();
-                //     console.log(item_id);
-                //     ajax(item_id, type);
-                // });
-                //
-                // $('#region_id').change(function () {
-                //     var type = 'get_schools';
-                //     var item_id = $(this).val();
-                //     ajax(item_id, type);
-                // });
-
                 $('#open_change_password').bind('click', function () {
                     var user_id = $(this).data('user_id');
                     $('input[name=user_id]').val(user_id);
@@ -337,7 +324,6 @@
 
                     classes = $('#class_id').val();
                     url = set_delimiter(url, classes, 'class');
-
 
                     console.log(url);
                     window.location = url;

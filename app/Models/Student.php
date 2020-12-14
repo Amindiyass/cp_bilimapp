@@ -24,7 +24,6 @@ class Student extends Model
         'class_id',
     ];
 
-
     public function scopeFilter(Builder $builder, QueryFilter $filters)
     {
         return $filters->apply($builder);
@@ -75,7 +74,7 @@ class Student extends Model
         sort($classes);
 
         $regions = Region::all()->pluck('name_ru', 'id')->toArray();
-        $schools = Region::all()->pluck('name_ru', 'id')->toArray();
+        $schools = School::all()->pluck('name_ru', 'id')->toArray();
 
         $result = [
             'areas' => $areas,
@@ -86,6 +85,23 @@ class Student extends Model
             'schools' => $schools,
         ];
         return $result;
+    }
+
+    public function get_temp_filter_items($request)
+    {
+        $areas = !empty($request->input('area')) ? explode(',', $request->input('area')) : [];
+        $regions = !empty($request->input('region')) ? explode(',', $request->input('region')) : [];
+        $schools = !empty($request->input('school')) ? explode(',', $request->input('school')) : [];
+        $classes = !empty($request->input('class')) ? explode(',', $request->input('class')) : [];
+        $languages = !empty($request->input('language')) ? explode(',', $request->input('language')) : [];
+
+        return [
+            'areas' => $areas,
+            'regions' => $regions,
+            'schools' => $schools,
+            'classes' => $classes,
+            'languages' => $languages,
+        ];
     }
 
     public function store($request)
@@ -109,6 +125,45 @@ class Student extends Model
             $new_student['user_id'] = $user->id;
 
             Student::create($new_student);
+            DB::commit();
+
+            return [
+                'success' => true,
+                'message' => '',
+            ];
+
+        } catch (\Exception $exception) {
+            DB::rollBack();
+
+            $message = sprintf('%s, %s, %s', $exception->getMessage(), $exception->getFile(), $exception->getLine());
+            info($message);
+            return [
+                'success' => false,
+                'message' => $message,
+            ];
+        }
+    }
+
+
+    public function modify(array $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $new_user = [
+                'name' => $request['first_name'],
+                'email' => $request['email'],
+                'phone' => $request['phone'],
+            ];
+
+            $user = User::find($request['user_id']);
+            $user->fill($request);
+            $user->save();
+
+            $student = Student::where(['user_id' => $request['user_id']])->first();
+            $student->fill($request);
+            $student->save();
+
             DB::commit();
 
             return [

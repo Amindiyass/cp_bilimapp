@@ -18,9 +18,10 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $results = Home::get_items();
+        $week_number = $request->input('week_number', 0);
+        $results = Home::get_items($week_number);
         return view('admin.home.index', $results);
     }
 }

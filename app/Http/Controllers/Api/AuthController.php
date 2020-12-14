@@ -52,6 +52,7 @@ class AuthController extends BaseController
 
     public function confirmAndRegister(Request $request)
     {
+
         $phone = $request->phone;
         $code = $request->code;
         $result = $this->redisGet($phone);

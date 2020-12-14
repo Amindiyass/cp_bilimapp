@@ -10,4 +10,14 @@ class Section extends Model
     {
         return $this->hasMany(Lesson::class);
     }
+
+    public function tests()
+    {
+        return $this->hasMany(Test::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
 }

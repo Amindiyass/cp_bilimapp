@@ -79,6 +79,11 @@ class Course extends Model
         return $this->morphOne(CompletedRate::class, 'model');
     }
 
+    public function tests()
+    {
+        return $this->hasMany(Test::class);
+    }
+
     public static function test_count()
     {
 

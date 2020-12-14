@@ -6,6 +6,7 @@ use App\Filters\StudentFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StudentStoreRequest;
 use App\Http\Requests\Admin\StudentUpdatePasswordRequest;
+use App\Http\Requests\Admin\StudentUpdateRequest;
 use App\Models\Area;
 use App\Models\Course;
 use App\Models\EducationLevel;
@@ -18,8 +19,11 @@ use App\Models\UserSubscription;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+use Symfony\Component\Console\Input\Input;
 
-class StudentController extends Controller
+
+class StudentController extends BaseController
 {
     public function index()
     {
@@ -80,9 +84,9 @@ class StudentController extends Controller
         return view('admin.student.edit', $items);
     }
 
-    public function update(StudentStoreRequest $request, $id)
+    public function update(StudentUpdateRequest $request)
     {
-        $result = (new \App\Models\Student)->store($request->all());
+        $result = (new \App\Models\Student)->modify($request->all());
         if ($result['success']) {
             return redirect(route('student.index'))
                 ->with('success', 'Вы успешно добавили пользователя');
@@ -100,22 +104,17 @@ class StudentController extends Controller
 
     public function filter(StudentFilter $filters, Request $request)
     {
-        # TODO move to model
-        $areas = !empty($request->input('area')) ? explode(',', $request->input('area')) : [];
-        $regions = !empty($request->input('region')) ? explode(',', $request->input('region')) : [];
-        $schools = !empty($request->input('school')) ? explode(',', $request->input('school')) : [];
-        $classes = !empty($request->input('class')) ? explode(',', $request->input('class')) : [];
-        $languages = !empty($request->input('language')) ? explode(',', $request->input('language')) : [];
-
+        # TODO Исправить ошибку с фильтром не остается 1 класс после фильтраций в фильтре
+        $items = (new \App\Models\Student)->get_temp_filter_items($request);
         $students = Student::filter($filters)->get()->pluck('user_id')->toArray();
         $students = (new \App\Models\Student)->get_students($students);
         return redirect(route('student.index'))
             ->with('students', $students)
-            ->with('areas', $areas)
-            ->with('schools', $schools)
-            ->with('regions', $regions)
-            ->with('classes', $classes)
-            ->with('languages', $languages);
+            ->with('areas', $items['areas'])
+            ->with('schools', $items['schools'])
+            ->with('regions', $items['regions'])
+            ->with('classes', $items['classes'])
+            ->with('languages', $items['languages']);
     }
 
     public function get_regions($item_id)

@@ -1,3 +1,6 @@
+<?php
+$week_number = app('request')->input('week_number');
+?>
 @extends('adminlte::page')
 
 @section('title', 'Главная страница')
@@ -7,7 +10,6 @@
 @stop
 
 @section('content')
-
     <div class="row">
         <div class="col-lg-3 col-6">
             <div class="small-box bg-info">
@@ -37,7 +39,7 @@
         <div class="col-lg-3 col-6">
             <div class="small-box bg-info">
                 <div class="inner">
-                    <h3>44</h3>
+                    <h3>{{$subjects}}</h3>
                     <p>
                         Количество активных предметов
                         <br>
@@ -53,7 +55,7 @@
         <div class="col-lg-3 col-6">
             <div class="small-box bg-info">
                 <div class="inner">
-                    <h3>65</h3>
+                    <h3>{{$lessons}}</h3>
 
                     <p>
                         Количество уроков
@@ -71,7 +73,7 @@
         <div class="col-lg-3 col-6">
             <div class="small-box bg-info">
                 <div class="inner">
-                    <h3>65</h3>
+                    <h3>{{$tests}}</h3>
 
                     <p>Количество тестов</p>
                 </div>
@@ -84,7 +86,7 @@
         <div class="col-lg-3 col-6">
             <div class="small-box bg-info">
                 <div class="inner">
-                    <h3>65</h3>
+                    <h3>{{$videos}}</h3>
 
                     <p>Количество видео</p>
                 </div>
@@ -97,7 +99,7 @@
         <div class="col-lg-3 col-6">
             <div class="small-box bg-info">
                 <div class="inner">
-                    <h3>65</h3>
+                    <h3>{{$conspectus}}</h3>
 
                     <p>Количество конспектов</p>
                 </div>
@@ -110,7 +112,7 @@
         <div class="col-lg-3 col-6">
             <div class="small-box bg-info">
                 <div class="inner">
-                    <h3>65</h3>
+                    <h3>{{$assignments}}</h3>
 
                     <p>Количество задач</p>
                 </div>
@@ -122,20 +124,6 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box">
-                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-comment"></i></span>
-
-                <div class="info-box-content">
-                    <span class="info-box-text">Комментарий</span>
-                    <span class="info-box-number">
-                  10
-                </span>
-                </div>
-                <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-        </div>
         <!-- /.col -->
         <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
@@ -143,7 +131,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Лайки</span>
-                    <span class="info-box-number">41,410</span>
+                    <span class="info-box-number">{{$likes}}</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
@@ -159,29 +147,15 @@
                 <span class="info-box-icon bg-success elevation-1"><i class="fa fa-star"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Оценки</span>
-                    <span class="info-box-number">760</span>
+                    <span class="info-box-number">{{$reviews}}</span>
                 </div>
                 <!-- /.info-box-content -->
             </div>
             <!-- /.info-box -->
         </div>
-        <!-- /.col -->
-        <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box mb-3">
-                <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
-
-                <div class="info-box-content">
-                    <span class="info-box-text">New Members</span>
-                    <span class="info-box-number">2,000</span>
-                </div>
-                <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
     </div>
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
             <div class="card">
                 <div class="card-header border-0">
                     <div class="d-flex justify-content-between">
@@ -192,69 +166,27 @@
                 <div class="card-body">
                     <div class="d-flex">
                         <p class="d-flex flex-column">
-                            <span class="text-bold text-lg">820</span>
-                            <span>Visitors Over Time</span>
-                        </p>
-                        <p class="ml-auto d-flex flex-column text-right">
-                    <span class="text-success">
-                      <i class="fas fa-arrow-up"></i> 12.5%
-                    </span>
-                            <span class="text-muted">Since last week</span>
+                            <span class="text-bold text-lg">{{$users}}</span>
+                            <span>Общее кол-во активных пользователей</span>
                         </p>
                     </div>
                     <!-- /.d-flex -->
 
-                    <div class="position-relative mb-4">
-                        <canvas id="visitors-chart" height="200"></canvas>
+                    <div class="chart">
+                        <canvas id="barChart"
+                                style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                     </div>
 
                     <div class="d-flex flex-row justify-content-end">
-                  <span class="mr-2">
-                    <i class="fas fa-square text-primary"></i> This Week
-                  </span>
+                        <a href="{{route('home.index', ['week_number' => ($week_number - 1)])}}"
+                           class="mr-2 btn btn-success text-white">
+                            <i class="fas fa-arrow-left"></i> &nbsp; Предыдущая неделя
+                        </a>
 
-                        <span>
-                    <i class="fas fa-square text-gray"></i> Last Week
-                  </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="card">
-                <div class="card-header border-0">
-                    <div class="d-flex justify-content-between">
-                        <h3 class="card-title">Sales</h3>
-                        <a href="javascript:void(0);">View Report</a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="d-flex">
-                        <p class="d-flex flex-column">
-                            <span class="text-bold text-lg">$18,230.00</span>
-                            <span>Sales Over Time</span>
-                        </p>
-                        <p class="ml-auto d-flex flex-column text-right">
-                    <span class="text-success">
-                      <i class="fas fa-arrow-up"></i> 33.1%
-                    </span>
-                            <span class="text-muted">Since last month</span>
-                        </p>
-                    </div>
-                    <!-- /.d-flex -->
-
-                    <div class="position-relative mb-4">
-                        <canvas id="sales-chart" height="200"></canvas>
-                    </div>
-
-                    <div class="d-flex flex-row justify-content-end">
-                  <span class="mr-2">
-                    <i class="fas fa-square text-primary"></i> This year
-                  </span>
-
-                        <span>
-                    <i class="fas fa-square text-gray"></i> Last year
-                  </span>
+                        <a href="{{route('home.index', ['week_number' => ($week_number + 1)])}}"
+                           class=" btn btn-success text-white">
+                            Следующая неделя &nbsp;<i class="fas fa-arrow-right "></i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -272,252 +204,52 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-md-6">
-                    <p class="text-center">
-                        <strong>Goal Completion</strong>
-                    </p>
+                @foreach($subject_rates as $subject_rate)
+                    <div class="col-md-6">
+                        <p class="text-center">
+                            <strong>{{$subject_rate['name_ru']}}</strong>
+                        </p>
 
-                    <div class="progress-group">
-                        Add Products to Cart
-                        <span class="float-right"><b>160</b>/200</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-primary" style="width: 80%"></div>
+                        <div class="progress-group">
+                            Кол-во курсов
+                            <span class="float-right"><b>{{$subject_rate['course_count']}}</b>/{{$courses}}</span>
+                            <div class="progress progress-sm">
+                                <div class="progress-bar bg-primary"
+                                     style="width: {{($subject_rate['course_count']/$courses) * 100}}%"></div>
+                            </div>
                         </div>
-                    </div>
-                    <!-- /.progress-group -->
 
-                    <div class="progress-group">
-                        Complete Purchase
-                        <span class="float-right"><b>310</b>/400</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-danger" style="width: 75%"></div>
+                        <div class="progress-group">
+                            Кол-во уроков
+                            <span class="float-right"><b>{{$subject_rate['lesson_count']}}</b>/{{$lessons}}</span>
+                            <div class="progress progress-sm">
+                                <div class="progress-bar bg-danger"
+                                     style="width: {{($subject_rate['lesson_count']/$lessons) * 100}}%"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- /.progress-group -->
-                    <div class="progress-group">
-                        <span class="progress-text">Visit Premium Page</span>
-                        <span class="float-right"><b>480</b>/800</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-success" style="width: 60%"></div>
+                        <div class="progress-group">
+                            Кол-во тестов
+                            <span class="float-right"><b>{{$subject_rate['test_count']}}</b>/{{$tests}}</span>
+                            <div class="progress progress-sm">
+                                <div class="progress-bar bg-success"
+                                     style="width: {{($subject_rate['test_count']/$tests) * 100}}%"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- /.progress-group -->
-                    <div class="progress-group">
-                        Send Inquiries
-                        <span class="float-right"><b>250</b>/500</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-warning" style="width: 50%"></div>
+                        <!-- /.progress-group -->
+                        <div class="progress-group">
+                            Кол-во задач
+                            <span
+                                class="float-right"><b>{{$subject_rate['assignment_count']}}</b>/{{$assignments}}</span>
+                            <div class="progress progress-sm">
+                                <div class="progress-bar bg-warning"
+                                     style="width: {{($subject_rate['assignment_count']/$assignments) * 100}}%"></div>
+                            </div>
                         </div>
+                        <!-- /.progress-group -->
                     </div>
-                    <!-- /.progress-group -->
-                </div>
-                <div class="col-md-6">
-                    <p class="text-center">
-                        <strong>Goal Completion</strong>
-                    </p>
-
-                    <div class="progress-group">
-                        Add Products to Cart
-                        <span class="float-right"><b>160</b>/200</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-primary" style="width: 80%"></div>
-                        </div>
-                    </div>
-                    <!-- /.progress-group -->
-
-                    <div class="progress-group">
-                        Complete Purchase
-                        <span class="float-right"><b>310</b>/400</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-danger" style="width: 75%"></div>
-                        </div>
-                    </div>
-
-                    <!-- /.progress-group -->
-                    <div class="progress-group">
-                        <span class="progress-text">Visit Premium Page</span>
-                        <span class="float-right"><b>480</b>/800</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-success" style="width: 60%"></div>
-                        </div>
-                    </div>
-
-                    <!-- /.progress-group -->
-                    <div class="progress-group">
-                        Send Inquiries
-                        <span class="float-right"><b>250</b>/500</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-warning" style="width: 50%"></div>
-                        </div>
-                    </div>
-                    <!-- /.progress-group -->
-                </div>
-                <div class="col-md-6">
-                    <p class="text-center">
-                        <strong>Goal Completion</strong>
-                    </p>
-
-                    <div class="progress-group">
-                        Add Products to Cart
-                        <span class="float-right"><b>160</b>/200</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-primary" style="width: 80%"></div>
-                        </div>
-                    </div>
-                    <!-- /.progress-group -->
-
-                    <div class="progress-group">
-                        Complete Purchase
-                        <span class="float-right"><b>310</b>/400</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-danger" style="width: 75%"></div>
-                        </div>
-                    </div>
-
-                    <!-- /.progress-group -->
-                    <div class="progress-group">
-                        <span class="progress-text">Visit Premium Page</span>
-                        <span class="float-right"><b>480</b>/800</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-success" style="width: 60%"></div>
-                        </div>
-                    </div>
-
-                    <!-- /.progress-group -->
-                    <div class="progress-group">
-                        Send Inquiries
-                        <span class="float-right"><b>250</b>/500</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-warning" style="width: 50%"></div>
-                        </div>
-                    </div>
-                    <!-- /.progress-group -->
-                </div>
-                <div class="col-md-6">
-                    <p class="text-center">
-                        <strong>Goal Completion</strong>
-                    </p>
-
-                    <div class="progress-group">
-                        Add Products to Cart
-                        <span class="float-right"><b>160</b>/200</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-primary" style="width: 80%"></div>
-                        </div>
-                    </div>
-                    <!-- /.progress-group -->
-
-                    <div class="progress-group">
-                        Complete Purchase
-                        <span class="float-right"><b>310</b>/400</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-danger" style="width: 75%"></div>
-                        </div>
-                    </div>
-
-                    <!-- /.progress-group -->
-                    <div class="progress-group">
-                        <span class="progress-text">Visit Premium Page</span>
-                        <span class="float-right"><b>480</b>/800</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-success" style="width: 60%"></div>
-                        </div>
-                    </div>
-
-                    <!-- /.progress-group -->
-                    <div class="progress-group">
-                        Send Inquiries
-                        <span class="float-right"><b>250</b>/500</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-warning" style="width: 50%"></div>
-                        </div>
-                    </div>
-                    <!-- /.progress-group -->
-                </div>
-                <div class="col-md-6">
-                    <p class="text-center">
-                        <strong>Goal Completion</strong>
-                    </p>
-
-                    <div class="progress-group">
-                        Add Products to Cart
-                        <span class="float-right"><b>160</b>/200</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-primary" style="width: 80%"></div>
-                        </div>
-                    </div>
-                    <!-- /.progress-group -->
-
-                    <div class="progress-group">
-                        Complete Purchase
-                        <span class="float-right"><b>310</b>/400</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-danger" style="width: 75%"></div>
-                        </div>
-                    </div>
-
-                    <!-- /.progress-group -->
-                    <div class="progress-group">
-                        <span class="progress-text">Visit Premium Page</span>
-                        <span class="float-right"><b>480</b>/800</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-success" style="width: 60%"></div>
-                        </div>
-                    </div>
-
-                    <!-- /.progress-group -->
-                    <div class="progress-group">
-                        Send Inquiries
-                        <span class="float-right"><b>250</b>/500</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-warning" style="width: 50%"></div>
-                        </div>
-                    </div>
-                    <!-- /.progress-group -->
-                </div>
-                <div class="col-md-6">
-                    <p class="text-center">
-                        <strong>Goal Completion</strong>
-                    </p>
-
-                    <div class="progress-group">
-                        Add Products to Cart
-                        <span class="float-right"><b>160</b>/200</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-primary" style="width: 80%"></div>
-                        </div>
-                    </div>
-                    <!-- /.progress-group -->
-
-                    <div class="progress-group">
-                        Complete Purchase
-                        <span class="float-right"><b>310</b>/400</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-danger" style="width: 75%"></div>
-                        </div>
-                    </div>
-
-                    <!-- /.progress-group -->
-                    <div class="progress-group">
-                        <span class="progress-text">Visit Premium Page</span>
-                        <span class="float-right"><b>480</b>/800</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-success" style="width: 60%"></div>
-                        </div>
-                    </div>
-
-                    <!-- /.progress-group -->
-                    <div class="progress-group">
-                        Send Inquiries
-                        <span class="float-right"><b>250</b>/500</span>
-                        <div class="progress progress-sm">
-                            <div class="progress-bar bg-warning" style="width: 50%"></div>
-                        </div>
-                    </div>
-                    <!-- /.progress-group -->
-                </div>
+                @endforeach
             </div>
             <div style="width: 100%;" class="text-center mt-3">
                 <a href="">Еще...</a>
@@ -527,4 +259,55 @@
 
 
 
+@stop
+
+@section('plugins.Chartjs', true)
+@section('js')
+    <script>
+        var date_range = <?php echo json_encode(sprintf('%s - %s', $lastWeekDays[0], $lastWeekDays[6])) ?>;
+        var week_days = <?php echo json_encode($lastWeekDays); ?>;
+        var registered_count = <?php echo json_encode($registered_count); ?>;
+        var areaChartData = {
+            labels: week_days,
+            datasets: [
+                {
+                    label: 'Динамика регистраций пользователей: ' + date_range,
+                    backgroundColor: 'rgba(60,141,188,0.9)',
+                    borderColor: 'rgba(60,141,188,0.8)',
+                    pointRadius: false,
+                    pointColor: '#3b8bba',
+                    pointStrokeColor: 'rgba(60,141,188,1)',
+                    pointHighlightFill: '#fff',
+                    pointHighlightStroke: 'rgba(60,141,188,1)',
+                    data: registered_count
+                },
+            ]
+        }
+
+        var barChartCanvas = $('#barChart').get(0).getContext('2d')
+        var barChartData = $.extend(true, {}, areaChartData)
+        var temp0 = areaChartData.datasets[0]
+        barChartData.datasets[0] = temp0
+
+        var barChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            datasetFill: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        stepSize: 1
+                    }
+                }]
+            },
+        }
+
+        var barChart = new Chart(barChartCanvas, {
+            type: 'bar',
+            data: barChartData,
+            options: barChartOptions
+        })
+
+
+    </script>
 @stop

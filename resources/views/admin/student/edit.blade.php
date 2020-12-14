@@ -8,10 +8,11 @@
 
 @section('content')
     <div class="card card-danger">
-        {!! Form::open(['route' => ' admin/student/' . $user->id,'method' => 'POST']) !!}
-
+        {!! Form::open(['url' => 'admin/student/' . $user->id,'method' => 'POST']) !!}
         @csrf
+        @method('PUT')
         <div class="card-body">
+            <input type="hidden" value="{{$user->id}}" name="user_id">
             <div class="form-group">
                 <label>Имя *</label>
                 <div class="input-group">
@@ -98,7 +99,7 @@
                      'style' => 'width: 100%;']); !!}
             </div>
             <button type="submit" class="btn btn-success float-right">
-                Добавить
+                Изменить
             </button>
         </div>
 
