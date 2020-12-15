@@ -145,17 +145,26 @@
         function append_items(data, type) {
             type = type === 'get_regions' ? 'region_id' : 'school_id';
             console.log(type);
+            var place_holder_text;
             if (type === 'region_id') {
                 $('#region_div').removeClass('d-none');
+                place_holder_text = 'Выберите регион ...';
             }
             if (type === 'school_id') {
                 $('#school_div').removeClass('d-none');
+                place_holder_text = 'Выберите школу ...';
             }
 
 
             $('#' + type).find('option')
                 .remove()
                 .end();
+
+
+            $('#' + type)
+                .append($("<option></option>")
+                    .attr("placeholder", null)
+                    .text(place_holder_text));
 
             $.each(data, function (index, value) {
                 length = Object.keys(data).length;
