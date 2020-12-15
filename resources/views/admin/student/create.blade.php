@@ -67,6 +67,7 @@
                     ['class' => 'form-control select2bs4 ',
                     'id' => 'region_id',
                     'style' => 'width: 100%;',
+                    'placeholder' => 'Выберите регион ...',
                     ]); !!}
             </div>
 
@@ -155,6 +156,10 @@
                 .remove()
                 .end();
 
+            $('#' + type)
+                    .append($("<option></option>")
+                        .attr("placeholder", null)
+                        .text('Выберите регион ...'));
             $.each(data, function (index, value) {
                 length = Object.keys(data).length;
                 $('#' + type)
@@ -162,6 +167,7 @@
                         .attr("value", index)
                         .text(value));
             });
+
         }
     </script>
 @endsection

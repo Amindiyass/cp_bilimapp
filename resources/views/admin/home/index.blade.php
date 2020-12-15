@@ -264,8 +264,8 @@ $week_number = app('request')->input('week_number');
 @section('plugins.Chartjs', true)
 @section('js')
     <script>
-        var date_range = <?php echo json_encode(sprintf('%s - %s', $lastWeekDays[0], $lastWeekDays[6])) ?>;
-        var week_days = <?php echo json_encode($lastWeekDays); ?>;
+        var date_range = <?php echo json_encode(sprintf('%s - %s', $weekDays[0], $weekDays[6])) ?>;
+        var week_days = <?php echo json_encode($weekDays); ?>;
         var registered_count = <?php echo json_encode($registered_count); ?>;
         var areaChartData = {
             labels: week_days,
