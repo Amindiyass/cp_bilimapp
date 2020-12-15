@@ -47,11 +47,11 @@ class TestController extends BaseController
 
     public function edit(Test $test)
     {
-        if (isset($test->section->course->id)) {
+        if (!isset($test->section->course->id)) {
             return redirect(route('test.edit', $test->id))
                 ->with('error', 'Не указаны разделы добавьте раздел.');
         }
-        
+
         $course_id = $test->section->course->id;
         $courses = Course::all()->pluck('name_ru', 'id')->toArray();
         $sections = Section::where(['course_id' => $course_id])->get()->pluck('name_ru', 'id')->toArray();
