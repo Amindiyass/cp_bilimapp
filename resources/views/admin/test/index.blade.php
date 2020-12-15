@@ -30,7 +30,7 @@
                     <tr>
                         <td>{{$test->id}}</td>
                         <td>{{$test->name_kz}}</td>
-                        <td>{{$test->section->name_ru}}</td>
+                        <td>{{$test->section?$test->section->name_ru:null}}</td>
                         <td>{{$test->order_number}}</td>
                         <td>{{count($test->questions) ?? 0}}</td>
                         <td>{{date('Y-m-d H:i:s', strtotime($test->created_at))}}</td>
