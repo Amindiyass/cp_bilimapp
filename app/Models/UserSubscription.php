@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class UserSubscription extends Model
+class UserSubscription extends Pivot
 {
-    #TODO complete Model
+    protected $table = 'user_subscriptions';
 }

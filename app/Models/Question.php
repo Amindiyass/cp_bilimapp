@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Question extends Model
 {
     protected $table = 'questions';
+    protected $casts = [
+        'right_variant_id' => 'array'
+    ];
     protected $fillable = [
         'test_id',
         'right_variant_id',

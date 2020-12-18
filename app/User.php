@@ -5,6 +5,8 @@ namespace App;
 use App\Models\CompletedRate;
 use App\Models\Student;
 use App\Models\UserSubscription;
+use App\Models\Subscription;
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -68,6 +70,11 @@ class User extends Authenticatable
         return $originalCode === $code;
     }
 
+    public function students()
+    {
+        return $this->hasMany(Student::class);
+    }
+
     public function student()
     {
         return $this->hasOne(Student::class);
@@ -80,7 +87,36 @@ class User extends Authenticatable
 
     public function subscriptions()
     {
-        return $this->hasMany(UserSubscription::class);
+        return $this->belongsToMany(Subscription::class, 'user_subscriptions');
     }
 
+    public function isActiveSubscription()
+    {
+        $userSubscriptions = $this->subscriptions()->withPivot('created_at')->get();
+        foreach ($userSubscriptions as $userSubscription) {
+            $active = $userSubscription->pivot->created_at
+                    ->addWeeks($userSubscription->duration_in_week)
+                    ->addMonths($userSubscription->duration_in_month)
+                    ->addYear($userSubscription->duration_in_year) > Carbon::now();
+            if ($active) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getActiveSubscription()
+    {
+        $userSubscriptions = $this->subscriptions()->withPivot('created_at')->get();
+        foreach ($userSubscriptions as $userSubscription) {
+            $active = $userSubscription->pivot->created_at
+                    ->addWeeks($userSubscription->duration_in_week)
+                    ->addMonths($userSubscription->duration_in_month)
+                    ->addYear($userSubscription->duration_in_year) > Carbon::now();
+            if ($active) {
+                return $userSubscription;
+            }
+        }
+        return null;
+    }
 }

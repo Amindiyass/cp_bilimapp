@@ -54,6 +54,11 @@ class Student extends Model
         return $this->belongsTo(Language::class);
     }
 
+    public function courses()
+    {
+        return $this->hasMany(Course::class, 'class_id', 'class_id');
+    }
+
     public function get_students($user_ids = null)
     {
         $students = User::whereHas("roles", function ($query) {

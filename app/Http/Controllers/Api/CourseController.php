@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\EducationLevel;
 use App\Models\Language;
 use App\Models\Subject;
+use App\Models\Student;
 use App\Models\Test;
 use App\Search\CourseSearch;
 use Illuminate\Http\Request;
@@ -14,6 +15,15 @@ use Illuminate\Http\Request;
 
 class CourseController extends BaseController
 {
+    public function index()
+    {
+        /** @var Student $student */
+        $student = auth()->user()->student()->firstOrFail();
+        $courses = $student->courses()->with(['completedRate' => function($query) {
+            return $query->orderBy('rate', 'DESC');
+        }, 'language', 'class'])->get()->append(['count_tests', 'count_videos', 'link']);
+        return $this->sendResponse($courses);
+    }
     /**
      * Display the specified resource.
      *
@@ -41,8 +51,10 @@ class CourseController extends BaseController
     public function details(Course $course)
     {
         $lessons = $course->lessons()
-            ->with('videos', 'conspectus', 'tests', 'completedRate')
-            ->get();
+                          ->with(['videos', 'conspectus', 'tests', 'completedRate', 'assignments' => function($query) {
+                              return $query->select('id, lesson_id');
+                          }])
+                          ->get();
         return $this->sendResponse($lessons, 'Содержимое курса');
     }
 
