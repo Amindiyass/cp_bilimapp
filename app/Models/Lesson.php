@@ -32,11 +32,6 @@ class Lesson extends Model
         return $this->hasMany(Test::class);
     }
 
-    public function assignments()
-    {
-        return $this->hasMany(Assignment::class);
-    }
-
     public function completedRate()
     {
         return $this->morphOne(CompletedRate::class, 'model')->where('user_id', auth()->id());
