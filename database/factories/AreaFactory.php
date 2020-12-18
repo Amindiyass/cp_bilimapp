@@ -2,12 +2,12 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Models\Area;
 use Faker\Generator as Faker;
 
-$factory->define(Area::class, function (Faker $faker) {
+$factory->define(\App\Models\Area::class, function (Faker $faker) {
+    $name = $faker->sentence(1, 10);
     return [
-        'name_ru' => $faker->country,
-        'name_kz' => $faker->country
+        'name_kz' => $name,
+        'name_ru' => $name,
     ];
 });

@@ -37,7 +37,17 @@ Route::get('languages', [DictionaryController::class, 'languages']);
 Route::get('classes', [DictionaryController::class, 'classes']);
 
 /**Route for details user API */
-Route::group(['middleware' => ['excludeObligation', 'auth:api']], function () {
+Route::group(['middleware' => [
+    'excludeObligation', 'auth:api',
+]], function () {
+
+    Route::get('courses/all', 'Api\CourseController@all');
+    Route::get('courses/filter', 'Api\CourseController@filter');
+    Route::get('courses/search', 'Api\CourseController@search');
+    Route::get('course/filter/attributes', 'Api\CourseController@filter_attributes');
+    Route::get('course/filter/variants', 'Api\CourseController@filter_variants');
+
+    Route::get('languages/all', 'LanguageController@all');
 
     Route::post('details', [AuthController::class, 'user_info']);
 

@@ -52,9 +52,18 @@ class AuthController extends BaseController
 
     public function confirmAndRegister(Request $request)
     {
+
         $phone = $request->phone;
         $code = $request->code;
         $result = $this->redisGet($phone);
+
+
+        $validator = Validator::make($request->all(), [
+            'phone' => 'required|unique:users',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'message' => $validator->errors()]);
+        }
 
 
         if ($code != $result['code']) {
@@ -77,6 +86,8 @@ class AuthController extends BaseController
                 'last_visit' => date('Y-m-d H:i:s'),
             ];
             $user = User::create($new_user);
+
+            $user->assignRole('student');
 
             $new_student = $result;
             $new_student['user_id'] = $user->id;
@@ -171,7 +182,7 @@ class AuthController extends BaseController
     {
         $user = auth()->user();
         $phone = $request->get('phone');
-        $code  = $request->get('code');
+        $code = $request->get('code');
         if ($user->checkCode($phone, $code)) {
             $user->phone = $phone;
             $user->save();
