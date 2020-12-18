@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AssignmentController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CourseController;
+use App\Http\Controllers\Api\DictionaryController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\Api\SubscriptionController;
@@ -25,9 +26,15 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', 'Api\AuthController@login');
 
 /**Route for register API */
-Route::post('register', 'Api\AuthController@register');
+// Route::post('register', 'Api\AuthController@register');
 Route::post('registration/send_code', 'Api\AuthController@sendConfirmationPhone');
 Route::post('registration/confirm_code', 'Api\AuthController@confirmAndRegister');
+
+Route::get('areas', [DictionaryController::class, 'areas']);
+Route::get('schools', [DictionaryController::class, 'schools']);
+Route::get('regions', [DictionaryController::class, 'regions']);
+Route::get('languages', [DictionaryController::class, 'languages']);
+Route::get('classes', [DictionaryController::class, 'classes']);
 
 /**Route for details user API */
 Route::group(['middleware' => ['excludeObligation', 'auth:api']], function () {
