@@ -23,12 +23,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 /**Route for login API */
-Route::post('login', 'Api\AuthController@login');
+Route::post('login', [AuthController::class, 'login']);
 
 /**Route for register API */
 // Route::post('register', 'Api\AuthController@register');
-Route::post('registration/send_code', 'Api\AuthController@sendConfirmationPhone');
-Route::post('registration/confirm_code', 'Api\AuthController@confirmAndRegister');
+Route::post('registration/send_code', [AuthController::class, 'sendConfirmationPhone']);
+Route::post('registration/confirm_code', [AuthController::class, 'confirmAndRegister']);
 
 Route::get('areas', [DictionaryController::class, 'areas']);
 Route::get('schools', [DictionaryController::class, 'schools']);

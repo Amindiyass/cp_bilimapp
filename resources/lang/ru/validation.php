@@ -147,7 +147,7 @@ return [
     */
 
     'attributes' => [
-        'phone' => 'Телефон'
+        'phone' => 'Номер'
     ],
 
 ];
