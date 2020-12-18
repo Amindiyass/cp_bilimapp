@@ -7,17 +7,22 @@ use App\Models\EducationLevel;
 use App\Models\Language;
 use App\Models\Region;
 use App\Models\School;
+use Illuminate\Http\Request;
 
 class DictionaryController extends BaseController
 {
-    public function areas()
+    public function areas(Request $request)
     {
-        return $this->sendResponse(Area::all());
+        $query = Area::query();
+        $query->when($request->region_id, fn($query) => $query->where('region_id', request('region_id')));
+        return $this->sendResponse($query->get());
     }
 
-    public function schools()
+    public function schools(Request $request)
     {
-        return $this->sendResponse(School::all());
+        $query = School::query();
+        $query->when($request->region_id, fn($query) => $query->where('region_id', request('region_id')));
+        return $this->sendResponse($query->get());
     }
 
     public function regions()
