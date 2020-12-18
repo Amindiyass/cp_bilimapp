@@ -11,11 +11,9 @@ use Illuminate\Http\Request;
 
 class DictionaryController extends BaseController
 {
-    public function areas(Request $request)
+    public function areas()
     {
-        $query = Area::query();
-        $query->when($request->region_id, fn($query) => $query->where('region_id', request('region_id')));
-        return $this->sendResponse($query->get());
+        return $this->sendResponse(Area::all());
     }
 
     public function schools(Request $request)
@@ -25,9 +23,11 @@ class DictionaryController extends BaseController
         return $this->sendResponse($query->get());
     }
 
-    public function regions()
+    public function regions(Request $request)
     {
-        return $this->sendResponse(Region::all());
+        $query = Region::query();
+        $query->when($request->area_id, fn($query) => $query->where('area_id', request('area_id')));
+        return $this->sendResponse($query->get());
     }
 
     public function languages()
