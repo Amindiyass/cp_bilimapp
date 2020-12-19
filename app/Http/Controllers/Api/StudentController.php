@@ -25,7 +25,7 @@ class StudentController extends BaseController
         if ($request->has('photo')) {
             $user->avatar_image = Storage::putFile('avatars/' . auth()->id(), $request->file('photo'), 'public');
             $user->save();
-            $phone = $request->input('phone.');
+            $phone = $request->input('phone');
             $code = rand(1000, 9999);
             $message = sprintf("Доступ на %s, Код: %s", config('app.url'), $code);
             Send::request($phone, $message);

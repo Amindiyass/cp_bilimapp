@@ -61,12 +61,12 @@ class User extends Authenticatable
 
     public function associateRedisCodeAndPhone($phone, $code)
     {
-        Redis::hset($phone, $code);
+        Redis::hset($phone, 'code', $code);
     }
 
     public function checkCode($phone, $code)
     {
-        $originalCode = Redis::hget($phone);
+        $originalCode = Redis::hget($phone, 'code');
         return $originalCode === $code;
     }
 
