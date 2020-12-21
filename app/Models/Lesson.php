@@ -32,10 +32,6 @@ class Lesson extends Model
         return $this->hasMany(Test::class);
     }
 
-    public function assignments()
-    {
-        return $this->hasMany(Assignment::class);
-    }
 
     public function completedRate()
     {

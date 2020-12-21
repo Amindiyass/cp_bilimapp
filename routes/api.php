@@ -60,12 +60,11 @@ Route::group(['middleware' => ['excludeObligation', 'auth:api']], function () {
 
     Route::get('user/subscriptions', [SubscriptionController::class, 'index'])->name('api.user.subscriptions');
     Route::get('user/subscription/expiry', [SubscriptionController::class, 'expiry'])->name('api.user.subscription.expiry');
-    Route::get('courses/all', 'CourseController@all');
-    Route::get('courses/filter', 'CourseController@filter');
-    Route::get('courses/search', 'CourseController@search');
-    Route::get('course/filter/attributes', 'CourseController@filter_attributes');
-    Route::get('course/filter/variants', 'CourseController@filter_variants');
-    Route::get('languages/all', 'LanguagesController@all');
+    Route::get('courses/all', [CourseController::class, 'all']);
+    Route::get('courses/filter', [CourseController::class, 'filter']);
+    Route::get('courses/search', [CourseController::class, 'search']);
+    Route::get('course/filter/attributes', [CourseController::class, 'filter_attributes']);
+    Route::get('course/filter/variants', [CourseController::class, 'filter_variants']);
 
     Route::post('details', 'Api\AuthController@user_info');
     Route::get('course/{course}', 'Api\CourseController@show');
