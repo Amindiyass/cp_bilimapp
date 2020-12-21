@@ -67,6 +67,13 @@ Route::group(['middleware' => ['excludeObligation', 'auth:api']], function () {
     Route::get('course/filter/variants', 'CourseController@filter_variants');
     Route::get('languages/all', 'LanguagesController@all');
 
+    Route::post('details', 'Api\AuthController@user_info');
+    Route::get('course/{course}', 'Api\CourseController@show');
+    Route::get('course/{course}/details', 'Api\CourseController@details');
+    Route::get('course/{course}/tests', 'Api\CourseController@tests');
+    Route::get('profile', 'Api\StudentController@profile');
+    Route::put('profile', 'Api\StudentController@update');
+    Route::post('profile/reconfirm_code', 'Api\AuthController@reconfirmCode');
 });
 //Route::middleware('auth:api')->group( function () {
 //});

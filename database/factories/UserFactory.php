@@ -30,6 +30,6 @@ $factory->define(User::class, function (Faker $faker) {
         'remember_token' => Str::random(10),
         'is_active' => true,
         'balance' => 0,
-        'inviter_id' => $userIds[array_rand($userIds)]
+//        'inviter_id' => 0
     ];
 });

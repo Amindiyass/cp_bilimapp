@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Requests\Api;
+namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StudentUpdateRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class StudentUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,14 +25,15 @@ class StudentUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required|string',
-            'last_name' => 'string',
-            'region_id' => 'required|integer',
-            'area_id' => 'required|integer',
-            'school_id' => 'required|integer',
+            'first_name' => 'required',
+            'last_name' => 'required',
             'phone' => 'required',
-            'photo' => 'image',
-            'email' => 'email'
+            'email' => ['required', Rule::unique('users')->ignore($this->user_id)],
+            'area_id' => 'required|int',
+            'region_id' => 'required|int',
+            'school_id' => 'required|int',
+            'language_id' => 'required|int',
+            'class_id' => 'required|int',
         ];
     }
 

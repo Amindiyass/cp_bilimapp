@@ -79,6 +79,11 @@ class Course extends Model
         return $this->morphOne(CompletedRate::class, 'model');
     }
 
+    public function tests()
+    {
+        return $this->hasMany(Test::class);
+    }
+
     public function getCountTestsAttribute()
     {
         return Test::whereIn('lesson_id', $this->lessons()->select('lessons.id'))->count();

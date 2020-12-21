@@ -13,6 +13,12 @@ class Subject extends Model
     # TODO write relationships before commit
 
 
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
+
+
     public function filter_list()
     {
         $array = ['type' => 'class'];
@@ -27,5 +33,12 @@ class Subject extends Model
         }
         $array['items'] = $items;
         return $array;
+    }
+
+    public static function detail()
+    {
+        $subject = Subject::with('courses', 'courses.lesson', 'courses.user')->get();
+//        $subject = $subject->load('courses');
+        dd($subject->toArray());
     }
 }
