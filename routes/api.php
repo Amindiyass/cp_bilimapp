@@ -35,6 +35,7 @@ Route::get('schools', [DictionaryController::class, 'schools']);
 Route::get('regions', [DictionaryController::class, 'regions']);
 Route::get('languages', [DictionaryController::class, 'languages']);
 Route::get('classes', [DictionaryController::class, 'classes']);
+Route::get('subjects', [DictionaryController::class, 'subjects']);
 
 /**Route for details user API */
 Route::group(['middleware' => [

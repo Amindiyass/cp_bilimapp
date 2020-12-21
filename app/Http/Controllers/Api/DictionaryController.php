@@ -7,6 +7,7 @@ use App\Models\EducationLevel;
 use App\Models\Language;
 use App\Models\Region;
 use App\Models\School;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 
 class DictionaryController extends BaseController
@@ -38,5 +39,10 @@ class DictionaryController extends BaseController
     public function classes()
     {
         return $this->sendResponse(EducationLevel::all());
+    }
+
+    public function subjects()
+    {
+        return $this->sendResponse(Subject::select('id', 'name_ru', 'name_kz')->get());
     }
 }
