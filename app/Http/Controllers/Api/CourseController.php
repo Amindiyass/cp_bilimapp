@@ -54,7 +54,7 @@ class CourseController extends BaseController
     {
         $lessons = $course->lessons()
                           ->with(['videos', 'conspectus', 'tests', 'completedRate', 'assignments' => function($query) {
-                              return $query->select('id, lesson_id');
+                              return $query->select('id', 'lesson_id');
                           }])
                           ->get();
         return $this->sendResponse($lessons, 'Содержимое курса');
