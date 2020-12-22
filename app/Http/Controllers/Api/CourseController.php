@@ -15,13 +15,15 @@ use Illuminate\Http\Request;
 
 class CourseController extends BaseController
 {
-    public function index()
+    public function index(CourseFilter $filter)
     {
         /** @var Student $student */
         $student = auth()->user()->student()->firstOrFail();
-        $courses = $student->courses()->with(['completedRate' => function($query) {
-            return $query->orderBy('rate', 'DESC');
-        }, 'language', 'class'])->get()->append(['count_tests', 'count_videos', 'link']);
+
+        $courses = $student->courses()->filter($filter)->with(['language', 'class', 'subject', 'completedRate' =>
+            fn($query) => $query->orderBy('rate', 'DESC')
+        ])->get()->append(['count_tests', 'count_videos', 'link']);
+
         return $this->sendResponse($courses);
     }
     /**
