@@ -38,5 +38,10 @@ class CourseFilter extends QueryFilter
         });
     }
 
+    public function subject_id($subject)
+    {
+        return $this->builder->where('subject_id', $subject);
+    }
+
 
 }
