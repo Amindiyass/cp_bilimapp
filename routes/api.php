@@ -52,7 +52,8 @@ Route::group(['middleware' => [
 
     Route::post('details', [AuthController::class, 'user_info']);
 
-    Route::get('courses', [CourseController::class, 'index']);
+    Route::get('courses', [CourseController::class, 'all']);
+    Route::get('user-courses', [CourseController::class, 'index']);
     Route::get('course/{course}', [CourseController::class, 'show'])->name('course.show');
     Route::get('course/{course}/details', [CourseController::class, 'details']);
     Route::get('course/{course}/tests', [CourseController::class, 'tests']);
@@ -76,7 +77,8 @@ Route::group(['middleware' => [
         Route::post('video/{video}/store-progress', [VideoController::class, 'storeProgress']);
     });
 
-    Route::get('user/subscriptions', [SubscriptionController::class, 'index'])->name('api.user.subscriptions');
+    Route::get('user/subscriptions', [SubscriptionController::class, 'user'])->name('api.user.subscriptions');
+    Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('api.subscriptions');
     Route::get('user/subscription/expiry', [SubscriptionController::class, 'expiry'])->name('api.user.subscription.expiry');
 });
 //Route::middleware('auth:api')->group( function () {

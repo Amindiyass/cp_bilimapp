@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class Test extends Model
 {
-    public $next;
+    protected $appends = ['count_questions'];
 
     use SoftDeletes;
 
@@ -17,7 +17,6 @@ class Test extends Model
         'name_ru',
         'section_id',
         'order_number',
-
     ];
 
     public function completedRate()
@@ -90,7 +89,7 @@ class Test extends Model
     public function getNextAttribute()
     {
         $nextTest = self::where('id', '>', $this->id)->first();
-        return route('api.test', ['id' => $nextTest->id]);
+        return route('api.test', ['test' => $nextTest->id]);
     }
 
     public function results()
@@ -116,6 +115,9 @@ class Test extends Model
     public function checkTest(array $answers = [])
     {
         $questions = $this->questions()->get();
+        if ($questions->count() === 0) {
+            abort(500, 'Questions are zero');
+        }
         $rightAnswers = 0;
         $wrongAnswers = 0;
         foreach ($answers as $key => $answer) {
@@ -139,5 +141,10 @@ class Test extends Model
             'passed' => ($rightAnswers * 100 / $questions->count()) > 70
         ]);
 
+    }
+
+    public function getCountQuestionsAttribute()
+    {
+        return $this->questions()->count();
     }
 }

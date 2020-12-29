@@ -10,11 +10,11 @@ class TestController extends BaseController
 {
     public function show(Test $test)
     {
-        $test = $test->with(['questions' => function (HasMany $query) {
-            return $query->select('body', 'test_id', 'id')->orderBy('order_number');
+        $test = $test->load(['questions' => function (HasMany $query) {
+            return $query->select('body_kz', 'body_ru', 'test_id', 'id')->orderBy('order_number');
         }, 'questions.variants' => function (HasMany $query) {
             return $query->select('variant_in_kz', 'variant_in_ru', 'question_id');
-        }])->first()->append('next');
+        }])->append('next');
         return $this->sendResponse($test);
     }
 

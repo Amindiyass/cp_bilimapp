@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
  * @package App\Models
  * @property CompletedRate $completed_rate
  * @property Lesson $previous
+ * @property Test[] $tests
  */
 class Lesson extends Model
 {
