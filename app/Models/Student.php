@@ -56,7 +56,7 @@ class Student extends Model
 
     public function courses()
     {
-        return $this->hasMany(Course::class, 'class_id', 'class_id')->where('');
+        return $this->hasMany(Course::class, 'class_id', 'class_id');
     }
 
     public function get_students($user_ids = null)
