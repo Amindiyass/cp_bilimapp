@@ -4,10 +4,8 @@ namespace App;
 
 use App\Models\CompletedRate;
 use App\Models\Student;
-use App\Models\UserSubscription;
 use App\Models\Subscription;
 use Carbon\Carbon;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;

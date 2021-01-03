@@ -134,6 +134,12 @@ class AuthController extends BaseController
         }
     }
 
+    public function logout()
+    {
+        auth()->user()->token()->revoke();
+        return $this->sendResponse([], 'Logout success');
+    }
+
     public function user_info()
     {
         $user = Auth::user();
