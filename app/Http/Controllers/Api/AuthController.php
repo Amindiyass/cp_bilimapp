@@ -32,7 +32,7 @@ class AuthController extends BaseController
             'inviter_id' => 'int',
         ]);
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'message' => $validator->errors()]);
+            return response()->json(['success' => false, 'message' => $validator->errors()], 400);
         }
 
         $phone = $request->phone;
@@ -62,7 +62,7 @@ class AuthController extends BaseController
             'phone' => 'required|unique:users',
         ]);
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'message' => $validator->errors()]);
+            return response()->json(['success' => false, 'message' => $validator->errors()], 400);
         }
 
 
