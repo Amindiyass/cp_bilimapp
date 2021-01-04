@@ -42,6 +42,8 @@ Route::group(['middleware' => [
     'excludeObligation', 'auth:api',
 ]], function () {
 
+    Route::post('logout', [AuthController::class, 'logout']);
+
     Route::get('courses/all', 'Api\CourseController@all');
     Route::get('courses/filter', 'Api\CourseController@filter');
     Route::get('courses/search', 'Api\CourseController@search');
