@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApplicationController;
 use App\Http\Controllers\Api\AssignmentController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CourseController;
@@ -43,6 +44,8 @@ Route::group(['middleware' => [
 ]], function () {
 
     Route::post('logout', [AuthController::class, 'logout']);
+
+    Route::post('application', [ApplicationController::class, 'store']);
 
     Route::get('courses/all', 'Api\CourseController@all');
     Route::get('courses/filter', 'Api\CourseController@filter');

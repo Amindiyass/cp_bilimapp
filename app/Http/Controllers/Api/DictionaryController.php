@@ -8,6 +8,7 @@ use App\Models\Language;
 use App\Models\Region;
 use App\Models\School;
 use App\Models\Subject;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class DictionaryController extends BaseController
@@ -41,8 +42,12 @@ class DictionaryController extends BaseController
         return $this->sendResponse(EducationLevel::all());
     }
 
-    public function subjects()
+    public function subjects(Request $request)
     {
-        return $this->sendResponse(Subject::select('id', 'name_ru', 'name_kz')->get());
+        $query = Subject::select('id', 'name_ru', 'name_kz');
+        $query->when($request->input('class_id'),
+            fn(Builder $query) => $query->whereHas('courses', fn(Builder $query) => $query->where('class_id', request('class_id')))
+        );
+        return $this->sendResponse($query->get());
     }
 }
