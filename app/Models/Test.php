@@ -126,7 +126,8 @@ class Test extends Model
                 $wrongAnswers++;
                 continue;
             }
-            if ((int)$answeredQuestion->right_variant_id === (int)$answer) {
+            $answer = array_map('intval', $answer);
+            if ($answer === $answeredQuestion->right_variant_id) {
                 $rightAnswers++;
             } else {
                 $wrongAnswers++;

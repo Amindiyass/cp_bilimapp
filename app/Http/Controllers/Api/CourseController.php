@@ -68,14 +68,23 @@ class CourseController extends BaseController
         $result = [];
         foreach ($lessons as $lesson) {
             if ($lesson->videos->count() > 0) {
+                foreach ($lesson->videos as $video) {
+                    $video->link = route('api.lesson', ['lesson' => $lesson->id]);
+                }
                 $result[] = $lesson->toArray() + ['type' => 'videos'];
             }
             if ($lesson->tests->count() > 0) {
                 unset($lesson->videos);
+                foreach ($lesson->tests as $test) {
+                    $test->link = route('api.lesson', ['lesson' => $lesson->id]);
+                }
                 $result[] = $lesson->toArray() + ['type' => 'tests'];
             }
             if ($lesson->assignments->count() > 0) {
                 unset($lesson->tests);
+                foreach ($lesson->assignments as $assignment) {
+                    $assignment->link = route('api.lesson', ['lesson' => $lesson->id]);
+                }
                 $result[] = $lesson->toArray() + ['type' => 'assignments'];
             }
         }

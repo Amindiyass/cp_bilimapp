@@ -37,6 +37,7 @@ Route::get('regions', [DictionaryController::class, 'regions']);
 Route::get('languages', [DictionaryController::class, 'languages']);
 Route::get('classes', [DictionaryController::class, 'classes']);
 Route::get('subjects', [DictionaryController::class, 'subjects']);
+Route::get('courses', [CourseController::class, 'all']);
 
 /**Route for details user API */
 Route::group(['middleware' => [
@@ -57,7 +58,6 @@ Route::group(['middleware' => [
 
     Route::post('details', [AuthController::class, 'user_info']);
 
-    Route::get('courses', [CourseController::class, 'all']);
     Route::get('user-courses', [CourseController::class, 'index']);
     Route::get('course/{course}', [CourseController::class, 'show'])->name('course.show');
     Route::get('course/{course}/details', [CourseController::class, 'details']);

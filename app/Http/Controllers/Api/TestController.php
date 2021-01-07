@@ -22,7 +22,7 @@ class TestController extends BaseController
     {
         $answers = $request->get('answers');
         $result = $test->checkTest($answers);
-        $result = $result->select('wrong_answered', 'right_answered', 'passed', 'total_question')->first();
+        $result = $result->makeHidden('answers');
         return $this->sendResponse($result);
     }
 
