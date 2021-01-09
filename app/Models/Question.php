@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Question extends Model
 {
     protected $table = 'questions';
+    protected $casts = [
+        'right_variant_id' => 'array'
+    ];
     protected $fillable = [
         'test_id',
         'right_variant_id',
@@ -33,7 +36,4 @@ class Question extends Model
         return count(json_decode($this->right_variant_id));
     }
 
-    protected $casts = [
-        'right_variant_id' => 'array'
-    ];
 }

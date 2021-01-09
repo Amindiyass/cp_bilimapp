@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Lesson
  * @package App\Models
  * @property CompletedRate $completed_rate
  * @property Lesson $previous
+ * @property Test[] $tests
  */
 class Lesson extends Model
 {
@@ -32,7 +34,6 @@ class Lesson extends Model
         return $this->hasMany(Test::class);
     }
 
-
     public function completedRate()
     {
         return $this->morphOne(CompletedRate::class, 'model')->where('user_id', auth()->id());
@@ -50,14 +51,18 @@ class Lesson extends Model
 
     public function getNextStepAttribute()
     {
-        $testResults = TestResult::user()->groupBy('test_id')->latest()->get();
-        foreach ($testResults as $testResult) {
-            if (!$testResult->passed) {
-                return route('api.test', ['id' => $testResult->test->id]);
-            }
+//        $testResults = TestResult::byUser()->where('passed', 'false')->groupBy('test_id')->latest()->get();
+//        foreach ($testResults as $testResult) {
+//            if (!$testResult->passed) {
+//                return route('api.test', ['test' => $testResult->test->id]);
+//            }
+//        }
+        $testResult = TestResult::select('test_id')->byUser()->where('passed', 'false')->groupBy('test_id')->first();
+        if ($testResult) {
+            return route('api.test', ['test' => $testResult->test_id]);
         }
-        $course = $this->load('section.course');
-        $lesson = $course->lessons()->where('id', '>', $this->id)->first();
-        return route('lesson', ['lesson' => $lesson->id]);
+        // $course = $this->load('section.course');
+        $lesson = $this->section->course->lessons()->where('lessons.id', '>', $this->id)->first();
+        return route('api.lesson', ['lesson' => $lesson->id]);
     }
 }

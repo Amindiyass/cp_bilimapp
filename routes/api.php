@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\ApplicationController;
 use App\Http\Controllers\Api\AssignmentController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CourseController;
+use App\Http\Controllers\Api\DictionaryController;
 use App\Http\Controllers\Api\LessonController;
 use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\Api\SubscriptionController;
@@ -22,19 +24,41 @@ use Illuminate\Support\Facades\Route;
 */
 
 /**Route for login API */
-Route::post('login', 'Api\AuthController@login');
+Route::post('login', [AuthController::class, 'login']);
 
 /**Route for register API */
-Route::post('register', 'Api\AuthController@register');
-Route::post('registration/send_code', 'Api\AuthController@sendConfirmationPhone');
-Route::post('registration/confirm_code', 'Api\AuthController@confirmAndRegister');
+// Route::post('register', 'Api\AuthController@register');
+Route::post('registration/send_code', [AuthController::class, 'sendConfirmationPhone']);
+Route::post('registration/confirm_code', [AuthController::class, 'confirmAndRegister']);
+
+Route::get('areas', [DictionaryController::class, 'areas']);
+Route::get('schools', [DictionaryController::class, 'schools']);
+Route::get('regions', [DictionaryController::class, 'regions']);
+Route::get('languages', [DictionaryController::class, 'languages']);
+Route::get('classes', [DictionaryController::class, 'classes']);
+Route::get('subjects', [DictionaryController::class, 'subjects']);
+Route::get('courses', [CourseController::class, 'all']);
 
 /**Route for details user API */
-Route::group(['middleware' => ['excludeObligation', 'auth:api']], function () {
+Route::group(['middleware' => [
+    'excludeObligation', 'auth:api',
+]], function () {
+
+    Route::post('logout', [AuthController::class, 'logout']);
+
+    Route::post('application', [ApplicationController::class, 'store']);
+
+    Route::get('courses/all', 'Api\CourseController@all');
+    Route::get('courses/filter', 'Api\CourseController@filter');
+    Route::get('courses/search', 'Api\CourseController@search');
+    Route::get('course/filter/attributes', 'Api\CourseController@filter_attributes');
+    Route::get('course/filter/variants', 'Api\CourseController@filter_variants');
+
+    Route::get('languages/all', 'LanguageController@all');
 
     Route::post('details', [AuthController::class, 'user_info']);
 
-    Route::get('courses', [CourseController::class, 'index']);
+    Route::get('user-courses', [CourseController::class, 'index']);
     Route::get('course/{course}', [CourseController::class, 'show'])->name('course.show');
     Route::get('course/{course}/details', [CourseController::class, 'details']);
     Route::get('course/{course}/tests', [CourseController::class, 'tests']);
@@ -58,21 +82,9 @@ Route::group(['middleware' => ['excludeObligation', 'auth:api']], function () {
         Route::post('video/{video}/store-progress', [VideoController::class, 'storeProgress']);
     });
 
-    Route::get('user/subscriptions', [SubscriptionController::class, 'index'])->name('api.user.subscriptions');
+    Route::get('user/subscriptions', [SubscriptionController::class, 'user'])->name('api.user.subscriptions');
+    Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('api.subscriptions');
     Route::get('user/subscription/expiry', [SubscriptionController::class, 'expiry'])->name('api.user.subscription.expiry');
-    Route::get('courses/all', [CourseController::class, 'all']);
-    Route::get('courses/filter', [CourseController::class, 'filter']);
-    Route::get('courses/search', [CourseController::class, 'search']);
-    Route::get('course/filter/attributes', [CourseController::class, 'filter_attributes']);
-    Route::get('course/filter/variants', [CourseController::class, 'filter_variants']);
-
-    Route::post('details', 'Api\AuthController@user_info');
-    Route::get('course/{course}', 'Api\CourseController@show');
-    Route::get('course/{course}/details', 'Api\CourseController@details');
-    Route::get('course/{course}/tests', 'Api\CourseController@tests');
-    Route::get('profile', 'Api\StudentController@profile');
-    Route::put('profile', 'Api\StudentController@update');
-    Route::post('profile/reconfirm_code', 'Api\AuthController@reconfirmCode');
 });
 //Route::middleware('auth:api')->group( function () {
 //});

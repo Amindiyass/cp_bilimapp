@@ -84,6 +84,7 @@ class Course extends Model
         return $this->hasMany(Test::class);
     }
 
+
     public function getCountTestsAttribute()
     {
         return Test::whereIn('lesson_id', $this->lessons()->select('lessons.id'))->count();
@@ -151,4 +152,5 @@ class Course extends Model
 
         return $assignment_count;
     }
+
 }

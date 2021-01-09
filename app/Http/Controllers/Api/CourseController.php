@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Filters\CourseFilter;
 use App\Models\Course;
-use App\Models\Student;
 use App\Models\EducationLevel;
 use App\Models\Language;
+use App\Models\Lesson;
 use App\Models\Subject;
+use App\Models\Student;
 use App\Models\Test;
 use App\Search\CourseSearch;
 use Illuminate\Http\Request;
@@ -15,13 +16,22 @@ use Illuminate\Http\Request;
 
 class CourseController extends BaseController
 {
-    public function index()
+    public function all(CourseFilter $filter)
+    {
+        return $this->sendResponse(
+            Course::filter($filter)->with(['language', 'class', 'subject'])->get()->append(['count_tests', 'count_videos', 'link'])
+        );
+    }
+
+    public function index(CourseFilter $filter)
     {
         /** @var Student $student */
         $student = auth()->user()->student()->firstOrFail();
-        $courses = $student->courses()->with(['completedRate' => function($query) {
-            return $query->orderBy('rate', 'DESC');
-        }, 'language', 'class'])->get()->append(['count_tests', 'count_videos', 'link']);
+
+        $courses = $student->courses()->filter($filter)->with(['language', 'class', 'subject', 'completedRate' =>
+            fn($query) => $query->orderBy('rate', 'DESC')
+        ])->get()->append(['count_tests', 'count_videos', 'link']);
+
         return $this->sendResponse($courses);
     }
     /**
@@ -35,14 +45,18 @@ class CourseController extends BaseController
         $completeRate = $course->completedRate()->byUser()->first();
         return $this->sendResponse(
             [
-                'name_ru' => $course->subject->name_ru . ' ' . $course->class->name_ru,
-                'name_kz' => $course->subject->name_kz . ' ' . $course->class->name_kz,
+                'subject_ru' => $course->subject->name_ru,
+                'subject_kz' => $course->subject->name_kz,
+                'class_ru' => $course->class->name_ru,
+                'class_kz' => $course->class->name_kz,
+                'name_ru' => $course->name_ru,
+                'name_kz' => $course->name_kz,
                 'description' => $course->description,
-                'tests_count' => Test::whereIn('lesson_id', $course->lessons()->select('lessons.id'))->count(),
-                'lessons_count' => $course->lessons()->count(),
+                'tests_count' => $course->count_tests,
+                'videos_count' => $course->count_videos,
                 'language_ru' => $course->language->name_ru,
                 'language_kz' => $course->language->name_kz,
-                'photo'       => $course->photo,
+                'photo' => $course->photo,
                 'complete_rate' => $completeRate->rate ?? 0
             ],
             'Предмет');
@@ -50,22 +64,46 @@ class CourseController extends BaseController
 
     public function details(Course $course)
     {
-        $lessons = $course->lessons()
-                          ->with(['videos', 'conspectus', 'tests', 'completedRate', 'assignments' => function($query) {
-                              return $query->select('id, lesson_id');
-                          }])
-                          ->get();
-        return $this->sendResponse($lessons, 'Содержимое курса');
+        $lessons = $course->lessons()->get();
+        $result = [];
+        foreach ($lessons as $lesson) {
+            if ($lesson->videos->count() > 0) {
+                foreach ($lesson->videos as $video) {
+                    $video->link = route('api.lesson', ['lesson' => $lesson->id]);
+                }
+                $result[] = $lesson->toArray() + ['type' => 'videos'];
+            }
+            if ($lesson->tests->count() > 0) {
+                unset($lesson->videos);
+                foreach ($lesson->tests as $test) {
+                    $test->link = route('api.lesson', ['lesson' => $lesson->id]);
+                }
+                $result[] = $lesson->toArray() + ['type' => 'tests'];
+            }
+            if ($lesson->assignments->count() > 0) {
+                unset($lesson->tests);
+                foreach ($lesson->assignments as $assignment) {
+                    $assignment->link = route('api.lesson', ['lesson' => $lesson->id]);
+                }
+                $result[] = $lesson->toArray() + ['type' => 'assignments'];
+            }
+        }
+//        $lessons = $course->lessons()
+//                          ->with(['videos', 'conspectus', 'tests', 'completedRate', 'assignments' => function($query) {
+//                              return $query->select('id', 'lesson_id');
+//                          }])
+//                          ->get();
+        return $this->sendResponse($result, 'Содержимое курса');
     }
 
     public function tests(Course $course)
     {
         $result = [];
-        $lessons = $course->lessons()
-            ->with('tests.notCompletedRate')
-            ->get();
+        /** @var Lesson[] $lessons */
+        $lessons = $course->lessons()->has('tests')->with('tests.completedRate')->get();
         foreach ($lessons as $lesson) {
-            $result[] = $lesson->tests;
+            $tests = $lesson->tests->append('count_questions');
+            $result = $result + $tests->toArray();
         }
         return $this->sendResponse($result);
     }

@@ -10,7 +10,7 @@ class LessonController extends BaseController
 {
     public function show(Lesson $lesson)
     {
-        $lesson->load(['videos.completedRate', 'conspectus'])->append('next_step');
+        $lesson->load(['videos.completedRate', 'conspectus', 'assignments'])->append('next_step');
         return $this->sendResponse($lesson);
     }
 

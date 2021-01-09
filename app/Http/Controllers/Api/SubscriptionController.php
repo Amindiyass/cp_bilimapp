@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class SubscriptionController extends BaseController
 {
-    public function index()
+    public function user()
     {
         /** @var User $user */
         $user = auth()->user();
@@ -25,5 +25,10 @@ class SubscriptionController extends BaseController
             ->addWeeks($userSubscription->duration_in_week)
             ->addMonths($userSubscription->duration_in_month)
             ->addYear($userSubscription->duration_in_year)]);
+    }
+
+    public function index()
+    {
+        return $this->sendResponse(Subscription::all());
     }
 }

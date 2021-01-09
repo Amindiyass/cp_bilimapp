@@ -19,9 +19,9 @@ class TestPassed
         $test = $request->route()->parameter('test');
         /** @var Test $previousTest */
         $previousTest = $test->previous();
-        if (!$previousTest || $previousTest->passedResults()->count() > 0) {
+        //if (!$previousTest || $previousTest->passedResults()->count() > 0) {
             return $next($request);
-        }
+        //}
         return response()->json([
             'success' => false,
             'message' => 'Доступ запрещен',
