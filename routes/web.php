@@ -23,8 +23,11 @@ Route::group([
     'namespace' => 'Admin',
     'prefix' => 'admin',
 ], function () {
+
     Route::get('home', 'HomeController@index')->name('home.index');
+
     Route::resource('student', 'StudentController');
+
     Route::post('students/ajax', 'StudentController@ajax')->name('student.ajax');
     Route::get('students/filter', 'StudentController@filter')->name('student.filter');
     Route::post('students/password/change', 'StudentController@password_change')->name('student.password.change');
@@ -45,5 +48,9 @@ Route::group([
     Route::post('question/add', 'QuestionController@add')->name('question.add');
 
 
+    Route::resource('subject', 'SubjectController');
+
+    Route::resource('course', 'CourseController');
+    
 });
 

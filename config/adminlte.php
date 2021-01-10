@@ -251,6 +251,16 @@ return [
             'route' => 'test.index',
             'icon' => 'fa fa-spell-check',
         ],
+        [
+            'text' => 'Предметы',
+            'route' => 'subject.index',
+            'icon' => 'fa fa-book',
+        ],
+        [
+            'text' => 'Курсы',
+            'route' => 'course.index',
+            'icon' => 'fa fa-book-reader',
+        ],
     ],
 
     /*

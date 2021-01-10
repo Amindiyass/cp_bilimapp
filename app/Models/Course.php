@@ -84,6 +84,11 @@ class Course extends Model
         return $this->hasMany(Test::class);
     }
 
+    public function education_level()
+    {
+        return $this->hasOne(EducationLevel::class, 'id', 'class_id');
+    }
+
 
     public function getCountTestsAttribute()
     {

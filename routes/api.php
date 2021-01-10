@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\Api\TestController;
 use App\Http\Controllers\Api\VideoController;
+use App\Http\Controllers\LanguageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,16 +49,10 @@ Route::group(['middleware' => [
 
     Route::post('application', [ApplicationController::class, 'store']);
 
-    Route::get('courses/all', 'Api\CourseController@all');
-    Route::get('courses/filter', 'Api\CourseController@filter');
-    Route::get('courses/search', 'Api\CourseController@search');
-    Route::get('course/filter/attributes', 'Api\CourseController@filter_attributes');
-    Route::get('course/filter/variants', 'Api\CourseController@filter_variants');
-
-    Route::get('languages/all', 'LanguageController@all');
-
     Route::post('details', [AuthController::class, 'user_info']);
 
+    Route::get('courses/filter', [CourseController::class, 'filter']);
+    Route::get('courses/search', [CourseController::class, 'search']);
     Route::get('user-courses', [CourseController::class, 'index']);
     Route::get('course/{course}', [CourseController::class, 'show'])->name('course.show');
     Route::get('course/{course}/details', [CourseController::class, 'details']);
@@ -73,7 +68,6 @@ Route::group(['middleware' => [
     Route::middleware('hasSubscription')->group(function () {
         Route::get('test/{test}', [TestController::class, 'show'])->middleware('testPassed')->name('api.test');
         Route::post('test/check/{test}', [TestController::class, 'check'])->middleware('testPassed')->name('api.test.check');
-        ## TODO route name not completed
         Route::get('test/errors/{test}', [TestController::class, 'errors'])->middleware('testPassed')->name('api.test.error');
         Route::get('lesson/{lesson}/assignments', [LessonController::class, 'assignments'])->name('api.assignments');
         Route::get('assignment/{assignment}', [AssignmentController::class, 'show'])->name('api.task');
@@ -86,6 +80,4 @@ Route::group(['middleware' => [
     Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('api.subscriptions');
     Route::get('user/subscription/expiry', [SubscriptionController::class, 'expiry'])->name('api.user.subscription.expiry');
 });
-//Route::middleware('auth:api')->group( function () {
-//});
 
