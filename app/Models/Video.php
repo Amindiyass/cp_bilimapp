@@ -4,10 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Video
+ * @package App\Models
+ * @property Lesson $lesson
+ */
 class Video extends Model
 {
     protected $appends = [
-     //   'link_to_lesson'
+        'link',
+        'has_conspectus'
     ];
 
     public function completedRate()
@@ -20,8 +26,16 @@ class Video extends Model
         return $this->belongsTo(Lesson::class);
     }
 
-    public function getLinkToLessonAttribute()
+    public function getLinkAttribute()
     {
-        return route('api.lesson', ['lesson' => $this->lesson->id]);
+        return '/lesson/' . $this->id;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getHasConspectusAttribute()
+    {
+        return $this->lesson->conspectus->count() > 0;
     }
 }

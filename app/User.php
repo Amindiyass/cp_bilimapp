@@ -52,6 +52,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function inviter()
+    {
+        return $this->belongsTo(User::class, 'inviter_id', 'id');
+    }
+
     public function getAvatarImageAttribute($value)
     {
         return Storage::url($value);

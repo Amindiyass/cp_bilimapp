@@ -23,8 +23,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Course extends Model
 {
-
-
     protected $table = 'courses';
     protected $primaryKey = 'id';
     protected $fillable = [
@@ -36,7 +34,11 @@ class Course extends Model
         'order',
         'description_ru',
         'description_kz',
+    ];
 
+    protected $casts = [
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp',
     ];
 
     public function scopeFilter(Builder $builder, QueryFilter $filters)
@@ -149,6 +151,6 @@ class Course extends Model
 
     public function getLinkAttribute()
     {
-        return route('course.show', ['course' => $this->id]);
+        return '/course/' . $this->id;
     }
 }

@@ -20,4 +20,14 @@ class Section extends Model
     {
         return $this->belongsTo(Course::class);
     }
+
+    public function getLinkAttribute()
+    {
+        return route('api.lesson', ['lesson' => $this->id]);
+    }
+
+    public function getCompletedAttribute()
+    {
+        return $this->completed_rate ? $this->completed_rate->rate : 0;
+    }
 }

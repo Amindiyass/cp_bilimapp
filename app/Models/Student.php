@@ -24,6 +24,15 @@ class Student extends Model
         'class_id',
     ];
 
+    protected $casts = [
+        'area_id' => 'integer',
+        'region_id' => 'integer',
+        'school_id' => 'integer',
+        'language_id' => 'integer',
+        'user_id' => 'integer',
+        'class_id' => 'integer'
+    ];
+
     public function scopeFilter(Builder $builder, QueryFilter $filters)
     {
         return $filters->apply($builder);

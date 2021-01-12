@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StudentUpdateRequest extends FormRequest
+class UpdatePasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,14 +24,8 @@ class StudentUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'string',
-            'last_name' => 'string',
-            'region_id' => 'integer',
-            'area_id' => 'integer',
-            'school_id' => 'integer',
-            //'phone' => 'required',
-            'photo' => 'image',
-            'email' => 'email'
+            'password' => 'required|min:6',
+            'confirm_password' => 'required|same:password|min:6'
         ];
     }
 }

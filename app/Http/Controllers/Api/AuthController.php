@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Mail\Send;
 use App\Http\Requests\Api\ReconfirmCodeRequest;
+use App\Http\Requests\Api\UpdatePasswordRequest;
 use App\Models\Student;
 use App\User;
 use Illuminate\Http\Request;
@@ -196,5 +197,16 @@ class AuthController extends BaseController
         } else {
             return $this->sendResponse('Error. Code not valid');
         }
+    }
+
+    public function updatePassword(UpdatePasswordRequest $request)
+    {
+        $user = auth()->user();
+
+        $user->password = Hash::make($request->input('password'));
+
+        $user->save();
+
+        return $this->sendResponse([], 'Password updated');
     }
 }

@@ -1,18 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\V2;
 
 use App\Filters\CourseFilter;
+use App\Http\Controllers\Api\BaseController;
 use App\Models\Course;
-use App\Models\EducationLevel;
-use App\Models\Language;
 use App\Models\Lesson;
-use App\Models\Subject;
 use App\Models\Student;
-use App\Models\Test;
 use App\Search\CourseSearch;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 
 class CourseController extends BaseController
@@ -66,39 +62,11 @@ class CourseController extends BaseController
 
     public function details(Course $course)
     {
-        $lessons = $course->lessons()->where(function($query) {
-            return $query->has('tests')->orHas('videos')->orHas('assignments');
+        $lessons = $course->sections()->where(function($query) {
+            return $query->has('lessons.test')->orHas('lessons.video')->orHas('lessons.assignments');
         })
-            ->with('videos', 'tests', 'assignments')->get()->append(['link', 'completed']);
+            ->with('lessons.video', 'lessons.test', 'lessons.assignments')->get()->append(['link', 'completed']);
         return $this->sendResponse($lessons);
-        $result = [];
-        foreach ($lessons as $lesson) {
-//            if ($lesson->videos->count() > 0) {
-//                foreach ($lesson->videos as $video) {
-//                    $video->link = route('api.lesson', ['lesson' => $lesson->id]);
-//                }
-//            }
-//            if ($lesson->tests->count() > 0) {
-//                unset($lesson->videos);
-//                foreach ($lesson->tests as $test) {
-//                    $test->link = route('api.lesson', ['lesson' => $lesson->id]);
-//                }
-//                $result[] = $lesson->toArray() + ['type' => 'tests'];
-//            }
-//            if ($lesson->assignments->count() > 0) {
-//                unset($lesson->tests);
-//                foreach ($lesson->assignments as $assignment) {
-//                    $assignment->link = route('api.lesson', ['lesson' => $lesson->id]);
-//                }
-//                $result[] = $lesson->toArray() + ['type' => 'assignments'];
-//            }
-        }
-//        $lessons = $course->lessons()
-//                          ->with(['videos', 'conspectus', 'tests', 'completedRate', 'assignments' => function($query) {
-//                              return $query->select('id', 'lesson_id');
-//                          }])
-//                          ->get();
-        return $this->sendResponse($result, 'Содержимое курса');
     }
 
     public function tests(Course $course)
