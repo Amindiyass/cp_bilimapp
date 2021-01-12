@@ -10,6 +10,11 @@ class Test extends Model
 {
     protected $appends = ['count_questions'];
 
+    protected $casts = [
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp',
+    ];
+
     use SoftDeletes;
 
     protected $fillable = [
@@ -29,6 +34,11 @@ class Test extends Model
         return $this->morphOne(CompletedRate::class, 'model')
             ->where('user_id', auth()->id())
             ->where('is_checked', false);
+    }
+
+    public function lesson()
+    {
+        return $this->belongsTo(Lesson::class);
     }
 
     public function course()
@@ -126,7 +136,12 @@ class Test extends Model
                 $wrongAnswers++;
                 continue;
             }
-            if ((int)$answeredQuestion->right_variant_id === (int)$answer) {
+            if (is_array($answer)) {
+                $answer = array_map('intval', $answer);
+            } else {
+                $answer = (int) $answer;
+            }
+            if ($answer === $answeredQuestion->right_variant_id) {
                 $rightAnswers++;
             } else {
                 $wrongAnswers++;
@@ -140,7 +155,44 @@ class Test extends Model
             'answers' => $answers,
             'passed' => ($rightAnswers * 100 / $questions->count()) > 70
         ]);
+    }
 
+    public function checkTestByAnswer(array $answers)
+    {
+        $questions = $this->questions()->get();
+        if ($questions->count() === 0) {
+            abort(500, 'Questions are zero');
+        }
+        $rightAnswers = 0;
+        $wrongAnswers = 0;
+        foreach ($questions as $question) {
+            if (!isset($answers[$question->id])){
+                abort(404, 'no answer for question: ' . $question->id);
+            }
+            $answer = $answers[$question->id];
+            if (is_array($answer)) {
+                $answer = array_map('intval', $answer);
+            } else {
+                if (is_array($question->right_variant_id)){
+                    $answer = [(int) $answer];
+                } else {
+                    $answer = (int) $answer;
+                }
+            }
+            if ($answer === $question->right_variant_id) { // TODO
+                $rightAnswers++;
+            } else {
+                $wrongAnswers++;
+            }
+        }
+        return $this->results()->create([
+            'user_id' => auth()->id(),
+            'total_question' => $questions->count(),
+            'wrong_answered' => $wrongAnswers,
+            'right_answered' => $rightAnswers,
+            'answers' => $answers,
+            'passed' => ($rightAnswers * 100 / $questions->count()) > 70
+        ]);
     }
 
     public function getCountQuestionsAttribute()

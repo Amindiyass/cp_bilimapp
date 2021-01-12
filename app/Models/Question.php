@@ -19,6 +19,9 @@ class Question extends Model
         'body_kz',
         'body_ru'
     ];
+    protected $appends = [
+        'multiple'
+    ];
 
 
     public function variants()
@@ -36,4 +39,8 @@ class Question extends Model
         return count(json_decode($this->right_variant_id));
     }
 
+    public function getMultipleAttribute()
+    {
+        return is_array($this->right_variant_id) ? count($this->right_variant_id) > 1 : false;
+    }
 }

@@ -24,19 +24,14 @@ class StudentUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required|string',
+            'first_name' => 'string',
             'last_name' => 'string',
-            'region_id' => 'required|integer',
-            'area_id' => 'required|integer',
-            'school_id' => 'required|integer',
-            'phone' => 'required',
+            'region_id' => 'integer',
+            'area_id' => 'integer',
+            'school_id' => 'integer',
+            //'phone' => 'required',
             'photo' => 'image',
             'email' => 'email'
         ];
-    }
-
-    public function validationData()
-    {
-        return $this->post();
     }
 }

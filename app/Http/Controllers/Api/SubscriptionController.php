@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Subscription;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class SubscriptionController extends BaseController
@@ -21,10 +22,12 @@ class SubscriptionController extends BaseController
         /** @var User $user */
         $user = auth()->user();
         $userSubscription = $user->getActiveSubscription();
-        return $this->sendResponse(['expired_at' => $userSubscription->pivot->created_at
+        /** @var Carbon $expired */
+        $expired = $userSubscription->pivot->created_at
             ->addWeeks($userSubscription->duration_in_week)
             ->addMonths($userSubscription->duration_in_month)
-            ->addYear($userSubscription->duration_in_year)]);
+            ->addYear($userSubscription->duration_in_year);
+        return $this->sendResponse(['expired_at' => $expired->timestamp]);
     }
 
     public function index()

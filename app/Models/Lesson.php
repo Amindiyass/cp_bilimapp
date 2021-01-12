@@ -14,7 +14,17 @@ use Illuminate\Support\Facades\DB;
  */
 class Lesson extends Model
 {
+    protected $casts = [
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp',
+    ];
+
     public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
+    }
+
+    public function assignment()
     {
         return $this->hasMany(Assignment::class);
     }
@@ -22,6 +32,11 @@ class Lesson extends Model
     public function videos()
     {
         return $this->hasMany(Video::class);
+    }
+
+    public function video()
+    {
+        return $this->hasOne(Video::class);
     }
 
     public function conspectus()
@@ -32,6 +47,11 @@ class Lesson extends Model
     public function tests()
     {
         return $this->hasMany(Test::class);
+    }
+
+    public function test()
+    {
+        return $this->hasOne(Test::class);
     }
 
     public function completedRate()
@@ -65,4 +85,26 @@ class Lesson extends Model
         $lesson = $this->section->course->lessons()->where('lessons.id', '>', $this->id)->first();
         return route('api.lesson', ['lesson' => $lesson->id]);
     }
+
+    public function getLinkAttribute()
+    {
+        return route('api.lesson', ['lesson' => $this->id]);
+    }
+
+    public function getCompletedAttribute()
+    {
+        return $this->completed_rate ? $this->completed_rate->rate : 0;
+    }
+
+    public function incrementCompletedRate()
+    {
+        if (!$this->completed_rate) {
+            $this->completedRate()->create([
+                'rate' => 1,
+                'user_id' => auth()->user()->id,
+                'is_checked' => false
+            ]);
+        }
+    }
+
 }

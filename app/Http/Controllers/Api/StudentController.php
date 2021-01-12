@@ -12,7 +12,7 @@ class StudentController extends BaseController
     public function profile()
     {
         $student = Student::byUser()->with(['user' => function($query) {
-            $query->select('id', 'avatar_image');
+            $query->with('inviter.student')->select('id', 'avatar_image', 'inviter_id');
         }])->first();
         return $this->sendResponse($student);
     }
@@ -21,10 +21,13 @@ class StudentController extends BaseController
     {
         $user = auth()->user();
         $student = $student->byUser()->first();
+
         $student->update($request->all());
         if ($request->has('photo')) {
             $user->avatar_image = Storage::putFile('avatars/' . auth()->id(), $request->file('photo'), 'public');
             $user->save();
+        }
+        if ($request->has('phone')) {
             $phone = $request->input('phone');
             $code = rand(1000, 9999);
             $message = sprintf("Доступ на %s, Код: %s", config('app.url'), $code);

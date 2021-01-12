@@ -1,13 +1,19 @@
 <?php
 
+use App\Http\Controllers\Api\ApplicationController;
 use App\Http\Controllers\Api\AssignmentController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CourseController;
+use App\Http\Controllers\Api\TransactionController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\V2\CourseController as V2CourseController;
 use App\Http\Controllers\Api\DictionaryController;
 use App\Http\Controllers\Api\LessonController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\Api\TestController;
+use App\Http\Controllers\Api\V2\TestController as V2TestController;
 use App\Http\Controllers\Api\VideoController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,11 +42,17 @@ Route::get('regions', [DictionaryController::class, 'regions']);
 Route::get('languages', [DictionaryController::class, 'languages']);
 Route::get('classes', [DictionaryController::class, 'classes']);
 Route::get('subjects', [DictionaryController::class, 'subjects']);
+Route::get('courses', [CourseController::class, 'all']);
 
 /**Route for details user API */
 Route::group(['middleware' => [
     'excludeObligation', 'auth:api',
 ]], function () {
+
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('user/update-password', [AuthController::class, 'updatePassword'])->name('api.user.set-password');
+
+    Route::post('application', [ApplicationController::class, 'store']);
 
     Route::get('courses/all', 'Api\CourseController@all');
     Route::get('courses/filter', 'Api\CourseController@filter');
@@ -52,21 +64,22 @@ Route::group(['middleware' => [
 
     Route::post('details', [AuthController::class, 'user_info']);
 
-    Route::get('courses', [CourseController::class, 'all']);
     Route::get('user-courses', [CourseController::class, 'index']);
     Route::get('course/{course}', [CourseController::class, 'show'])->name('course.show');
     Route::get('course/{course}/details', [CourseController::class, 'details']);
+    Route::get('v2/course/{course}/details', [V2CourseController::class, 'details']);
     Route::get('course/{course}/tests', [CourseController::class, 'tests']);
 
     Route::get('lesson/{lesson}', [LessonController::class, 'show'])->middleware('hasSubscription')->name('api.lesson');
 
     Route::get('profile', [StudentController::class, 'profile']);
-    Route::put('profile', [StudentController::class, 'update']);
+    Route::post('profile', [StudentController::class, 'update']);
     Route::post('profile/reconfirm_code', [AuthController::class, 'reconfirmCode']);
 
     Route::middleware('hasSubscription')->group(function() {
         Route::get('test/{test}', [TestController::class, 'show'])->middleware('testPassed')->name('api.test');
         Route::post('test/check/{test}', [TestController::class, 'check'])->middleware('testPassed')->name('api.test.check');
+        Route::post('v2/test/check/{test}', [V2TestController::class, 'check'])->middleware('testPassed')->name('v2.api.test.check');
         Route::get('test/errors/{test}', [TestController::class, 'errors'])->middleware('testPassed')->name('api.test.check');
 
         Route::get('lesson/{lesson}/assignments', [LessonController::class, 'assignments'])->name('api.assignments');
@@ -80,6 +93,10 @@ Route::group(['middleware' => [
     Route::get('user/subscriptions', [SubscriptionController::class, 'user'])->name('api.user.subscriptions');
     Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('api.subscriptions');
     Route::get('user/subscription/expiry', [SubscriptionController::class, 'expiry'])->name('api.user.subscription.expiry');
+
+    Route::get('notifications', [NotificationController::class, 'index']);
+    Route::get('transactions', [TransactionController::class, 'index']);
+    Route::get('user/cards', [UserController::class, 'index']);
 });
 //Route::middleware('auth:api')->group( function () {
 //});

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Mail\Send;
 use App\Http\Requests\Api\ReconfirmCodeRequest;
+use App\Http\Requests\Api\UpdatePasswordRequest;
 use App\Models\Student;
 use App\User;
 use Illuminate\Http\Request;
@@ -32,7 +33,7 @@ class AuthController extends BaseController
             'inviter_id' => 'int',
         ]);
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'message' => $validator->errors()]);
+            return response()->json(['success' => false, 'message' => $validator->errors()], 400);
         }
 
         $phone = $request->phone;
@@ -62,7 +63,7 @@ class AuthController extends BaseController
             'phone' => 'required|unique:users',
         ]);
         if ($validator->fails()) {
-            return response()->json(['success' => false, 'message' => $validator->errors()]);
+            return response()->json(['success' => false, 'message' => $validator->errors()], 400);
         }
 
 
@@ -134,6 +135,12 @@ class AuthController extends BaseController
         }
     }
 
+    public function logout()
+    {
+        auth()->user()->token()->revoke();
+        return $this->sendResponse([], 'Logout success');
+    }
+
     public function user_info()
     {
         $user = Auth::user();
@@ -190,5 +197,16 @@ class AuthController extends BaseController
         } else {
             return $this->sendResponse('Error. Code not valid');
         }
+    }
+
+    public function updatePassword(UpdatePasswordRequest $request)
+    {
+        $user = auth()->user();
+
+        $user->password = Hash::make($request->input('password'));
+
+        $user->save();
+
+        return $this->sendResponse([], 'Password updated');
     }
 }

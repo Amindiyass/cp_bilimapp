@@ -12,6 +12,7 @@ use App\Models\Student;
 use App\Models\Test;
 use App\Search\CourseSearch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 
 class CourseController extends BaseController
@@ -51,7 +52,8 @@ class CourseController extends BaseController
                 'class_kz' => $course->class->name_kz,
                 'name_ru' => $course->name_ru,
                 'name_kz' => $course->name_kz,
-                'description' => $course->description,
+                'description_kz' => $course->description_kz,
+                'description_ru' => $course->description_ru,
                 'tests_count' => $course->count_tests,
                 'videos_count' => $course->count_videos,
                 'language_ru' => $course->language->name_ru,
@@ -64,20 +66,32 @@ class CourseController extends BaseController
 
     public function details(Course $course)
     {
-        $lessons = $course->lessons()->get();
+        $lessons = $course->lessons()->where(function($query) {
+            return $query->has('tests')->orHas('videos')->orHas('assignments');
+        })
+            ->with('videos', 'tests', 'assignments')->get()->append(['link', 'completed']);
+        return $this->sendResponse($lessons);
         $result = [];
         foreach ($lessons as $lesson) {
-            if ($lesson->videos->count() > 0) {
-                $result[] = $lesson->toArray() + ['type' => 'videos'];
-            }
-            if ($lesson->tests->count() > 0) {
-                unset($lesson->videos);
-                $result[] = $lesson->toArray() + ['type' => 'tests'];
-            }
-            if ($lesson->assignments->count() > 0) {
-                unset($lesson->tests);
-                $result[] = $lesson->toArray() + ['type' => 'assignments'];
-            }
+//            if ($lesson->videos->count() > 0) {
+//                foreach ($lesson->videos as $video) {
+//                    $video->link = route('api.lesson', ['lesson' => $lesson->id]);
+//                }
+//            }
+//            if ($lesson->tests->count() > 0) {
+//                unset($lesson->videos);
+//                foreach ($lesson->tests as $test) {
+//                    $test->link = route('api.lesson', ['lesson' => $lesson->id]);
+//                }
+//                $result[] = $lesson->toArray() + ['type' => 'tests'];
+//            }
+//            if ($lesson->assignments->count() > 0) {
+//                unset($lesson->tests);
+//                foreach ($lesson->assignments as $assignment) {
+//                    $assignment->link = route('api.lesson', ['lesson' => $lesson->id]);
+//                }
+//                $result[] = $lesson->toArray() + ['type' => 'assignments'];
+//            }
         }
 //        $lessons = $course->lessons()
 //                          ->with(['videos', 'conspectus', 'tests', 'completedRate', 'assignments' => function($query) {

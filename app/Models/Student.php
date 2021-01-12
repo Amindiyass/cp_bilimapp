@@ -24,6 +24,15 @@ class Student extends Model
         'class_id',
     ];
 
+    protected $casts = [
+        'area_id' => 'integer',
+        'region_id' => 'integer',
+        'school_id' => 'integer',
+        'language_id' => 'integer',
+        'user_id' => 'integer',
+        'class_id' => 'integer'
+    ];
+
     public function scopeFilter(Builder $builder, QueryFilter $filters)
     {
         return $filters->apply($builder);
@@ -56,7 +65,7 @@ class Student extends Model
 
     public function courses()
     {
-        return $this->hasMany(Course::class, 'class_id', 'class_id')->where('');
+        return $this->hasMany(Course::class, 'class_id', 'class_id');
     }
 
     public function get_students($user_ids = null)
