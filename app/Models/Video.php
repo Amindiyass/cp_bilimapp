@@ -14,7 +14,8 @@ class Video extends Model
     protected $appends = [
         'link',
         'has_conspectus',
-        'conspectus'
+        'conspectus',
+        'video_url'
     ];
 
     public function completedRate()
@@ -49,5 +50,14 @@ class Video extends Model
 Математика не относится к естественным наукам, но широко используется в них как для точной формулировки их содержания, так и для получения новых результатов. Математика — фундаментальная наука, предоставляющая (общие) языковые средства другим наукам; тем самым она выявляет их структурную взаимосвязь и способствует нахождению самых общих законов природы[5].
 
 ';
+    }
+
+    public function getVideoUrlAttribute()
+    {
+        $progress = $this->completedRate()->first();
+        if (!$progress){
+            return $this->path;
+        }
+        return $this->path."#t".$progress->rate;
     }
 }

@@ -66,9 +66,9 @@ Route::group(['middleware' => [
 
     Route::get('user-courses', [CourseController::class, 'index']);
     Route::get('course/{course}', [CourseController::class, 'show'])->name('course.show');
-    Route::get('course/{course}/details', [CourseController::class, 'details']);
-    Route::get('v2/course/{course}/details', [V2CourseController::class, 'details']);
-    Route::get('course/{course}/tests', [CourseController::class, 'tests']);
+    Route::get('course/{course}/details', [CourseController::class, 'details'])->middleware('hasSubscription');
+    Route::get('v2/course/{course}/details', [V2CourseController::class, 'details'])->middleware('hasSubscription');
+    Route::get('course/{course}/tests', [CourseController::class, 'tests'])->middleware('hasSubscription');
 
     Route::get('lesson/{lesson}', [LessonController::class, 'show'])->middleware('hasSubscription')->name('api.lesson');
 
@@ -97,6 +97,9 @@ Route::group(['middleware' => [
     Route::get('notifications', [NotificationController::class, 'index']);
     Route::get('transactions', [TransactionController::class, 'index']);
     Route::get('user/cards', [UserController::class, 'index']);
+    Route::post('contact-us', [UserController::class, 'contact']);
+    Route::delete('user', [UserController::class, 'destroy']);
+    Route::post('subscribe', [SubscriptionController::class, 'addForDev']);// TODO remove these two methods in prod
 });
 //Route::middleware('auth:api')->group( function () {
 //});

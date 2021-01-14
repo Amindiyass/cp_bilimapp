@@ -11,7 +11,8 @@ class VideoController extends BaseController
     {
         $video->completedRate()->updateOrCreate(['user_id' => auth()->id()],
             [
-                'rate' => $request->input('rate')
+                'rate' => $request->input('rate'),
+                'is_checked' => true
             ]
         );
         return $this->sendResponse($video->completed_rate);

@@ -13,6 +13,8 @@ class TestController extends BaseController
         $answers = $request->get('answers');
         $result = $test->checkTestByAnswer($answers);
         // $result = $result->makeHidden('answers');
-        return $this->sendResponse($result->load('test.questions'));
+        $questions = $result->load('test.questions');
+        $questions->test->questions->append('right_answers');
+        return $this->sendResponse($questions);
     }
 }

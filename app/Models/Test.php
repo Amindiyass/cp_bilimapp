@@ -185,6 +185,13 @@ class Test extends Model
                 $wrongAnswers++;
             }
         }
+        if (!$this->completed_rate) {
+            $this->completedRate()->create([
+                'rate' => $rightAnswers * 100 / $questions->count(),
+                'user_id' => auth()->user()->id,
+                'is_checked' => ($rightAnswers * 100 / $questions->count()) > 70
+            ]);
+        }
         return $this->results()->create([
             'user_id' => auth()->id(),
             'total_question' => $questions->count(),
@@ -198,5 +205,10 @@ class Test extends Model
     public function getCountQuestionsAttribute()
     {
         return $this->questions()->count();
+    }
+
+    public function getCompletedAttribute()
+    {
+        return $this->completed_rate ? $this->completed_rate->rate : 0;
     }
 }

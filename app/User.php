@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\CompletedRate;
+use App\Models\Promocode;
 use App\Models\Student;
 use App\Models\Subscription;
 use Carbon\Carbon;
@@ -30,7 +31,8 @@ class User extends Authenticatable
         'is_active',
         'balance',
         'recommend_user_id',
-        'phone'
+        'phone',
+        'inviter_id'
     ];
     protected $softDelete = true;
 
@@ -55,6 +57,11 @@ class User extends Authenticatable
     public function inviter()
     {
         return $this->belongsTo(User::class, 'inviter_id', 'id');
+    }
+
+    public function promocode()
+    {
+        return $this->hasOne(Promocode::class);
     }
 
     public function getAvatarImageAttribute($value)

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Subscription;
+use App\Models\UserSubscription;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -33,5 +34,15 @@ class SubscriptionController extends BaseController
     public function index()
     {
         return $this->sendResponse(Subscription::all());
+    }
+
+    public function addForDev()
+    {
+        $user = auth()->user();
+        UserSubscription::create([
+            'user_id' => $user->id,
+            'subscription_id' => 1,
+            'is_active' => 1
+        ]);
     }
 }
