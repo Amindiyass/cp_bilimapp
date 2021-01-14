@@ -6,6 +6,7 @@ use App\Filters\QueryFilter;
 use App\Search\ModelSearch;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Course
@@ -156,6 +157,46 @@ class Course extends Model
         });
 
         return $assignment_count;
+    }
+
+    public function store($request)
+    {
+        try {
+            DB::beginTransaction();
+            $course = new Course();
+            $course->fill($request->all());
+            $course->save();
+
+            $key = sprintf('%s-%s', 'course_section', session()->getId());
+            $section = session()->get(sprintf('%s-%s', 'course_section', session()->getId()));
+            for ($i = 0; $i < count($section['sort_number']); $i++) {
+                DB::table('sections')
+                    ->insert([
+                        'name_ru' => $section['name_ru'][$i],
+                        'name_kz' => $section['name_kz'][$i],
+                        'sort_number' => $section['sort_number'][$i],
+                        'course_id' => $course->id,
+                    ]);
+            }
+
+            session()->forget($key);
+
+            DB::commit();
+
+            return [
+                'success' => true,
+                'message' => null
+            ];
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            $error = sprintf('%s %s %s', $exception->getFile(), $exception->getLine(), $exception->getMessage());
+            return [
+                'success' => false,
+                'message' => $error,
+            ];
+
+
+        }
     }
 
 }

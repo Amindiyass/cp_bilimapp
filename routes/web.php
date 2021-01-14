@@ -50,7 +50,13 @@ Route::group([
 
     Route::resource('subject', 'SubjectController');
 
-    Route::resource('course', 'CourseController');
-    
+    Route::resource('course', 'CourseController')->except('show');
+    Route::post('course/section', 'CourseController@tempSectionSave')->name('course.section');
+
+    Route::resource('lesson', 'LessonController');
+    Route::post('lesson/video', 'LessonController@tempVideoSave')->name('lesson.video');
+    Route::post('lesson/conspectuses', 'LessonController@tempConspectusesSave')->name('lesson.conspectuses');
+    Route::post('lesson/ajax', 'LessonController@ajax')->name('lesson.ajax');
+
 });
 

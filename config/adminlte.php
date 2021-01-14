@@ -261,6 +261,11 @@ return [
             'route' => 'course.index',
             'icon' => 'fa fa-book-reader',
         ],
+        [
+            'text' => 'Уроки',
+            'route' => 'lesson.index',
+            'icon' => 'fa fa-chalkboard-teacher',
+        ],
     ],
 
     /*
