@@ -12,7 +12,7 @@ class StudentController extends BaseController
     public function profile()
     {
         $student = Student::byUser()->with(['user' => function($query) {
-            $query->with('inviter.student')->select('id', 'avatar_image', 'inviter_id');
+            $query->with(['inviter.student', 'inviter.promocode'])->select('id', 'avatar_image', 'inviter_id');
         }])->first();
         return $this->sendResponse($student);
     }

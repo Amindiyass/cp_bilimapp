@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class FixVideosConspectus extends Migration
+class CreatePromocodesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class FixVideosConspectus extends Migration
      */
     public function up()
     {
-        Schema::table('conspectuses', function (Blueprint $table) {
-            $table->foreignId('video_id')
-                ->constrained('videos');
+        Schema::create('promocodes', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->foreignId('user_id')->constrained('users');
+            $table->timestamps();
         });
     }
 
@@ -26,9 +28,6 @@ class FixVideosConspectus extends Migration
      */
     public function down()
     {
-
-        Schema::table('conspectuses', function (Blueprint $table) {
-            $table->dropColumn('video_id');
-        });
+        Schema::dropIfExists('promocodes');
     }
 }

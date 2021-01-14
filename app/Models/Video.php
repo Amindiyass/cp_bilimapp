@@ -71,5 +71,4 @@ class Video extends Model
         return $progress->rate;
     }
 
-
 }
