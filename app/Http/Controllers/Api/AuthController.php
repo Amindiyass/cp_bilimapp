@@ -21,6 +21,23 @@ class AuthController extends BaseController
 
     public function sendConfirmationPhone(AuthRegisterRequest $request)
     {
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'area_id' => 'required|exists:areas,id',
+            'region_id' => 'required|int|exists:regions,id',
+            'school_id' => 'required|int|exists:schools,id',
+            'class_id' => 'required|int|exists:education_levels,id',
+            'language_id' => 'required|int|exists:languages,id',
+            'email' => 'required|email|unique:users',
+            'phone' => 'required|unique:users',
+            'password' => 'required',
+            'inviter_id' => 'int',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'message' => $validator->errors()], 400);
+        }
+        
         $phone = $request->phone;
         $code = rand(1000, 9999);
         $message = sprintf("Доступ на bilimapp.tk, Код: %s", $code);
