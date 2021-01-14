@@ -69,7 +69,7 @@ class CourseController extends BaseController
         $lessons = $course->lessons()->where(function($query) {
             return $query->has('tests')->orHas('videos')->orHas('assignments');
         })
-            ->with('videos', 'tests', 'assignments')->get()->append(['link', 'completed']);
+            ->with('videos.completedRate', 'tests.completedRate', 'assignments')->get()->append(['link', 'completed']);
         return $this->sendResponse($lessons);
         $result = [];
         foreach ($lessons as $lesson) {

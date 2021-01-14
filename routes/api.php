@@ -97,6 +97,7 @@ Route::group(['middleware' => [
     Route::get('notifications', [NotificationController::class, 'index']);
     Route::get('transactions', [TransactionController::class, 'index']);
     Route::get('user/cards', [UserController::class, 'index']);
+    Route::post('contact-us', [UserController::class, 'contact']);
 });
 //Route::middleware('auth:api')->group( function () {
 //});
