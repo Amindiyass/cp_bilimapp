@@ -38,7 +38,7 @@ class AuthController extends BaseController
 
         $phone = $request->phone;
         $code = rand(1000, 9999);
-        $message = sprintf("Доступ на bilimapp.tk, Код: %s", $code);
+        $message = sprintf("Код для регистраций на bilim.app, Код: %s", $code);
         $response = Send::request($phone, $message);
 
         #TODO if response error
