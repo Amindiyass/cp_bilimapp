@@ -21,7 +21,11 @@ class Video extends Model
 
     public function completedRate()
     {
-        return $this->morphOne(CompletedRate::class, 'model')->where('user_id', auth()->id());
+        return $this->morphOne(CompletedRate::class, 'model')->where('user_id', auth()->id())
+            ->withDefault(function (CompletedRate $rate) {
+                $rate->is_checked = false;
+                $rate->rate = 0;
+            });
     }
 
     public function lesson()
@@ -56,16 +60,16 @@ class Video extends Model
     public function getVideoUrlAttribute()
     {
         $progress = $this->completedRate()->first();
-        if (!$progress){
+        if (!$progress) {
             return $this->path;
         }
-        return $this->path."#t".$progress->rate;
+        return $this->path . "#t" . $progress->rate;
     }
 
     public function getStartFromAttribute()
     {
         $progress = $this->completedRate()->first();
-        if (!$progress){
+        if (!$progress) {
             return 0;
         }
         return $progress->rate;
