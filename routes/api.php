@@ -44,6 +44,10 @@ Route::get('classes', [DictionaryController::class, 'classes']);
 Route::get('subjects', [DictionaryController::class, 'subjects']);
 Route::get('courses', [CourseController::class, 'all']);
 
+Route::get('course/{course}', [CourseController::class, 'show'])->name('course.show');
+Route::get('course/{course}/details', [CourseController::class, 'details']);
+Route::get('v2/course/{course}/details', [V2CourseController::class, 'details']);
+
 /**Route for details user API */
 Route::group(['middleware' => [
     'excludeObligation', 'auth:api',
@@ -69,7 +73,7 @@ Route::group(['middleware' => [
     Route::get('course/{course}/details', [CourseController::class, 'details'])/*->middleware('hasSubscription')*/;
     Route::get('course/{course}/{video}/my-progress', [CourseController::class, 'myProgress'])/*->middleware('hasSubscription')*/;
     Route::get('v2/course/{course}/details', [V2CourseController::class, 'details'])/*->middleware('hasSubscription')*/;
-    Route::get('course/{course}/tests', [CourseController::class, 'tests'])->middleware('hasSubscription');
+    Route::get('course/{course}/tests', [CourseController::class, 'tests']);
 
     Route::get('lesson/{lesson}', [LessonController::class, 'show'])/*->middleware('hasSubscription')*/->name('api.lesson');
 
