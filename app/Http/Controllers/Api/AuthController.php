@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Helpers\Mail\Send;
+use App\Http\Requests\Api\AuthRegisterRequest;
 use App\Http\Requests\Api\ReconfirmCodeRequest;
 use App\Http\Requests\Api\UpdatePasswordRequest;
+use App\Models\Promocode;
 use App\Models\Student;
 use App\User;
 use Illuminate\Http\Request;
@@ -17,7 +19,7 @@ use Illuminate\Support\Facades\Validator;
 class AuthController extends BaseController
 {
 
-    public function sendConfirmationPhone(Request $request)
+    public function sendConfirmationPhone(AuthRegisterRequest $request)
     {
         $validator = Validator::make($request->all(), [
             'first_name' => 'required',
@@ -38,11 +40,18 @@ class AuthController extends BaseController
 
         $phone = $request->phone;
         $code = rand(1000, 9999);
-        $message = sprintf("Доступ на bilimapp.tk, Код: %s", $code);
+        $message = sprintf("Код для регистраций на bilim.app, Код: %s", $code);
         $response = Send::request($phone, $message);
 
         #TODO if response error
         $this->redisSet($request->all(), $code);
+
+        if ($request->input('promocode')) {
+            $promocode = Promocode::whereName($request->input('promocode'))->first();
+            if ($promocode) {
+                $this->redisSetInviter($request->input('phone'), $promocode->user_id);
+            }
+        }
 
         return response()->json([
             'success' => true,
@@ -76,7 +85,6 @@ class AuthController extends BaseController
 
         try {
             DB::beginTransaction();
-
             $new_user = [
                 'name' => $result['first_name'],
                 'password' => Hash::make($result['password']),
@@ -85,6 +93,7 @@ class AuthController extends BaseController
                 'balance' => 0,
                 'phone' => $phone,
                 'last_visit' => date('Y-m-d H:i:s'),
+                'inviter_id' => $result['inviter_id']
             ];
             $user = User::create($new_user);
 
@@ -149,6 +158,11 @@ class AuthController extends BaseController
         ], 200);
     }
 
+    public function redisSetInviter($phone, $inviterId)
+    {
+        Redis::hSet($phone, 'inviter_id', $inviterId);
+    }
+
     public function redisSet(array $array, $code)
     {
         $phone = $array['phone'];
@@ -161,7 +175,6 @@ class AuthController extends BaseController
         Redis::hSet($phone, 'language_id', $array['language_id']);
         Redis::hSet($phone, 'email', $array['email']);
         Redis::hSet($phone, 'password', $array['password']);
-        Redis::hSet($phone, 'inviter_id', isset($array['inviter_id']) ? $array['inviter_id'] : 0);
         Redis::hSet($phone, 'code', $code);
     }
 

@@ -14,7 +14,6 @@ class FixVideosConspectus extends Migration
     public function up()
     {
         Schema::table('conspectuses', function (Blueprint $table) {
-            $table->dropColumn('lesson_id');
             $table->foreignId('video_id')
                 ->constrained('videos');
         });
@@ -29,8 +28,6 @@ class FixVideosConspectus extends Migration
     {
 
         Schema::table('conspectuses', function (Blueprint $table) {
-            $table->foreignId('lesson_id')
-                ->constrained('lessons');
             $table->dropColumn('video_id');
         });
     }

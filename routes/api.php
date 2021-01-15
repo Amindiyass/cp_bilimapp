@@ -99,6 +99,8 @@ Route::group(['middleware' => [
     Route::get('transactions', [TransactionController::class, 'index']);
     Route::get('user/cards', [UserController::class, 'index']);
     Route::post('contact-us', [UserController::class, 'contact']);
+    Route::delete('user', [UserController::class, 'destroy']);
+    Route::post('subscribe', [SubscriptionController::class, 'addForDev']);// TODO remove these two methods in prod
 });
 //Route::middleware('auth:api')->group( function () {
 //});

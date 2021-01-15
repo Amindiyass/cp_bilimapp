@@ -14,7 +14,9 @@ class Video extends Model
     protected $appends = [
         'link',
         'has_conspectus',
-        'conspectus'
+        'conspectus',
+        'video_url',
+        'start_from'
     ];
 
     public function completedRate()
@@ -50,4 +52,23 @@ class Video extends Model
 
 ';
     }
+
+    public function getVideoUrlAttribute()
+    {
+        $progress = $this->completedRate()->first();
+        if (!$progress){
+            return $this->path;
+        }
+        return $this->path."#t".$progress->rate;
+    }
+
+    public function getStartFromAttribute()
+    {
+        $progress = $this->completedRate()->first();
+        if (!$progress){
+            return 0;
+        }
+        return $progress->rate;
+    }
+
 }
