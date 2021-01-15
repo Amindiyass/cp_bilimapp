@@ -115,8 +115,7 @@ class CourseController extends BaseController
     }
 
 
-    public
-    function filter_attributes()
+    public function filter_attributes()
     {
         $attributes = [
             [
@@ -139,8 +138,7 @@ class CourseController extends BaseController
         return $this->sendResponse($attributes);
     }
 
-    public
-    function filter_variants(Request $request)
+    public function filter_variants(Request $request)
     {
         $type = $request->input('type');
         $result = [];
