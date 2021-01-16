@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ApplicationController;
 use App\Http\Controllers\Api\AssignmentController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CourseController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\V2\CourseController as V2CourseController;
@@ -69,11 +70,7 @@ Route::group(['middleware' => [
     Route::post('details', [AuthController::class, 'user_info']);
 
     Route::get('user-courses', [CourseController::class, 'index']);
-
-    Route::get('course/{course}', [CourseController::class, 'show'])->name('course.show');
-    Route::get('course/{course}/details', [CourseController::class, 'details'])/*->middleware('hasSubscription')*/;
     Route::get('course/{course}/{video}/my-progress', [CourseController::class, 'myProgress'])/*->middleware('hasSubscription')*/;
-    Route::get('v2/course/{course}/details', [V2CourseController::class, 'details'])/*->middleware('hasSubscription')*/;
     Route::get('course/{course}/tests', [CourseController::class, 'tests']);
 
     Route::get('lesson/{lesson}', [LessonController::class, 'show'])/*->middleware('hasSubscription')*/->name('api.lesson');
@@ -81,6 +78,7 @@ Route::group(['middleware' => [
     Route::get('profile', [StudentController::class, 'profile']);
     Route::post('profile', [StudentController::class, 'update']);
     Route::post('profile/reconfirm_code', [AuthController::class, 'reconfirmCode']);
+    Route::post('order/{subscription}', [OrderController::class, 'order']);
 
     Route::middleware('hasSubscription')->group(function() {
         Route::get('test/{test}', [TestController::class, 'show'])->middleware('testPassed')->name('api.test');
