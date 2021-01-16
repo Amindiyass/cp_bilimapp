@@ -70,10 +70,7 @@ Route::group(['middleware' => [
     Route::post('details', [AuthController::class, 'user_info']);
 
     Route::get('user-courses', [CourseController::class, 'index']);
-    Route::get('course/{course}', [CourseController::class, 'show'])->name('course.show');
-    Route::get('course/{course}/details', [CourseController::class, 'details'])/*->middleware('hasSubscription')*/;
     Route::get('course/{course}/{video}/my-progress', [CourseController::class, 'myProgress'])/*->middleware('hasSubscription')*/;
-    Route::get('v2/course/{course}/details', [V2CourseController::class, 'details'])/*->middleware('hasSubscription')*/;
     Route::get('course/{course}/tests', [CourseController::class, 'tests']);
 
     Route::get('lesson/{lesson}', [LessonController::class, 'show'])/*->middleware('hasSubscription')*/->name('api.lesson');
