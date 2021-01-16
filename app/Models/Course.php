@@ -20,6 +20,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $description
  * @property CompletedRate $completedRate
  * @property Lesson[] $lessons
+ * @property Solution[] $solutions
+ * @property Category[] $solutionCategories;
  */
 class Course extends Model
 {
@@ -152,5 +154,15 @@ class Course extends Model
     public function getLinkAttribute()
     {
         return '/course/' . $this->id;
+    }
+
+    public function solutions()
+    {
+        return $this->hasMany('App\Models\Solution');
+    }
+
+    public function solutionCategories()
+    {
+        return $this->hasMany('App\Models\Category','course_id','id');
     }
 }

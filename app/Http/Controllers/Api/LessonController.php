@@ -11,7 +11,7 @@ class LessonController extends BaseController
 {
     public function show(Lesson $lesson)
     {
-        $lesson->load(['videos.completedRate', 'conspectus', 'assignments', 'test', 'video.completedRate'])->append('next_step');
+        $lesson->load(['videos.completedRate', 'conspectus', 'assignments', 'test', 'video.completedRate','section.course'])->append('next_step');
         $lesson->incrementCompletedRate();
         return $this->sendResponse($lesson);
     }
