@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ApplicationController;
 use App\Http\Controllers\Api\AssignmentController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CourseController;
+use App\Http\Controllers\Api\SolutionController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\V2\CourseController as V2CourseController;
@@ -80,6 +81,9 @@ Route::group(['middleware' => [
     Route::get('profile', [StudentController::class, 'profile']);
     Route::post('profile', [StudentController::class, 'update']);
     Route::post('profile/reconfirm_code', [AuthController::class, 'reconfirmCode']);
+
+    Route::get('solutions/{course}/categories',[SolutionController::class, 'categories']);
+    Route::get('solutions/{course}',[SolutionController::class, 'courseSolutions']);
 
     Route::middleware('hasSubscription')->group(function() {
         Route::get('test/{test}', [TestController::class, 'show'])->middleware('testPassed')->name('api.test');

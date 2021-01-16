@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Language::create(
+        /*\App\Models\Language::create(
             [
                 'name_kz' => 'Казак тили',
                 'name_ru' => 'Казахский язык',
@@ -33,7 +33,10 @@ class DatabaseSeeder extends Seeder
         factory(App\Models\Lesson::class, 200)->create();
         factory(App\Models\Test::class, 300)->create();
         factory(App\Models\Assignment::class, 300)->create();
-        factory(App\Models\Video::class, 300)->create();
+        factory(App\Models\Video::class, 300)->create();*/
+        factory(App\Models\Category::class,200)->create();
+        factory(App\Models\Solution::class,1200)->create();
+        factory(App\Models\SolutionCategory::class,1200)->create();
 
     }
 }
