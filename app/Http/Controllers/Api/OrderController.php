@@ -23,15 +23,17 @@ class OrderController extends Controller
         ]);
         return Paybox::generate([
             "x_idempotency_key" => Str::uuid()->toString(), // required
-            'order' => (string)$order->id,
-            'amount' =>  '5000.00', // required
+            'order' => 'ordered-'.$order->id,
+            'amount' =>  5000, // required
             "refund_amount" => 0,
             "currency" => "KZT", // required
             "description" => "Description", // required
-            "payment_system"=> "string",
+            // "payment_system"=> "string",
             "cleared" => true,
             "expires_at" => date('Y-m-d H:i:s', strtotime('+1 day')), // required
             "language" => "ru",
+            'testing' => true,
+            'test' => true,
             "options" => [
                 "callbacks" => [
                     "result_url" => route('api.payment.check', ['order' => $order->id]),

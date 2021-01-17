@@ -84,6 +84,9 @@ Route::group(['middleware' => [
     Route::get('solutions/{course}/categories',[SolutionController::class, 'categories']);
     Route::get('solutions/{course}',[SolutionController::class, 'courseSolutions']);
 
+    Route::post('order/{subscription}', [OrderController::class, 'order']);
+    Route::get('order/check-payment/{order}', [OrderController::class, 'check'])->name('api.payment.check');
+
     Route::middleware('hasSubscription')->group(function() {
         Route::get('test/{test}', [TestController::class, 'show'])->middleware('testPassed')->name('api.test');
         Route::post('test/check/{test}', [TestController::class, 'check'])->middleware('testPassed')->name('api.test.check');
