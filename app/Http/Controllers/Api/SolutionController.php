@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class SolutionController extends BaseController
 {
-
     public function courseSolutions(Course $course, Request $request)
     {
         $solutionsQuery = $course->solutions()->with('categories');
@@ -23,7 +22,7 @@ class SolutionController extends BaseController
                 $query->whereRaw("answer ilike '%$searchQuery%'")->orWhereRaw("question ilike '%$searchQuery%'");
             });
         }
-        return $solutionsQuery->get();
+        return $solutionsQuery->paginate(30);
     }
 
     public function categories(Course $course)

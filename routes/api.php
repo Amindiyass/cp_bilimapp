@@ -80,9 +80,12 @@ Route::group(['middleware' => [
     Route::post('profile', [StudentController::class, 'update']);
     Route::post('profile/reconfirm_code', [AuthController::class, 'reconfirmCode']);
     Route::post('order/{subscription}', [OrderController::class, 'order']);
+    Route::get('order/check-payment/{order}/{id}', [OrderController::class, 'check'])->name('api.payment.check');
+    Route::get('order/check-for-paybox', [OrderController::class, 'checkResult'])->name('api.paybox.payment.result');
 
     Route::get('solutions/{course}/categories',[SolutionController::class, 'categories']);
     Route::get('solutions/{course}',[SolutionController::class, 'courseSolutions']);
+
 
     Route::middleware('hasSubscription')->group(function() {
         Route::get('test/{test}', [TestController::class, 'show'])->middleware('testPassed')->name('api.test');
