@@ -22,7 +22,7 @@ class SolutionController extends BaseController
                 $query->whereRaw("answer ilike '%$searchQuery%'")->orWhereRaw("question ilike '%$searchQuery%'");
             });
         }
-        return $solutionsQuery->paginate(30);
+        return $solutionsQuery->paginate(10);
     }
 
     public function categories(Course $course)
