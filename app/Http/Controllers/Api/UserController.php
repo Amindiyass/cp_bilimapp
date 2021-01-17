@@ -23,7 +23,6 @@ class UserController extends BaseController
     {
         return $this->sendResponse('', 'Message delivered');
     }
-<<<<<<< HEAD
 
     public function destroy()
     {
@@ -41,6 +40,4 @@ class UserController extends BaseController
         $user->forceDelete();
         return $this->sendResponse([], 'User deleted');
     }
-=======
->>>>>>> c0dff7e982fc8a15b63031d1b74364195a926f1b
 }
