@@ -91,7 +91,7 @@ Route::group(['middleware' => [
         Route::get('test/{test}', [TestController::class, 'show'])->middleware('testPassed')->name('api.test');
         Route::post('test/check/{test}', [TestController::class, 'check'])->middleware('testPassed')->name('api.test.check');
         Route::post('v2/test/check/{test}', [V2TestController::class, 'check'])->middleware('testPassed')->name('v2.api.test.check');
-        Route::get('test/errors/{test}', [TestController::class, 'errors'])->middleware('testPassed')->name('api.test.check');
+        Route::get('test/errors/{test}', [TestController::class, 'errors'])->middleware('testPassed');
 
         Route::get('lesson/{lesson}/assignments', [LessonController::class, 'assignments'])->name('api.assignments');
         Route::get('assignment/{assignment}', [AssignmentController::class, 'show'])->name('api.task');
