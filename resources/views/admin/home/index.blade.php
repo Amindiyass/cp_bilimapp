@@ -215,7 +215,7 @@ $week_number = app('request')->input('week_number');
                             <span class="float-right"><b>{{$subject_rate['course_count']}}</b>/{{$courses}}</span>
                             <div class="progress progress-sm">
                                 <div class="progress-bar bg-primary"
-                                     style="width: {{($subject_rate['course_count']/$courses) * 100}}%"></div>
+                                     style="width: {{($subject_rate['course_count']/$courses ?? 1) * 100}}%"></div>
                             </div>
                         </div>
 
@@ -224,7 +224,7 @@ $week_number = app('request')->input('week_number');
                             <span class="float-right"><b>{{$subject_rate['lesson_count']}}</b>/{{$lessons}}</span>
                             <div class="progress progress-sm">
                                 <div class="progress-bar bg-danger"
-                                     style="width: {{($subject_rate['lesson_count']/$lessons) * 100}}%"></div>
+                                     style="width: {{($subject_rate['lesson_count']/$lessons ?? 1) * 100}}%"></div>
                             </div>
                         </div>
 
@@ -233,7 +233,7 @@ $week_number = app('request')->input('week_number');
                             <span class="float-right"><b>{{$subject_rate['test_count']}}</b>/{{$tests}}</span>
                             <div class="progress progress-sm">
                                 <div class="progress-bar bg-success"
-                                     style="width: {{($subject_rate['test_count']/$tests) * 100}}%"></div>
+                                     style="width: {{($subject_rate['test_count']/($tests ?? 1)) * 100}}%"></div>
                             </div>
                         </div>
 
@@ -244,7 +244,7 @@ $week_number = app('request')->input('week_number');
                                 class="float-right"><b>{{$subject_rate['assignment_count']}}</b>/{{$assignments}}</span>
                             <div class="progress progress-sm">
                                 <div class="progress-bar bg-warning"
-                                     style="width: {{($subject_rate['assignment_count']/$assignments) * 100}}%"></div>
+                                     style="width: {{($subject_rate['assignment_count']/$assignments ?? 1) * 100}}%"></div>
                             </div>
                         </div>
                         <!-- /.progress-group -->
