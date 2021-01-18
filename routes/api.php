@@ -49,6 +49,7 @@ Route::get('courses', [CourseController::class, 'all']);
 Route::get('course/{course}', [CourseController::class, 'show'])->name('course.show');
 Route::get('course/{course}/details', [CourseController::class, 'details']);
 Route::get('v2/course/{course}/details', [V2CourseController::class, 'details']);
+Route::post('application', [ApplicationController::class, 'store']);
 
 /**Route for details user API */
 Route::group(['middleware' => [
@@ -57,8 +58,6 @@ Route::group(['middleware' => [
 
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('user/update-password', [AuthController::class, 'updatePassword'])->name('api.user.set-password');
-
-    Route::post('application', [ApplicationController::class, 'store']);
 
     Route::get('courses/all', 'Api\CourseController@all');
     Route::get('courses/filter', 'Api\CourseController@filter');
