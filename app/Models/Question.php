@@ -41,7 +41,7 @@ class Question extends Model
 
     public function right_variants()
     {
-        return count(json_decode($this->right_variant_id));
+        return count($this->right_variant_id);
     }
 
     public function getRightAnswersAttribute()
