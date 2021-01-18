@@ -43,5 +43,10 @@ class CourseFilter extends QueryFilter
         return $this->builder->where('subject_id', $subject);
     }
 
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
 
 }
