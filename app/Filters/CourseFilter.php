@@ -26,7 +26,7 @@ class CourseFilter extends QueryFilter
     {
         $subjects = $this->paramToArray($subjects);
 
-        return $this->builder->whereHas('subject', function($query) use ($subjects) {
+        return $this->builder->whereHas('subject', function ($query) use ($subjects) {
             return $query->whereIn('name_kz', $subjects)->orWhereIn('name_ru', $subjects);
         });
     }
@@ -34,7 +34,7 @@ class CourseFilter extends QueryFilter
     public function subject($subject)
     {
         return $this->builder->whereHas('subject', function ($query) use ($subject) {
-            return $query->where('name_kz', 'LIKE', '%'.$subject.'%')->orWhere('name_ru', 'LIKE', '%'.$subject.'%');
+            return $query->where('name_kz', 'LIKE', '%' . $subject . '%')->orWhere('name_ru', 'LIKE', '%' . $subject . '%');
         });
     }
 

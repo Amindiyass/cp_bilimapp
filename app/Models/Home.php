@@ -46,7 +46,7 @@ class Home extends Model
             $subject_tests = DB::table('subjects')->join('courses', 'subjects.id', '=', 'courses.subject_id')
                 ->join('sections', 'sections.course_id', '=', 'courses.id')
                 ->join('tests', 'tests.section_id', '=', 'sections.id')
-                ->whereNull('deleted_at')
+                ->whereNull('subjects.deleted_at')
                 ->groupBy('subjects.id')
                 ->select('subjects.id', DB::raw('count(tests.id) as item_count'))
                 ->get()

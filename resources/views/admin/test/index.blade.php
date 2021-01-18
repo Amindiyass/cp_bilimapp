@@ -66,193 +66,193 @@
                 </tfoot>
             </table>
         </div>
-    {{--        <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog"--}}
-    {{--             aria-hidden="true">--}}
-    {{--            <div class="modal-dialog" role="document">--}}
-    {{--                <div class="modal-content">--}}
-    {{--                    <div class="modal-header">--}}
-    {{--                        <h5 class="modal-title" id="exampleModalLabel">Изменить пароль</h5>--}}
-    {{--                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
-    {{--                            <span aria-hidden="true">&times;</span>--}}
-    {{--                        </button>--}}
-    {{--                    </div>--}}
-    {{--                    {!! Form::open(['route' => 'student.password.change', 'method' => 'post']); !!}--}}
-    {{--                    <div class="modal-body">--}}
+        {{--        <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog"--}}
+        {{--             aria-hidden="true">--}}
+        {{--            <div class="modal-dialog" role="document">--}}
+        {{--                <div class="modal-content">--}}
+        {{--                    <div class="modal-header">--}}
+        {{--                        <h5 class="modal-title" id="exampleModalLabel">Изменить пароль</h5>--}}
+        {{--                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
+        {{--                            <span aria-hidden="true">&times;</span>--}}
+        {{--                        </button>--}}
+        {{--                    </div>--}}
+        {{--                    {!! Form::open(['route' => 'student.password.change', 'method' => 'post']); !!}--}}
+        {{--                    <div class="modal-body">--}}
 
-    {{--                        @csrf--}}
-    {{--                        <label for="password">--}}
-    {{--                            Новый пароль *--}}
-    {{--                        </label>--}}
-    {{--                        {!! Form::password('password', ['class' => 'form-control']); !!}--}}
+        {{--                        @csrf--}}
+        {{--                        <label for="password">--}}
+        {{--                            Новый пароль *--}}
+        {{--                        </label>--}}
+        {{--                        {!! Form::password('password', ['class' => 'form-control']); !!}--}}
 
-    {{--                        {!! Form::hidden('user_id') !!}--}}
-    {{--                        <label for="password_confirmation">--}}
-    {{--                            Повторите новый пароль *--}}
-    {{--                        </label>--}}
-    {{--                        {!! Form::password('password_confirmation', ['class' => 'form-control']); !!}--}}
-    {{--                    </div>--}}
-    {{--                    <div class="modal-footer">--}}
-    {{--                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>--}}
-    {{--                        <button type="submit" class="btn btn-primary">Изменить пароль</button>--}}
-    {{--                    </div>--}}
-    {{--                    {!! Form::close(); !!}--}}
-    {{--                </div>--}}
-    {{--            </div>--}}
-    {{--        </div>--}}
-    {{--        <div class="modal fade" id="addSubscription" tabindex="-1" role="dialog"--}}
-    {{--             aria-hidden="true">--}}
-    {{--            <div class="modal-dialog" role="document">--}}
-    {{--                <div class="modal-content">--}}
-    {{--                    <div class="modal-header">--}}
-    {{--                        <h5 class="modal-title" id="exampleModalLabel">Добавить подписку</h5>--}}
-    {{--                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
-    {{--                            <span aria-hidden="true">&times;</span>--}}
-    {{--                        </button>--}}
-    {{--                    </div>--}}
-    {{--                    <div class="modal-body">--}}
-    {{--                        {!! Form::open(['route' => 'student.add.subscription', 'method' => 'post']); !!}--}}
-    {{--                        <div class="form-group">--}}
-    {{--                            {!! Form::hidden('user_id') !!}--}}
-    {{--                            <label>Выберите подписку *</label>--}}
-    {{--                            {!! Form::select('subscription_id',$subscriptions, null,--}}
-    {{--                                ['class' => 'form-control select2bs4 ', 'style' => 'width: 100%;']); !!}--}}
-    {{--                        </div>--}}
-    {{--                        <button class="btn btn-primary float-right" type="submit">--}}
-    {{--                            Добавить--}}
-    {{--                        </button>--}}
-    {{--                        {!! Form::close(); !!}--}}
-    {{--                    </div>--}}
-    {{--                </div>--}}
+        {{--                        {!! Form::hidden('user_id') !!}--}}
+        {{--                        <label for="password_confirmation">--}}
+        {{--                            Повторите новый пароль *--}}
+        {{--                        </label>--}}
+        {{--                        {!! Form::password('password_confirmation', ['class' => 'form-control']); !!}--}}
+        {{--                    </div>--}}
+        {{--                    <div class="modal-footer">--}}
+        {{--                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>--}}
+        {{--                        <button type="submit" class="btn btn-primary">Изменить пароль</button>--}}
+        {{--                    </div>--}}
+        {{--                    {!! Form::close(); !!}--}}
+        {{--                </div>--}}
+        {{--            </div>--}}
+        {{--        </div>--}}
+        {{--        <div class="modal fade" id="addSubscription" tabindex="-1" role="dialog"--}}
+        {{--             aria-hidden="true">--}}
+        {{--            <div class="modal-dialog" role="document">--}}
+        {{--                <div class="modal-content">--}}
+        {{--                    <div class="modal-header">--}}
+        {{--                        <h5 class="modal-title" id="exampleModalLabel">Добавить подписку</h5>--}}
+        {{--                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
+        {{--                            <span aria-hidden="true">&times;</span>--}}
+        {{--                        </button>--}}
+        {{--                    </div>--}}
+        {{--                    <div class="modal-body">--}}
+        {{--                        {!! Form::open(['route' => 'student.add.subscription', 'method' => 'post']); !!}--}}
+        {{--                        <div class="form-group">--}}
+        {{--                            {!! Form::hidden('user_id') !!}--}}
+        {{--                            <label>Выберите подписку *</label>--}}
+        {{--                            {!! Form::select('subscription_id',$subscriptions, null,--}}
+        {{--                                ['class' => 'form-control select2bs4 ', 'style' => 'width: 100%;']); !!}--}}
+        {{--                        </div>--}}
+        {{--                        <button class="btn btn-primary float-right" type="submit">--}}
+        {{--                            Добавить--}}
+        {{--                        </button>--}}
+        {{--                        {!! Form::close(); !!}--}}
+        {{--                    </div>--}}
+        {{--                </div>--}}
 
-    {{--            </div>--}}
-    {{--        </div>--}}
-    {{--        <div class="modal fade" id="extendSubscription" tabindex="-1" role="dialog"--}}
-    {{--             aria-hidden="true">--}}
-    {{--            <div class="modal-dialog" role="document">--}}
-    {{--                <div class="modal-content">--}}
-    {{--                    <div class="modal-header">--}}
-    {{--                        <h5 class="modal-title" id="exampleModalLabel">Продлить подписку</h5>--}}
-    {{--                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
-    {{--                            <span aria-hidden="true">&times;</span>--}}
-    {{--                        </button>--}}
-    {{--                    </div>--}}
-    {{--                    <div class="modal-body">--}}
-    {{--                        {!! Form::open(['route' => 'student.extend.subscription', 'method' => 'post']); !!}--}}
+        {{--            </div>--}}
+        {{--        </div>--}}
+        {{--        <div class="modal fade" id="extendSubscription" tabindex="-1" role="dialog"--}}
+        {{--             aria-hidden="true">--}}
+        {{--            <div class="modal-dialog" role="document">--}}
+        {{--                <div class="modal-content">--}}
+        {{--                    <div class="modal-header">--}}
+        {{--                        <h5 class="modal-title" id="exampleModalLabel">Продлить подписку</h5>--}}
+        {{--                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
+        {{--                            <span aria-hidden="true">&times;</span>--}}
+        {{--                        </button>--}}
+        {{--                    </div>--}}
+        {{--                    <div class="modal-body">--}}
+        {{--                        {!! Form::open(['route' => 'student.extend.subscription', 'method' => 'post']); !!}--}}
 
-    {{--                        {!! Form::close(); !!}--}}
-    {{--                    </div>--}}
-    {{--                </div>--}}
+        {{--                        {!! Form::close(); !!}--}}
+        {{--                    </div>--}}
+        {{--                </div>--}}
 
-    {{--            </div>--}}
-    {{--        </div>--}}
+        {{--            </div>--}}
+        {{--        </div>--}}
+        @stop
+        @section('plugins.Select2', true)
+        @section('plugins.Datatables', true)
+        @section('js')
+            <script>
+                $('.select2').select2()
+
+                $("#example1").DataTable({
+                    "responsive": true,
+                    "autoWidth": false,
+                });
+
+                {{--                // $('#area_id').change(function () {--}}
+                {{--                //     var type = 'get_regions';--}}
+                {{--                //     var item_id = $(this).val();--}}
+                {{--                //     console.log(item_id);--}}
+                {{--                //     ajax(item_id, type);--}}
+                {{--                // });--}}
+                {{--                //--}}
+                {{--                // $('#region_id').change(function () {--}}
+                {{--                //     var type = 'get_schools';--}}
+                {{--                //     var item_id = $(this).val();--}}
+                {{--                //     ajax(item_id, type);--}}
+                {{--                // });--}}
+
+                {{--                $('#open_change_password').bind('click', function () {--}}
+                {{--                    var user_id = $(this).data('user_id');--}}
+                {{--                    $('input[name=user_id]').val(user_id);--}}
+                {{--                    $('#passwordModal').modal();--}}
+
+                {{--                });--}}
+
+                {{--                $('#open_add_subscription').bind('click', function () {--}}
+                {{--                    var user_id = $(this).data('user_id');--}}
+                {{--                    $('input[name=user_id]').val(user_id);--}}
+                {{--                    $('#addSubscription').modal();--}}
+                {{--                });--}}
+
+                {{--                $('#open_extend_subscription').bind('click', function () {--}}
+                {{--                    var user_id = $(this).data('user_id');--}}
+                {{--                    $('input[name=user_id]').val(user_id);--}}
+                {{--                    $('#extendSubscription').modal();--}}
+                {{--                });--}}
+
+
+                {{--                function ajax(item_id, type) {--}}
+                {{--                    $.ajaxSetup({--}}
+                {{--                        headers: {--}}
+                {{--                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')--}}
+                {{--                        }--}}
+                {{--                    });--}}
+                {{--                    $.ajax({--}}
+                {{--                        method: 'POST',--}}
+                {{--                        url: '/admin/students/ajax',--}}
+                {{--                        data: {type: type, item_id: item_id},--}}
+                {{--                        success: function (data) {--}}
+                {{--                            append_items(data, type);--}}
+                {{--                        }--}}
+                {{--                    });--}}
+
+                {{--                    function append_items(data, type) {--}}
+                {{--                        type = type === 'get_regions' ? 'region_id' : 'school_id';--}}
+                {{--                        $('#' + type).prop('disabled', false);--}}
+                {{--                        $('#' + type).find('option')--}}
+                {{--                            .remove()--}}
+                {{--                            .end();--}}
+
+                {{--                        $.each(data, function (index, value) {--}}
+                {{--                            length = Object.keys(data).length;--}}
+                {{--                            $('#' + type)--}}
+                {{--                                .append($("<option></option>")--}}
+                {{--                                    .attr("value", index)--}}
+                {{--                                    .text(value));--}}
+                {{--                        });--}}
+                {{--                    }--}}
+                {{--                }--}}
+
+                {{--                $('#filter_btn').click(function () {--}}
+                {{--                    url = '/admin/students/filter?';--}}
+
+                {{--                    area = $('#area_id').val();--}}
+                {{--                    url = set_delimiter(url, area, 'area');--}}
+
+                {{--                    region = $('#region_id').val();--}}
+                {{--                    url = set_delimiter(url, region, 'region');--}}
+
+                {{--                    school = $('#school_id').val();--}}
+                {{--                    url = set_delimiter(url, school, 'school');--}}
+
+                {{--                    langauge = $('#language_id').val();--}}
+                {{--                    url = set_delimiter(url, langauge, 'language');--}}
+
+                {{--                    classes = $('#class_id').val();--}}
+                {{--                    url = set_delimiter(url, classes, 'class');--}}
+
+
+                {{--                    console.log(url);--}}
+                {{--                    window.location = url;--}}
+                {{--                });--}}
+
+                {{--                function set_delimiter(url, item, param_name) {--}}
+                {{--                    console.log(item.length);--}}
+                {{--                    if (Array.isArray(item) && item.length) {--}}
+                {{--                        url = url + '&' + param_name + '=' + item.join();--}}
+                {{--                    }--}}
+                {{--                    return url;--}}
+                {{--                }--}}
+
+
+            </script>
 @stop
-@section('plugins.Select2', true)
-@section('plugins.Datatables', true)
-{{--        @section('js')--}}
-{{--            <script>--}}
-{{--                $('.select2').select2()--}}
-
-{{--                $("#example1").DataTable({--}}
-{{--                    "responsive": true,--}}
-{{--                    "autoWidth": false,--}}
-{{--                });--}}
-
-{{--                // $('#area_id').change(function () {--}}
-{{--                //     var type = 'get_regions';--}}
-{{--                //     var item_id = $(this).val();--}}
-{{--                //     console.log(item_id);--}}
-{{--                //     ajax(item_id, type);--}}
-{{--                // });--}}
-{{--                //--}}
-{{--                // $('#region_id').change(function () {--}}
-{{--                //     var type = 'get_schools';--}}
-{{--                //     var item_id = $(this).val();--}}
-{{--                //     ajax(item_id, type);--}}
-{{--                // });--}}
-
-{{--                $('#open_change_password').bind('click', function () {--}}
-{{--                    var user_id = $(this).data('user_id');--}}
-{{--                    $('input[name=user_id]').val(user_id);--}}
-{{--                    $('#passwordModal').modal();--}}
-
-{{--                });--}}
-
-{{--                $('#open_add_subscription').bind('click', function () {--}}
-{{--                    var user_id = $(this).data('user_id');--}}
-{{--                    $('input[name=user_id]').val(user_id);--}}
-{{--                    $('#addSubscription').modal();--}}
-{{--                });--}}
-
-{{--                $('#open_extend_subscription').bind('click', function () {--}}
-{{--                    var user_id = $(this).data('user_id');--}}
-{{--                    $('input[name=user_id]').val(user_id);--}}
-{{--                    $('#extendSubscription').modal();--}}
-{{--                });--}}
-
-
-{{--                function ajax(item_id, type) {--}}
-{{--                    $.ajaxSetup({--}}
-{{--                        headers: {--}}
-{{--                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')--}}
-{{--                        }--}}
-{{--                    });--}}
-{{--                    $.ajax({--}}
-{{--                        method: 'POST',--}}
-{{--                        url: '/admin/students/ajax',--}}
-{{--                        data: {type: type, item_id: item_id},--}}
-{{--                        success: function (data) {--}}
-{{--                            append_items(data, type);--}}
-{{--                        }--}}
-{{--                    });--}}
-
-{{--                    function append_items(data, type) {--}}
-{{--                        type = type === 'get_regions' ? 'region_id' : 'school_id';--}}
-{{--                        $('#' + type).prop('disabled', false);--}}
-{{--                        $('#' + type).find('option')--}}
-{{--                            .remove()--}}
-{{--                            .end();--}}
-
-{{--                        $.each(data, function (index, value) {--}}
-{{--                            length = Object.keys(data).length;--}}
-{{--                            $('#' + type)--}}
-{{--                                .append($("<option></option>")--}}
-{{--                                    .attr("value", index)--}}
-{{--                                    .text(value));--}}
-{{--                        });--}}
-{{--                    }--}}
-{{--                }--}}
-
-{{--                $('#filter_btn').click(function () {--}}
-{{--                    url = '/admin/students/filter?';--}}
-
-{{--                    area = $('#area_id').val();--}}
-{{--                    url = set_delimiter(url, area, 'area');--}}
-
-{{--                    region = $('#region_id').val();--}}
-{{--                    url = set_delimiter(url, region, 'region');--}}
-
-{{--                    school = $('#school_id').val();--}}
-{{--                    url = set_delimiter(url, school, 'school');--}}
-
-{{--                    langauge = $('#language_id').val();--}}
-{{--                    url = set_delimiter(url, langauge, 'language');--}}
-
-{{--                    classes = $('#class_id').val();--}}
-{{--                    url = set_delimiter(url, classes, 'class');--}}
-
-
-{{--                    console.log(url);--}}
-{{--                    window.location = url;--}}
-{{--                });--}}
-
-{{--                function set_delimiter(url, item, param_name) {--}}
-{{--                    console.log(item.length);--}}
-{{--                    if (Array.isArray(item) && item.length) {--}}
-{{--                        url = url + '&' + param_name + '=' + item.join();--}}
-{{--                    }--}}
-{{--                    return url;--}}
-{{--                }--}}
-
-
-{{--            </script>--}}
-{{--@stop--}}

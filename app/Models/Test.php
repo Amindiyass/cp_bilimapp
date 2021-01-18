@@ -24,6 +24,11 @@ class Test extends Model
         'order_number',
     ];
 
+    public $next;
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
+    }
     public function completedRate()
     {
         return $this->morphOne(CompletedRate::class, 'model')->where('user_id', auth()->id());
@@ -32,8 +37,8 @@ class Test extends Model
     public function notCompletedRate()
     {
         return $this->morphOne(CompletedRate::class, 'model')
-            ->where('user_id', auth()->id())
-            ->where('is_checked', false);
+                    ->where('user_id', auth()->id())
+                    ->where('is_checked', false);
     }
 
     public function lesson()
@@ -51,10 +56,6 @@ class Test extends Model
         return $this->belongsTo(Section::class);
     }
 
-    public function questions()
-    {
-        return $this->hasMany(Question::class);
-    }
 
     public function variants()
     {

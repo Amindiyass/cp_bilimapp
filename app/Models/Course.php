@@ -6,6 +6,8 @@ use App\Filters\QueryFilter;
 use App\Search\ModelSearch;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class Course
@@ -25,6 +27,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Course extends Model
 {
+
+    use SoftDeletes;
+
     protected $table = 'courses';
     protected $primaryKey = 'id';
     protected $fillable = [
@@ -88,6 +93,27 @@ class Course extends Model
         return $this->hasMany(Test::class);
     }
 
+    public function education_level()
+    {
+        return $this->hasOne(EducationLevel::class, 'id', 'class_id');
+    }
+
+
+    public function getCountTestsAttribute()
+    {
+        return Test::whereIn('lesson_id', $this->lessons()->select('lessons.id'))->count();
+    }
+
+    public function getCountVideosAttribute()
+    {
+        return Video::whereIn('lesson_id', $this->lessons()->select('lessons.id'))->count();
+    }
+
+    public function getLinkAttribute()
+    {
+        return route('course.show', ['course' => $this->id]);
+    }
+
     public static function test_count()
     {
 
@@ -141,19 +167,55 @@ class Course extends Model
         return $assignment_count;
     }
 
-    public function getCountTestsAttribute()
+    public function store($request)
     {
-        return Test::whereIn('lesson_id', $this->lessons()->select('lessons.id'))->count();
+        try {
+            DB::beginTransaction();
+            $course = new Course();
+            $course->fill($request->all());
+            $course->save();
+
+            $key = sprintf('%s-%s', 'course_section', session()->getId());
+            $section = session()->get(sprintf('%s-%s', 'course_section', session()->getId()));
+            for ($i = 0; $i < count($section['sort_number']); $i++) {
+                DB::table('sections')
+                    ->insert([
+                        'name_ru' => $section['name_ru'][$i],
+                        'name_kz' => $section['name_kz'][$i],
+                        'sort_number' => $section['sort_number'][$i],
+                        'course_id' => $course->id,
+                    ]);
+            }
+
+            session()->forget($key);
+
+            DB::commit();
+
+            return [
+                'success' => true,
+                'message' => null
+            ];
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            $error = sprintf('%s %s %s', $exception->getFile(), $exception->getLine(), $exception->getMessage());
+            return [
+                'success' => false,
+                'message' => $error,
+            ];
+        }
     }
 
-    public function getCountVideosAttribute()
+    public function get_temp_filter_items($request)
     {
-        return Video::whereIn('lesson_id', $this->lessons()->select('lessons.id'))->count();
-    }
+        $classes = !empty($request->input('classes')) ? explode(',', $request->input('classes')) : [];
+        $languages = !empty($request->input('languages')) ? explode(',', $request->input('languages')) : [];
+        $subjects = !empty($request->input('subject_id')) ? explode(',', $request->input('subject_id')) : [];
 
-    public function getLinkAttribute()
-    {
-        return '/course/' . $this->id;
+        return [
+            'classes' => $classes,
+            'languages' => $languages,
+            'subjects' => $subjects,
+        ];
     }
 
     public function solutions()
