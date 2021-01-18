@@ -244,7 +244,7 @@ $week_number = app('request')->input('week_number');
                                 class="float-right"><b>{{$subject_rate['assignment_count']}}</b>/{{$assignments}}</span>
                             <div class="progress progress-sm">
                                 <div class="progress-bar bg-warning"
-                                     style="width: {{($subject_rate['assignment_count']/($assignments ?? 1) * 100}}%"></div>
+                                     style="width: {{($subject_rate['assignment_count']/($assignments ?? 1)) * 100}}%"></div>
                             </div>
                         </div>
                         <!-- /.progress-group -->
