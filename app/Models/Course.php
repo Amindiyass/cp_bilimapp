@@ -178,13 +178,15 @@ class Course extends Model
             $key = sprintf('%s-%s', 'course_section', session()->getId());
             $section = session()->get(sprintf('%s-%s', 'course_section', session()->getId()));
             for ($i = 0; $i < count($section['sort_number']); $i++) {
-                DB::table('sections')
-                    ->insert([
-                        'name_ru' => $section['name_ru'][$i],
-                        'name_kz' => $section['name_kz'][$i],
-                        'sort_number' => $section['sort_number'][$i],
-                        'course_id' => $course->id,
-                    ]);
+                $section_array = [
+                    'name_ru' => $section['name_ru'][$i],
+                    'name_kz' => $section['name_kz'][$i],
+                    'sort_number' => $section['sort_number'][$i],
+                    'course_id' => $course->id
+                ];
+                $section = new Section();
+                $section->fill($section_array);
+                $section->save();
             }
 
             session()->forget($key);
@@ -225,6 +227,6 @@ class Course extends Model
 
     public function solutionCategories()
     {
-        return $this->hasMany('App\Models\Category','course_id','id');
+        return $this->hasMany('App\Models\Category', 'course_id', 'id');
     }
 }
