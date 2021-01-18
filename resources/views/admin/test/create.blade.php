@@ -61,9 +61,45 @@
                     <input name="order_number" type="text" class="form-control">
                 </div>
             </div>
-
+            <div id="questions_container">
+            <div class="form-group questions" id="0">
+                <div class="row">
+                    <div class="col-md-5">
+                        <label for="password">
+                            Вопрос на казахском *
+                        </label>
+                        {!! Form::textarea('question_in_kz[0]',null , ['class' => 'form-control editor question_kz', 'rows' => 5]); !!}
+                    </div>
+                    <div class="col-md-5">
+                        <label for="password">
+                            Вопрос на русском *
+                        </label>
+                        {!! Form::textarea('question_in_ru[0]',null , ['class' => 'form-control editor question_ru', 'rows' => 5]); !!}
+                    </div>
+                </div>
+                <div class="row" id="0">
+                    <div class="col-md-5">
+                        <label for="password">
+                            Вариант на казахском *
+                        </label>
+                        {!! Form::textarea('variant_in_kz[0][0]',null , ['class' => 'form-control editor kz', 'rows' => 5]); !!}
+                    </div>
+                    <div class="col-md-5">
+                        <label for="password">
+                            Вариант на русском *
+                        </label>
+                        {!! Form::textarea('variant_in_ru[0][0]',null , ['class' => 'form-control editor ru', 'rows' => 5]); !!}
+                    </div>
+                    <div class="col-md-2 mt-4">
+                        <input class="form-check-input" type="checkbox" name="variant[0][]">
+                        <label class="form-check-label">Правильный ответ</label>
+                        <button class="btn btn-primary" type="button" onclick="addVariant(this)">Добавить еще вариант</button>
+                    </div>
+                </div>
+            </div>
+            </div>
             <div class="btn btn-group float-right">
-                <button type="button" class="btn btn-primary d-none" id="open_add_variants_modal">
+                <button type="button" class="btn btn-primary" onclick="addQuestion()">
                     Добавить вопрос
                 </button>
                 <button type="submit" class="btn btn-success">
@@ -73,74 +109,16 @@
         </div>
         {!! Form::close() !!}
     </div>
-    <div class="modal fade" id="addVariants" tabindex="-1" role="dialog"
-         aria-hidden="true">
-        <div class="modal-dialog" style="max-width: 800px;" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Добавить варианты теста</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                {!! Form::open(['route' => 'student.password.change', 'method' => 'post']); !!}
-                <div class="modal-body">
-                    @csrf
-                    {!! Form::hidden('user_id') !!}
-
-                    <label for="password">
-                        Ответ на казахском *
-                    </label>
-                    {!! Form::textarea('variant_in_kz',null , ['class' => 'form-control', 'rows' => 5]); !!}
-
-                    <label for="password">
-                        Ответ на русском *
-                    </label>
-                    {!! Form::textarea('variant_in_ru', null,['class' => 'form-control', 'rows' => 5]); !!}
-
-
-                    <label for="is_right">
-                        Правильный ответ &emsp;
-                    </label>
-                    {!! Form::checkbox('is_right', true, true); !!}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                    <button type="submit" class="btn btn-primary">Добавить вариант</button>
-                </div>
-                {!! Form::close(); !!}
-            </div>
-        </div>
-    </div>
-
-    <div class="card d-none">
-        <div class="card-header">
-            Варианты
-        </div>
-        <div class="card-body">
-            <table style="" id="example1" class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                    <th>ID-номер</th>
-                    <th>Ответ</th>
-                    <th>Дата создание</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-
-                </tbody>
-            </table>
-        </div>
-    </div>
 @stop
 @section('js')
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async
-            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-    </script>
+{{--    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>--}}
+{{--    <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/tex-mml-chtml.js"></script>--}}
+{{--    <script type="text/javascript" id="MathJax-script-s"--}}
+{{--            src="https://cdn.jsdelivr.net/npm/mathjax@3.0.0/es5/tex-chtml.js">--}}
+{{--        </script>--}}
+    <script src="/ckeditor/ckeditor.js"></script>
     <script>
-
+        CKEDITOR.replaceAll( 'editor' );
         $("#course_id").change(function () {
             var type = 'get_sections';
             var item_id = $(this).val();
@@ -182,6 +160,33 @@
                         .attr("value", index)
                         .text(value));
             });
+        }
+
+        let template = $('.questions').clone();
+        function addQuestion()
+        {
+            let newId = parseInt(template.first().attr('id'))+1;
+            template.first().attr('id', newId);
+            template.find('.question_kz').attr('name', 'question_in_kz['+newId+']')
+            template.find('.question_ru').attr('name', 'question_in_ru['+newId+']')
+            template.find('.cke').remove()
+            $('#questions_container').append(template);
+            CKEDITOR.replaceAll( 'editor' );
+        }
+
+        function addVariant(context)
+        {
+            let questionId = $(context).parent().parent().parent().attr('id');
+            let container = $(context).parent().parent().clone();
+            let newId = parseInt(container.attr('id'))+1;
+            container.attr('id', newId);
+            console.log(container);
+            container.find('.kz').attr('name', 'variant_in_kz['+questionId+']['+newId+']')
+            container.find('.ru').attr('name', 'variant_in_ru['+questionId+']['+newId+']')
+            container.find('.form-check-input').attr('name', 'variant['+questionId+']['+newId+']')
+            container.find('.cke').remove()
+            $(context).parent().parent().parent().append(container)
+            CKEDITOR.replaceAll( 'editor' );
         }
     </script>
 @endsection

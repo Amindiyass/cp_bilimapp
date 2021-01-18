@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class Test
+ * @package App\Models
+ * @property Question[] $questions
+ */
 class Test extends Model
 {
     protected $appends = ['count_questions'];
