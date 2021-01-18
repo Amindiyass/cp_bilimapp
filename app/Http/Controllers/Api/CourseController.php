@@ -47,6 +47,7 @@ class CourseController extends BaseController
         $completeRate = $course->completedRate()->byUser()->first();
         return $this->sendResponse(
             [
+                'id' => $course->id,
                 'subject_ru' => $course->subject->name_ru,
                 'subject_kz' => $course->subject->name_kz,
                 'class_ru' => $course->class->name_ru,

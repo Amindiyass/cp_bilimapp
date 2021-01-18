@@ -49,6 +49,7 @@ Route::get('courses', [CourseController::class, 'all']);
 Route::get('course/{course}', [CourseController::class, 'show'])->name('course.show');
 Route::get('course/{course}/details', [CourseController::class, 'details']);
 Route::get('v2/course/{course}/details', [V2CourseController::class, 'details']);
+Route::post('application', [ApplicationController::class, 'store']);
 
 /**Route for details user API */
 Route::group(['middleware' => [
@@ -57,8 +58,6 @@ Route::group(['middleware' => [
 
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('user/update-password', [AuthController::class, 'updatePassword'])->name('api.user.set-password');
-
-    Route::post('application', [ApplicationController::class, 'store']);
 
     Route::get('courses/all', 'Api\CourseController@all');
     Route::get('courses/filter', 'Api\CourseController@filter');
@@ -80,12 +79,12 @@ Route::group(['middleware' => [
     Route::post('profile', [StudentController::class, 'update']);
     Route::post('profile/reconfirm_code', [AuthController::class, 'reconfirmCode']);
     Route::post('order/{subscription}', [OrderController::class, 'order']);
+    Route::get('order/check-payment/{order}/{id}', [OrderController::class, 'check'])->name('api.payment.check');
+    Route::get('order/check-for-paybox', [OrderController::class, 'checkResult'])->name('api.paybox.payment.result');
 
     Route::get('solutions/{course}/categories',[SolutionController::class, 'categories']);
     Route::get('solutions/{course}',[SolutionController::class, 'courseSolutions']);
 
-    Route::post('order/{subscription}', [OrderController::class, 'order']);
-    Route::get('order/check-payment/{order}', [OrderController::class, 'check'])->name('api.payment.check');
 
     Route::middleware('hasSubscription')->group(function() {
         Route::get('test/{test}', [TestController::class, 'show'])->middleware('testPassed')->name('api.test');
