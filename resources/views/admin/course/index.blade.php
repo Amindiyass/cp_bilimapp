@@ -98,8 +98,8 @@
                         <td>{{$course->name_kz}}</td>
                         <td>{{$course->name_ru}}</td>
                         <td>{{$course->language->name_ru}}</td>
-                        <td>{{$course->subject->name_ru}}</td>
-                        <td>{{$course->education_level->order_number}}</td>
+                        <td>{{$course->subject  ? $course->subject->name_ru : 'нету'}}</td>
+                        <td>{{$course->education_level  ? $course->education_level->order_number : 'нету'}}</td>
                         <td>{{$course->order}}</td>
                         <td> {{date('Y-m-d H:i:s',strtotime($course->created_at))}}</td>
                         <td>

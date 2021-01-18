@@ -20,7 +20,7 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::orderBy('id')->paginate(15);
+        $courses = Course::orderBy('id')->get();
         $result = $this->get_items();
         $result['courses'] = $courses;
         return view('admin.course.index', $result);
@@ -69,7 +69,8 @@ class CourseController extends Controller
     {
         $sessionId = \session()->getId();
         $key = sprintf('%s-%s', 'course_section', $sessionId);
-        $count = count(Session::get($key . '.sort_number')) + 1;
+        $item_key = Session::get($key . '.sort_number');
+        $count = isset($item_key) ? count($item_key) + 1 : null;
         Session::push($key . '.key', $count);
         Session::push($key . '.name_ru', $request->name_ru);
         Session::push($key . '.name_kz', $request->name_kz);
