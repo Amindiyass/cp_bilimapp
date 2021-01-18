@@ -35,7 +35,7 @@ class AuthRegisterRequest extends FormRequest
             'phone' => 'required|unique:users',
             'password' => 'required',
             'inviter_id' => 'int',
-            'promocode' => 'sometimes|required|exists:promocodes,name'
+            /*'promocode' => 'sometimes|required|exists:promocodes,name'*/
         ];
     }
 }
