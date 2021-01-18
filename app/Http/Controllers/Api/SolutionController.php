@@ -11,7 +11,8 @@ class SolutionController extends BaseController
     public function courseSolutions(Course $course, Request $request)
     {
         $solutionsQuery = $course->solutions()->with('categories');
-        if ($categoryIds = $request->get('category_ids', [])) {
+        if ($categoryIds = $request->get('category_ids', '')) {
+            $categoryIds = is_array($categoryIds) ? $categoryIds : explode(',', $categoryIds);
             $solutionsQuery = $solutionsQuery->whereHas('categories', function (Builder $query) use ($categoryIds) {
                 $query->whereIn('categories.id', $categoryIds);
             });
@@ -21,7 +22,7 @@ class SolutionController extends BaseController
                 $query->whereRaw("answer ilike '%$searchQuery%'")->orWhereRaw("question ilike '%$searchQuery%'");
             });
         }
-        return $solutionsQuery->paginate(30);
+        return $solutionsQuery->paginate(10);
     }
 
     public function categories(Course $course)
