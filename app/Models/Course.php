@@ -6,6 +6,7 @@ use App\Filters\QueryFilter;
 use App\Search\ModelSearch;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -25,6 +26,7 @@ use Illuminate\Support\Facades\DB;
 class Course extends Model
 {
 
+    use SoftDeletes;
 
     protected $table = 'courses';
     protected $primaryKey = 'id';
@@ -194,9 +196,19 @@ class Course extends Model
                 'success' => false,
                 'message' => $error,
             ];
-
-
         }
     }
 
+    public function get_temp_filter_items($request)
+    {
+        $classes = !empty($request->input('classes')) ? explode(',', $request->input('classes')) : [];
+        $languages = !empty($request->input('languages')) ? explode(',', $request->input('languages')) : [];
+        $subjects = !empty($request->input('subject_id')) ? explode(',', $request->input('subject_id')) : [];
+
+        return [
+            'classes' => $classes,
+            'languages' => $languages,
+            'subjects' => $subjects,
+        ];
+    }
 }

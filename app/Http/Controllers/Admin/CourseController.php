@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Filters\CourseFilter;
+use App\Filters\StudentFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\CourseStoreRequest;
 use App\Http\Requests\Admin\SectionStoreRequest;
 use App\Models\Course;
+use App\Models\EducationLevel;
+use App\Models\Language;
+use App\Models\Student;
+use App\Models\Subject;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -13,10 +20,10 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::paginate(15);
-        return view('admin.course.index', [
-            'courses' => $courses,
-        ]);
+        $courses = Course::orderBy('id')->paginate(15);
+        $result = $this->get_items();
+        $result['courses'] = $courses;
+        return view('admin.course.index', $result);
     }
 
     public function create()
@@ -62,6 +69,8 @@ class CourseController extends Controller
     {
         $sessionId = \session()->getId();
         $key = sprintf('%s-%s', 'course_section', $sessionId);
+        $count = count(Session::get($key . '.sort_number')) + 1;
+        Session::push($key . '.key', $count);
         Session::push($key . '.name_ru', $request->name_ru);
         Session::push($key . '.name_kz', $request->name_kz);
         Session::push($key . '.sort_number', $request->sort_number);
@@ -72,6 +81,33 @@ class CourseController extends Controller
 
     public function destroy($id)
     {
-        //
+        Course::find($id)->delete();
+        return redirect(route('course.index'))
+            ->with('success', 'Вы успешно удалили курс');
+    }
+
+    public function get_items()
+    {
+        $subjects = Subject::all()->pluck('name_ru', 'id')->toArray();
+        $languages = Language::all()->pluck('name_ru', 'id')->toArray();
+        $classes = EducationLevel::orderBy('order_number')->get()->pluck('order_number', 'id')->toArray();
+
+        return [
+            'subjects' => $subjects,
+            'classes' => $classes,
+            'languages' => $languages,
+        ];
+    }
+
+    public function filter(CourseFilter $filters, Request $request)
+    {
+        $items = (new \App\Models\Course())->get_temp_filter_items($request);
+        $courses = Course::filter($filters)->get();
+
+        return redirect(route('course.index'))
+            ->with('courses', $courses)
+            ->with('subjects', $items['subjects'])
+            ->with('classes', $items['classes'])
+            ->with('languages', $items['languages']);
     }
 }

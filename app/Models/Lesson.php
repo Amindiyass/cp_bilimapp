@@ -126,4 +126,27 @@ class Lesson extends Model
             ];
         }
     }
+
+    public function deleteWithDependencies($lesson)
+    {
+        try {
+            DB::beginTransaction();
+            Video::where('lesson_id', $lesson->id)->delete();
+            Conspectus::where('lesson_id', $lesson->id)->delete();
+            Assignment::where('lesson_id', $lesson->id)->delete();
+            $lesson->delete();
+            DB::commit();
+
+            return [
+                'success' => true,
+                'message' => null,
+            ];
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return [
+                'success' => false,
+                'message' => $exception->getMessage()
+            ];
+        }
+    }
 }

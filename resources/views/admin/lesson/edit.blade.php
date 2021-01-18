@@ -1,15 +1,13 @@
 <?php
+/** @var \App\Models\Lesson $lesson */
 $courses = \App\Models\Course::all()->pluck('name_ru', 'id')->toArray();
-$key = sprintf('%s-%s', 'lesson_video', \session()->getId());
-$videoArray = session()->get($key);
-
-$key = sprintf('%s-%s', 'lesson_conspectus', \session()->getId());
-$conspectusArray = session()->get($key);
-
+$sections = \App\Models\Section::all()->pluck('name_ru', 'id')->toArray();
+$videos = $lesson->videos;
+$conspectus = $lesson->conspectus;
 ?>
 @extends('adminlte::page')
 
-@section('title', 'Добавить урок')
+@section('title', 'Изменить урок')
 
 @section('content_header')
     <h1 class="m-0 text-dark">Добавить урок</h1>
@@ -37,20 +35,20 @@ $conspectusArray = session()->get($key);
             <div class="form-group">
                 <label>Название на казахском *</label>
                 <div class="input-group">
-                    <input name="name_kz" type="text" class="form-control">
+                    <input value="{{$lesson->name_kz}}" name="name_kz" type="text" class="form-control">
                 </div>
 
             </div>
             <div class="form-group">
                 <label>Название на русском *</label>
                 <div class="input-group">
-                    <input name="name_ru" type="text" class="form-control">
+                    <input value="{{$lesson->name_ru}}" name="name_ru" type="text" class="form-control">
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Выберите курс *</label>
-                {!! Form::select('course_id',$courses, null,
+                {!! Form::select('course_id',$courses, ($lesson->section && $lesson->section->course ? $lesson->section->course->id : null),
                     [
                          'class' => 'form-control select2bs4',
                          'id' => 'subject_id',
@@ -61,11 +59,11 @@ $conspectusArray = session()->get($key);
 
             <div class="form-group">
                 <label>Выберите тему *</label>
-                {!! Form::select('section_id',[], null,
+                {!! Form::select('section_id', $sections, $lesson->section ? $lesson->section->id : null,
                     [
                          'class' => 'form-control select2bs4',
                          'id' => 'section_id',
-                         'disabled' => true,
+                         'disabled' => false,
                          'style' => 'width: 100%;',
                          'placeholder' => 'Выберите тему ...',
                          ]); !!}
@@ -74,12 +72,14 @@ $conspectusArray = session()->get($key);
             <div class="form-group">
                 <label for="">Описание на русском *</label>
                 <textarea class="form-control" name="description_ru" cols="30" rows="5">
+                    {{$lesson->description_ru}}
                 </textarea>
             </div>
 
             <div class="form-group">
                 <label for="">Описание на казахском *</label>
                 <textarea class="form-control" name="description_kz" cols="30" rows="5">
+                    {{$lesson->description_kz}}
                 </textarea>
             </div>
 
@@ -89,7 +89,7 @@ $conspectusArray = session()->get($key);
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fa fa-sort"></i></span>
                     </div>
-                    <input name="order" value="100" type="text" class="form-control">
+                    <input name="order" value="{{$lesson->order}}" type="text" class="form-control">
                 </div>
             </div>
 
@@ -108,12 +108,12 @@ $conspectusArray = session()->get($key);
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                @if(!empty($videoArray))
-                                    <td>{{$videoArray['title_kz'][0]}}</td>
-                                    <td>{{$videoArray['title_ru'][0]}}</td>
-                                    <td>{{$videoArray['path'][0]}}</td>
-                                    <td>{{$videoArray['sort_number'][0]}}</td>
+                            @foreach($videos as $video)
+                                <tr>
+                                    <td>{{$video->title_kz}}</td>
+                                    <td>{{$video->title_ru}}</td>
+                                    <td>{{$video->path}}</td>
+                                    <td>{{$video->sort_number}}</td>
                                     <td>
                                         <div class="btn-group" style="position: relative;">
                                             <button type="button" class="btn btn-danger dropdown-toggle"
@@ -138,8 +138,8 @@ $conspectusArray = session()->get($key);
                                             </div>
                                         </div>
                                     </td>
-                                @endif
-                            </tr>
+                                </tr>
+                            @endforeach
                             </tbody>
                             <tfoot>
                             </tfoot>
@@ -157,9 +157,8 @@ $conspectusArray = session()->get($key);
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                @if(!empty($conspectusArray))
-                                    {{--                                    <td>{{$conspectusArray['body'][0]}}</td>--}}
+                            @foreach($conspectus as $conspect)
+                                <tr>
                                     <td>Конспект</td>
                                     <td>
                                         <div class="btn-group" style="position: relative;">
@@ -189,8 +188,8 @@ $conspectusArray = session()->get($key);
                                             </div>
                                         </div>
                                     </td>
-                                @endif
-                            </tr>
+                                </tr>
+                            @endforeach
                             </tbody>
                             <tfoot>
                             </tfoot>
@@ -205,7 +204,6 @@ $conspectusArray = session()->get($key);
             </div>
         </div>
         {!! Form::close() !!}
-
     </div>
     <div class="modal fade" id="addVideos" tabindex="-1" role="dialog"
          aria-hidden="true">

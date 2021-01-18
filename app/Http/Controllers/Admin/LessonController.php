@@ -39,6 +39,16 @@ class LessonController extends Controller
         return redirect(route('lesson.create'))->with([
             'success' => 'Вы успешно добавили видео',
         ]);
+    }
+
+    public function videoReset()
+    {
+        $sessionId = \session()->getId();
+        $key = sprintf('%s-%s', 'lesson_video', $sessionId);
+        Session::forget($key);
+        return redirect(route('lesson.create'))->with([
+            'success' => 'Вы успешно сбросили видео',
+        ]);
 
     }
 
@@ -46,14 +56,25 @@ class LessonController extends Controller
     {
         $sessionId = \session()->getId();
         $key = sprintf('%s-%s', 'lesson_conspectus', $sessionId);
+        Session::forget($key);
         Session::push($key . '.body', $request->body);
-
 
         return redirect(route('lesson.create'))->with([
             'success' => 'Вы успешно добавили конспект',
         ]);
+    }
+
+    public function conspectusReset()
+    {
+        $sessionId = \session()->getId();
+        $key = sprintf('%s-%s', 'lesson_conspectus', $sessionId);
+        Session::forget($key);
+        return redirect(route('lesson.create'))->with([
+            'success' => 'Вы успешно сбросили конспект',
+        ]);
 
     }
+
 
     public function store(LessonStoreRequest $request)
     {
@@ -87,16 +108,13 @@ class LessonController extends Controller
         return $result;
     }
 
-    public
-    function show($id)
-    {
-        //
-    }
 
     public
-    function edit($id)
+    function edit(Lesson $lesson)
     {
-        //
+        return view('admin.lesson.edit', [
+            'lesson' => $lesson,
+        ]);
     }
 
     public
@@ -106,8 +124,15 @@ class LessonController extends Controller
     }
 
     public
-    function destroy($id)
+    function destroy(Lesson $lesson)
     {
-        //
+        $result = (new \App\Models\Lesson)->deleteWithDependencies($lesson);
+
+        if ($result['success']) {
+            return redirect(route('lesson.index'))
+                ->with('success', 'Вы успешно добавили урок');
+        }
+        return redirect(route('lesson.index'))
+            ->with('error', $result['message']);
     }
 }

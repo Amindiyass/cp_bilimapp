@@ -57,6 +57,16 @@ Route::group([
     Route::post('lesson/video', 'LessonController@tempVideoSave')->name('lesson.video');
     Route::post('lesson/conspectuses', 'LessonController@tempConspectusesSave')->name('lesson.conspectuses');
     Route::post('lesson/ajax', 'LessonController@ajax')->name('lesson.ajax');
+    Route::get('lesson/video/reset', 'LessonController@videoReset')->name('lesson.video.reset');
+    Route::get('lesson/conspectus/reset', 'LessonController@conspectusReset')->name('lesson.conspectus.reset');
+
+    Route::resource('stuff', 'StuffController');
+    Route::post('stuff/password/change', 'StuffController@password_change')->name('stuff.password.change');
+    Route::post('stuff/deactivate', 'StuffController@deactivate')->name('stuff.deactivate');
+    Route::post('stuff/activate', 'StuffController@activate')->name('stuff.activate');
+
+    Route::get('configuration/show', 'ConfigurationController@show')->name('configuration.show');
+    Route::get('course/filter', 'CourseController@filter')->name('course.filter');
 
 });
 

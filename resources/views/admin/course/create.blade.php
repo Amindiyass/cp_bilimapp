@@ -129,6 +129,15 @@ $subjects = \App\Models\Subject::all()->pluck('name_ru', 'id')->toArray();
                                                 aria-haspopup="true" aria-expanded="false">
                                             Действие
                                         </button>
+{{--                                        <div class="dropdown-menu" style="position: absolute;">--}}
+{{--                                            <a href="{{route('section.edit', ['section' => $sectionArray['key'][$i]])}}"--}}
+{{--                                               class="dropdown-item"--}}
+{{--                                               data-user_id="{{$lesson->id}}">--}}
+{{--                                                Редактировать--}}
+{{--                                                &nbsp;--}}
+{{--                                                <i class="fa fa-edit"></i>--}}
+{{--                                            </a>--}}
+{{--                                        </div>--}}
                                     </div>
                                 </td>
                             </tr>

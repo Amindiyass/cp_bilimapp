@@ -13,7 +13,7 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body" style="overflow-x: auto;white-space: nowrap;">
-            <table style="" id="example1" class="table table-bordered table-striped">
+            <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
                     <th>ID-номер</th>
@@ -39,13 +39,13 @@
                                     Действие
                                 </button>
                                 <div class="dropdown-menu" style="position: absolute;">
-                                    <a href="{{route('course.edit', ['course' => $lesson->id])}}" class="dropdown-item"
+                                    <a href="{{route('lesson.edit', ['lesson' => $lesson->id])}}" class="dropdown-item"
                                        data-user_id="{{$lesson->id}}">
                                         Редактировать
                                         &nbsp;
                                         <i class="fa fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('course.destroy', $lesson->id) }}" method="POST">
+                                    <form action="{{ route('lesson.destroy', $lesson->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="dropdown-item">
@@ -63,10 +63,9 @@
                 <tfoot>
                 </tfoot>
             </table>
-            <div class="mt-3">
+            <div class="float-right">
                 {{ $lessons->links() }}
             </div>
-
         </div>
 
     </div>
@@ -80,5 +79,7 @@
         $("#example1").DataTable({
             "responsive": true,
             "autoWidth": false,
+            'paging': false,
         });
+    </script>
 @stop

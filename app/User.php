@@ -24,6 +24,13 @@ class User extends Authenticatable
      *
      * @var array
      */
+
+    const ROLE_ADMIN = 1;
+    const ROLE_STUDENT = 2;
+    const ROLE_MODERATOR = 3;
+    const ROLE_STUFF = 4;
+
+
     protected $fillable = [
         'name',
         'email',
@@ -52,6 +59,20 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static function getRoleNames($role_id)
+    {
+        switch ($role_id) {
+            case self::ROLE_ADMIN:
+                return 'admin';
+            case self::ROLE_STUDENT:
+                return 'student';
+            case  self::ROLE_MODERATOR:
+                return 'moderator';
+            case self::ROLE_STUFF:
+                return 'stuff';
+        }
+    }
 
     public function getAvatarImageAttribute($value)
     {
@@ -117,5 +138,18 @@ class User extends Authenticatable
             }
         }
         return null;
+    }
+
+    public function getRoleName($id)
+    {
+        $user = self::find($id);
+        switch ($user->roles->pluck('name')[0]) {
+            case 'stuff':
+                return 'Сотрудник';
+            case 'admin':
+                return 'Администратор';
+            case 'moderator':
+                return 'Модератор';
+        }
     }
 }

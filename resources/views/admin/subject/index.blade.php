@@ -13,7 +13,7 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body" style="overflow-x: auto;white-space: nowrap;">
-            <table style="" id="example1" class="table table-bordered table-striped">
+            <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
                     <th>ID-номер</th>
@@ -61,12 +61,7 @@
                 <tfoot>
                 </tfoot>
             </table>
-            <div class="mt-3">
-                {{ $subjects->links() }}
-            </div>
-
         </div>
-
     </div>
 @stop
 @section('plugins.Datatables', true)
@@ -79,4 +74,5 @@
             "responsive": true,
             "autoWidth": false,
         });
+    </script>
 @stop
