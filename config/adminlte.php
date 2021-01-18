@@ -251,6 +251,31 @@ return [
             'route' => 'test.index',
             'icon' => 'fa fa-spell-check',
         ],
+        [
+            'text' => 'Предметы',
+            'route' => 'subject.index',
+            'icon' => 'fa fa-book',
+        ],
+        [
+            'text' => 'Курсы',
+            'route' => 'course.index',
+            'icon' => 'fa fa-book-reader',
+        ],
+        [
+            'text' => 'Уроки',
+            'route' => 'lesson.index',
+            'icon' => 'fa fa-chalkboard-teacher',
+        ],
+        [
+            'text' => 'Сотрудники',
+            'route' => 'stuff.index',
+            'icon' => 'fa fa-users',
+        ],
+        [
+            'text' => 'Настройки платформы',
+            'route' => 'configuration.show',
+            'icon' => 'fa fa-cog',
+        ],
     ],
 
     /*
@@ -313,12 +338,12 @@ return [
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => true,
+                    'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js',
                 ],
                 [
                     'type' => 'css',
-                    'asset' => true,
+                    'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.css',
                 ],
             ],
@@ -358,19 +383,19 @@ return [
                 ],
             ],
         ],
-        'inputmask' => [
-            'active' => true,
+        'Summernote' => [
+            'active' => false,
             'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css',
+                ],
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/inputmask/4.0.9/jquery.inputmask.bundle.min.js',
+                    'location' => '//cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js',
                 ],
-//                [
-//                    'type' => 'css',
-//                    'asset' => true,
-//                    'location' => 'css/plugin.min.css',
-//                ],
             ],
         ],
     ],

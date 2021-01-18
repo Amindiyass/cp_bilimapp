@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Section extends Model
 {
+    protected $fillable = [
+        'name_kz',
+        'name_ru',
+        'sort_number',
+        'course_id'
+    ];
+
     public function lessons()
     {
         return $this->hasMany(Lesson::class);
