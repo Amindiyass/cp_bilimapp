@@ -8,6 +8,7 @@ use App\Models\Course;
 use App\Models\Question;
 use App\Models\Section;
 use App\Models\Test;
+use App\Models\TestVariant;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -39,6 +40,31 @@ class TestController extends BaseController
         $test = new Test();
         $test->fill($request->all());
         $test->save();
+
+        for ($i = 0; $i < count($request->question_in_kz);$i++) {
+            $rightVariants = [];
+            $question = Question::create([
+                'test_id' => $test->id,
+                'body_kz' => $request->question_in_kz[$i],
+                'body_ru' => $request->question_in_ru[$i],
+                'right_variant_id' => [],
+                'order_number' => 1
+            ]);
+            for ($j = 0; $j < count($request->variant_in_kz[$i]);$j++) {
+                $variant = TestVariant::create([
+                    'variant_in_kz' => $request->variant_in_kz[$i][$j],
+                    'variant_in_ru' => $request->variant_in_ru[$i][$j],
+                    'question_id' => $question->id,
+                    'test_id' => $test->id,
+                    'order_number' => 1
+                ]);
+                if (isset($request->variant[$i][$j]) && $request->variant[$i][$j] == 'on') {
+                    $rightVariants[] = $variant->id;
+                }
+            }
+            $question->right_variant_id = $rightVariants;
+            $question->save();
+        }
 
         return redirect(route('test.index'))
             ->with('success', 'Вы успешно добавили тест');
@@ -74,6 +100,10 @@ class TestController extends BaseController
 
     public function destroy(Test $test)
     {
+        foreach ($test->questions as $question) {
+            $question->variants()->delete();
+        }
+        $test->questions()->delete();
         $test->delete();
         return redirect(route('test.index'))
             ->with('success', 'Вы успешно удалили тест');
