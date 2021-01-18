@@ -20,8 +20,18 @@ class CourseController extends BaseController
 {
     public function all(CourseFilter $filter)
     {
+        $result = [];
+        $courses = Course::filter($filter)->with(['language', 'class', 'subject'])->get()->append(['count_tests', 'count_videos', 'link']);
+        foreach ($courses as $index => $course){
+            if ($subject = $filter->getRequest()->get('subject','')){
+                if ($index === 1 && ( $subject === 'Английский язык' || $subject === 'Ағылшын тілі')){
+                    break;
+                }
+            }
+            $result[] = $course;
+        }
         return $this->sendResponse(
-            Course::filter($filter)->with(['language', 'class', 'subject'])->get()->append(['count_tests', 'count_videos', 'link'])
+            $result
         );
     }
 
