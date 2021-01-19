@@ -16,6 +16,7 @@ class ApplicationCreated extends Mailable
      */
     protected $application;
 
+
     /**
      * Create a new message instance.
      *
@@ -23,6 +24,7 @@ class ApplicationCreated extends Mailable
      */
     public function __construct(Application $application)
     {
+        $this->subject = 'Новая заявка #'.$application->id;
         $this->application = $application;
     }
 
