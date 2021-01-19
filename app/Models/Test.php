@@ -27,6 +27,7 @@ class Test extends Model
         'name_ru',
         'section_id',
         'order_number',
+        'lesson_id'
     ];
 
     public $next;

@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\TestStoreRequest;
 use App\Models\Course;
+use App\Models\Lesson;
 use App\Models\Question;
 use App\Models\Section;
 use App\Models\Test;
 use App\Models\TestVariant;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TestController extends BaseController
 {
@@ -28,10 +30,12 @@ class TestController extends BaseController
     {
         $courses = Course::all()->pluck('name_ru', 'id')->toArray();
         $sections = Section::all()->pluck('name_ru', 'id')->toArray();
+        $lessons = Lesson::all()->pluck('name_ru', 'id')->toArray();
 
         return view('admin.test.create', [
             'courses' => $courses,
             'sections' => $sections,
+            'lessons' => $lessons,
         ]);
     }
 
@@ -43,12 +47,14 @@ class TestController extends BaseController
 
         for ($i = 0; $i < count($request->question_in_kz);$i++) {
             $rightVariants = [];
+            $photo = $request->file('photos');
             $question = Question::create([
                 'test_id' => $test->id,
                 'body_kz' => $request->question_in_kz[$i],
                 'body_ru' => $request->question_in_ru[$i],
                 'right_variant_id' => [],
-                'order_number' => 1
+                'order_number' => 1,
+                'photo' => isset($photo[$i]) ? Storage::putFile('question-photos/' . auth()->id(), $photo[$i], 'public') : null
             ]);
             for ($j = 0; $j < count($request->variant_in_kz[$i]);$j++) {
                 $variant = TestVariant::create([
@@ -115,12 +121,20 @@ class TestController extends BaseController
         return $sections;
     }
 
+    public function getLessons($item_id)
+    {
+        return Lesson::where(['section_id' => $item_id])->get()->pluck('name_ru', 'id')->toArray();
+    }
+
     public function ajax(Request $request)
     {
         $type = $request->type;
         switch ($type) {
             case 'get_sections':
                 $result = $this->get_sections($request->item_id);
+                break;
+            case 'get_lessons':
+                $result = $this->getLessons($request->item_id);
                 break;
         }
         return response()->json($result);

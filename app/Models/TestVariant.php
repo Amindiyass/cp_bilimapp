@@ -22,7 +22,7 @@ class TestVariant extends Model
 
     public function is_right()
     {
-        $right_variants = json_decode($this->question->right_variant_id);
+        $right_variants = $this->question->right_variant_id;
         if (in_array($this->id, $right_variants)) {
             return true;
         }
