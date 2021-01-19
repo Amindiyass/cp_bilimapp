@@ -11,14 +11,14 @@ class TransactionController extends BaseController
     {
         return $this->sendResponse([
             [
-                'amount' => '15',
-                'payment_type' => 'Qiwi',
-                'finished_at' => 1620822432,
-                'day_left' => 7,
-                'processed_at' => 1610454432,
+                'amount' => '0',
+                'payment_type' => 'Акция',
+                'finished_at' => 1612042276,
+                'day_left' => 14,
+                'processed_at' => 1610659876,
                 'currency' => '₸',
-                'finished' => '2021-01-11 11:11:11',
-                'processed' => '2021-01-11 11:11:11'
+                'finished' => '2021-01-17 11:11:11',
+                'processed' => '2021-01-17 11:11:11'
             ]
         ]);
     }

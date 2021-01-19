@@ -8,6 +8,7 @@ use App\Http\Requests\Api\ReconfirmCodeRequest;
 use App\Http\Requests\Api\UpdatePasswordRequest;
 use App\Models\Promocode;
 use App\Models\Student;
+use App\Models\UserSubscription;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -103,6 +104,14 @@ class AuthController extends BaseController
             $new_student['user_id'] = $user->id;
 
             Student::create($new_student);
+            UserSubscription::create([
+                'user_id' => $user->id,
+                'subscription_id' => 1,
+                'is_active' => 1,
+                'created_at' => '2021-01-17 11:11:11',
+                'updated_at' => '2021-01-17 11:11:11'
+            ]);
+
             DB::commit();
 
         } catch (\Exception $exception) {

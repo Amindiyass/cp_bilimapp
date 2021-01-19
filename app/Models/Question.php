@@ -26,6 +26,7 @@ class Question extends Model
     ];
     protected $appends = [
         'multiple',
+        'body'
     ];
 
 
@@ -58,5 +59,10 @@ class Question extends Model
     public function getMultipleAttribute()
     {
         return is_array($this->right_variant_id) ? count($this->right_variant_id) > 1 : false;
+    }
+
+    public function getBodyAttribute()
+    {
+        return htmlspecialchars_decode(html_entity_decode($this->body_kz, ENT_QUOTES | ENT_HTML5));
     }
 }
