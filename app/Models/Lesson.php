@@ -93,7 +93,11 @@ class Lesson extends Model
         }
         // $course = $this->load('section.course');
         $lesson = $this->section->course->lessons()->where('lessons.id', '>', $this->id)->first();
-        return route('api.lesson', ['lesson' => $lesson->id]);
+        if ($lesson){
+            return route('api.lesson', ['lesson' => $lesson->id]);
+        }else{
+            return null;
+        }
     }
 
     public function getLinkAttribute()
