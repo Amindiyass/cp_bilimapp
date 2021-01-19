@@ -189,12 +189,13 @@
             });
         }
 
-        let template = $('.questions').clone();
-
         function addQuestion() {
+            let template = $('.questions:last-child').clone();
             let newId = parseInt(template.first().attr('id')) + 1;
+            template.find('input').val('')
+            template.find('textarea').val('')
             template.first().attr('id', newId);
-            template.find('photo')
+            template.find('.questions').attr('id', newId)
             template.find('.question_kz').attr('name', 'question_in_kz[' + newId + ']')
             template.find('.question_ru').attr('name', 'question_in_ru[' + newId + ']')
             template.find('.photo').attr('name', 'photos['+newId+']')
