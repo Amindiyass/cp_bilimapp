@@ -14,7 +14,7 @@ class ApplicationController extends BaseController
     public function store(CreateApplicationRequest $request)
     {
         $application = Application::create($request->all());
-        Mail::to('otkelbaysultan@gmail.com')->send(new ApplicationCreated($application));
+        Mail::to('toobilimapp@gmail.com')->send(new ApplicationCreated($application));
         return $this->sendResponse([], 'Заявка подана');
     }
 }
