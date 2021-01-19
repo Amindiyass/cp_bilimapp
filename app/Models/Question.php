@@ -22,7 +22,8 @@ class Question extends Model
         'created_at',
         'updated_at',
         'body_kz',
-        'body_ru'
+        'body_ru',
+        'photo'
     ];
     protected $appends = [
         'multiple',
