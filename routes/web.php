@@ -68,5 +68,8 @@ Route::group([
     Route::get('configuration/show', 'ConfigurationController@show')->name('configuration.show');
     Route::get('course/filter', 'CourseController@filter')->name('course.filter');
 
+    Route::resource('assignment', 'AssignmentController');
+    Route::post('assignment/ajax', 'AssignmentController@ajax');
+
 });
 
