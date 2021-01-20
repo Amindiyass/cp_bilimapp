@@ -176,14 +176,17 @@ class Course extends Model
             $course->save();
 
             $key = sprintf('%s-%s', 'course_section', session()->getId());
-            $section = session()->get(sprintf('%s-%s', 'course_section', session()->getId()));
-            for ($i = 0; $i < count($section['sort_number']); $i++) {
+            $RedisSection = session()->get(sprintf('%s-%s', 'course_section', session()->getId()));
+            $count = count($RedisSection['sort_number']);
+            for ($i = 0; $i < $count; $i++) {
+                $sort_number = (int) ($RedisSection['sort_number'][$i]);
                 $section_array = [
-                    'name_ru' => $section['name_ru'][$i],
-                    'name_kz' => $section['name_kz'][$i],
-                    'sort_number' => $section['sort_number'][$i],
-                    'course_id' => $course->id
+                    'name_ru' => $RedisSection['name_ru'][$i],
+                    'name_kz' => $RedisSection['name_kz'][$i],
+                    'course_id' => $course->id,
+                    'sort_number' => $sort_number,
                 ];
+
                 $section = new Section();
                 $section->fill($section_array);
                 $section->save();

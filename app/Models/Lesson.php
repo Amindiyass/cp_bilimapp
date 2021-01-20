@@ -93,9 +93,9 @@ class Lesson extends Model
         }
         // $course = $this->load('section.course');
         $lesson = $this->section->course->lessons()->where('lessons.id', '>', $this->id)->first();
-        if ($lesson){
+        if ($lesson) {
             return route('api.lesson', ['lesson' => $lesson->id]);
-        }else{
+        } else {
             return null;
         }
     }
@@ -122,7 +122,6 @@ class Lesson extends Model
     }
 
 
-
     public function store(LessonStoreRequest $request)
     {
         try {
@@ -144,13 +143,17 @@ class Lesson extends Model
                 'subject_id' => $subject_id,
             ];
 
-            DB::table('videos')->insert($videos);
+
+            $video = new Video();
+            $video->fill($videos);
+            $video->save();
 
             $conspectus_key = sprintf('%s-%s', 'lesson_conspectus', session()->getId());
             $conspectus = session()->get($conspectus_key);
             $conspectus = [
                 'body' => $conspectus['body'][0],
                 'lesson_id' => $lesson->id,
+                'video_id' => $video->id,
             ];
 
             DB::table('conspectuses')->insert($conspectus);
