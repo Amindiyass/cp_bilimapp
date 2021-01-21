@@ -3,7 +3,7 @@
 @section('title', 'Список тестов')
 
 @section('content_header')
-    <h1 class="m-0 text-dark">Список учеников</h1>
+    <h1 class="m-0 text-dark">Список тестов</h1>
 @stop
 
 @section('content')

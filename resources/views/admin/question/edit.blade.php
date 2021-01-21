@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Редактировать ученика')
+@section('title', 'Редактировать вопрос')
 
 @section('content_header')
     <h1 class="m-0 text-dark">Редактировать вопрос</h1>
@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="card card-danger">
-        <form action="{{ route('question.update', $question->id) }}" method="POST">
+        {!! Form::open(['route' => ['question.update', $question->id], 'method' => 'post', 'files' => true]); !!}
             @csrf
             @method('PUT')
             <div class="card-body">
@@ -36,6 +36,15 @@
                         </textarea>
                     </div>
                 </div>
+                <div class="card-body">
+                    <img src="<?= $question->photo ?>" />
+                </div>
+                <div class="form-group">
+                    <label>Файл</label>
+                    <div class="input-group">
+                        {!! Form::file('photo') !!}
+                    </div>
+                </div>
                 <div class="btn btn-group float-right">
                     <button type="button" id="open_modal_add_variants" class="btn btn-success">
                         Добавить варианты
@@ -45,7 +54,7 @@
                     </button>
                 </div>
             </div>
-        </form>
+        {{ Form::close() }}
     </div>
 
     <div class="card">
@@ -168,7 +177,6 @@
                 <form action="{{route('variant.modify')}}" method="POST">
                     <div class="modal-body">
                         @csrf
-
                         {{Form::hidden('variant_id', null)}}
                         <label for="variant_in_kz">
                             Вариант на казахском *
@@ -186,6 +194,7 @@
                         </label>
                         &nbsp;
                         {!! Form::checkbox('is_right', null, false) !!}
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>

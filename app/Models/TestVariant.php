@@ -48,9 +48,9 @@ class TestVariant extends Model
             $variant->save();
 
             if ($request->is_right) {
-                $right_variants_id = json_decode($question->right_variant_id);
+                $right_variants_id = $question->right_variant_id;
                 $right_variants_id[count($right_variants_id)] = $variant->id;
-                $question->right_variant_id = json_encode($right_variants_id);
+                $question->right_variant_id = $right_variants_id;
                 $question->save();
             }
             DB::commit();
@@ -93,7 +93,7 @@ class TestVariant extends Model
             $variant->fill($request->all());
             $variant->save();
 
-            $right_variants_id = json_decode($question->right_variant_id);
+            $right_variants_id = $question->right_variant_id;
 
             if ($request->is_right) {
                 $right_variants_id[count($right_variants_id)] = $variant->id;
@@ -107,7 +107,7 @@ class TestVariant extends Model
                 $right_variants_id = $array;
             }
 
-            $question->right_variant_id = json_encode($right_variants_id);
+            $question->right_variant_id = $right_variants_id;
             $question->save();
             DB::commit();
 

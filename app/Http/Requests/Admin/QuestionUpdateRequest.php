@@ -26,6 +26,7 @@ class QuestionUpdateRequest extends FormRequest
         return [
             'body_kz' => 'required',
             'body_ru' => 'required',
+            'photo' => 'image'
         ];
     }
 }

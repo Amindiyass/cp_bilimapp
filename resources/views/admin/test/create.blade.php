@@ -179,6 +179,7 @@
             $('#' + type).find('option')
                 .remove()
                 .end();
+            $('#' + type).append('<option value="" disabled selected>Выберите</option>')
 
             $.each(data, function (index, value) {
                 length = Object.keys(data).length;
