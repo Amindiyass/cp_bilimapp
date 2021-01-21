@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Http\Requests\Admin\LessonStoreRequest;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -16,6 +17,9 @@ use Illuminate\Support\Facades\DB;
  */
 class Lesson extends Model
 {
+
+    use SoftDeletes;
+
     protected $casts = [
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp',
