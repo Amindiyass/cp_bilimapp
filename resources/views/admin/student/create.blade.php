@@ -61,21 +61,23 @@
                          ]); !!}
             </div>
 
-            <div id="region_div" class="form-group d-none">
+            <div id="region_div" class="form-group">
                 <label>Выберите регион *</label>
                 {!! Form::select('region_id',[], null,
                     ['class' => 'form-control select2bs4 ',
                     'id' => 'region_id',
+                    'disabled' => true,
                     'style' => 'width: 100%;',
                     'placeholder' => 'Выберите регион ...',
                     ]); !!}
             </div>
 
-            <div id="school_div" class="form-group d-none">
+            <div id="school_div" class="form-group">
                 <label>Выберите школу *</label>
                 {!! Form::select('school_id',[], null,
                     ['class' => 'form-control select2bs4 ',
                     'id' =>'school_id',
+                    'disabled' => true,
                     'style' => 'width: 100%;']); !!}
             </div>
 
@@ -145,11 +147,11 @@
             type = type === 'get_regions' ? 'region_id' : 'school_id';
             var place_holder_text;
             if (type === 'region_id') {
-                $('#region_div').removeClass('d-none');
+                $('#region_id').prop('disabled', false);
                 place_holder_text = 'Выберите регион ...';
             }
             if (type === 'school_id') {
-                $('#school_div').removeClass('d-none');
+                $('#school_id').prop('disabled', false);
                 place_holder_text = 'Выберите школу ...';
             }
 
