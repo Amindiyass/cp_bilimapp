@@ -167,29 +167,47 @@ class Course extends Model
         return $assignment_count;
     }
 
-    public function store($request)
+    public function store($request, $course = null)
     {
         try {
             DB::beginTransaction();
-            $course = new Course();
+            if (!isset($course)) {
+                $course = new Course();
+            }
             $course->fill($request->all());
             $course->save();
 
-            $key = sprintf('%s-%s', 'course_section', session()->getId());
-            $section = session()->get(sprintf('%s-%s', 'course_section', session()->getId()));
-            for ($i = 0; $i < count($section['sort_number']); $i++) {
-                $section_array = [
-                    'name_ru' => $section['name_ru'][$i],
-                    'name_kz' => $section['name_kz'][$i],
-                    'sort_number' => $section['sort_number'][$i],
-                    'course_id' => $course->id
-                ];
-                $section = new Section();
-                $section->fill($section_array);
-                $section->save();
+            $sectionArray = [];
+            if (!isset($course)) {
+                foreach ($request->addmore as $key => $value) {
+                    $section = new Section();
+                    $value['course_id'] = $course->id;
+                    $section->fill($value);
+                    $section->save();
+                }
+            } else {
+                foreach ($request->addmore as $key => $value) {
+                    if (!isset($value['section_id'])) {
+                        $section = new Section();
+                    } else {
+                        $section = Section::where(['id' => $value['section_id']])->first();
+                    }
+                    $value['course_id'] = $course->id;
+                    $section->fill($value);
+                    $section->save();
+                    array_push($sectionArray, $section->id);
+                }
             }
 
-            session()->forget($key);
+            if (!isset($course)) {
+                $sections = Section::where(['course_id' => $course->id])->get()->pluck('id')->toArray();
+                foreach ($sections as $key => $item) {
+                    if (!in_array($item, $sectionArray)) {
+                        Section::find($item)->delete();
+                    }
+                }
+            }
+
 
             DB::commit();
 

@@ -142,15 +142,15 @@
                                         </button>
                                     </form>
                                     <a class="dropdown-item" href="{{route('student.edit', ['student' => $student])}}">Редактировать</a>
-                                    <a type="button" id="open_change_password" class="dropdown-item"
+                                    <a type="button" class="dropdown-item open_change_password"
                                        data-user_id="{{$student->id}}">
                                         Изменить пароль
                                     </a>
-                                    <a type="button" id="open_add_subscription" class="dropdown-item"
+                                    <a type="button" class="dropdown-item open_add_subscription"
                                        data-user_id="{{$student->id}}">
                                         Добавить подписку
                                     </a>
-                                    <a type="button" id="open_extend_subscription" class="dropdown-item"
+                                    <a type="button"  class="dropdown-item open_extend_subscription"
                                        data-user_id="{{$student->id}}">
                                         Продлить подписку
                                     </a>
@@ -256,20 +256,20 @@
             "autoWidth": false,
         });
 
-        $('#open_change_password').bind('click', function () {
+        $('.open_change_password').bind('click', function () {
             var user_id = $(this).data('user_id');
             $('input[name=user_id]').val(user_id);
             $('#passwordModal').modal();
 
         });
 
-        $('#open_add_subscription').bind('click', function () {
+        $('.open_add_subscription').bind('click', function () {
             var user_id = $(this).data('user_id');
             $('input[name=user_id]').val(user_id);
             $('#addSubscription').modal();
         });
 
-        $('#open_extend_subscription').bind('click', function () {
+        $('.open_extend_subscription').bind('click', function () {
             var user_id = $(this).data('user_id');
             $('input[name=user_id]').val(user_id);
             $('#extendSubscription').modal();

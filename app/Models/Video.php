@@ -11,6 +11,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Video extends Model
 {
+    protected $fillable = [
+        'title_kz',
+        'title_ru',
+        'lesson_id',
+        'subject_id',
+        'path',
+        'sort_number',
+        'duration',
+        'size'
+    ];
+
     protected $appends = [
         'link',
         'has_conspectus',

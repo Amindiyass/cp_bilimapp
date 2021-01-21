@@ -15,20 +15,9 @@ $subjects = \App\Models\Subject::all()->pluck('name_ru', 'id')->toArray();
 @section('content')
     <div class="card card-danger">
 
+        {!! Form::open(['route' => 'course.store','method' => 'POST']) !!}
+        @csrf
         <div class="card-body">
-            <div class="btn-group float-left">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSections">
-                    Добавить темы
-                    &nbsp;
-                    <i class="fa fa-paragraph"></i>
-                </button>
-            </div>
-        </div>
-
-        <div class="card-body">
-
-            {!! Form::open(['route' => 'course.store','method' => 'POST']) !!}
-            @csrf
             <div class="form-group">
                 <label>Название на казахском *</label>
                 <div class="input-group">
@@ -98,100 +87,50 @@ $subjects = \App\Models\Subject::all()->pluck('name_ru', 'id')->toArray();
                     <input name="order" value="100" type="text" class="form-control">
                 </div>
             </div>
-
-            <div class="card-body col-8">
-                <h3>Темы</h3>
-                <table style="" id="example1" class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>Название на казахском</th>
-                        <th>Название на русском</th>
-                        <th>Сортировачный номер</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    <?php
-                    $key = sprintf('%s-%s', 'course_section', \session()->getId());
-                    $sectionArray = session()->get($key);
-                    ?>
-                    @if(!empty($sectionArray))
-                        @for($i = 0; $i<count($sectionArray['sort_number']); $i++)
-                            <tr>
-                                <td>{{$sectionArray['name_kz'][$i]}}</td>
-                                <td>{{$sectionArray['name_ru'][$i]}}</td>
-                                <td>{{$sectionArray['sort_number'][$i]}}</td>
-                                <td>
-                                    <div class="btn-group" style="position: relative;">
-                                        <button type="button" class="btn btn-danger dropdown-toggle"
-                                                data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
-                                            Действие
-                                        </button>
-{{--                                        <div class="dropdown-menu" style="position: absolute;">--}}
-{{--                                            <a href="{{route('section.edit', ['section' => $sectionArray['key'][$i]])}}"--}}
-{{--                                               class="dropdown-item"--}}
-{{--                                               data-user_id="{{$lesson->id}}">--}}
-{{--                                                Редактировать--}}
-{{--                                                &nbsp;--}}
-{{--                                                <i class="fa fa-edit"></i>--}}
-{{--                                            </a>--}}
-{{--                                        </div>--}}
-                                    </div>
-                                </td>
-                            </tr>
-                        @endfor
-                    @endif
-                    </tbody>
-                    <tfoot>
-                    </tfoot>
-                </table>
-            </div>
-
-            <div class="btn btn-group float-right">
-                <button type="submit" class="btn btn-success">
-                    Добавить
-                </button>
-            </div>
+        </div>
+        <div class="card-header">
+            <h2><i class="fa fa-paragraph"></i> Темы</h2>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered" id="dynamicTable">
+                <tr>
+                    <th>Названание на казахском *</th>
+                    <th>Названание на русском *</th>
+                    <th>Сортировочный номер *</th>
+                    <th>Действие</th>
+                </tr>
+                <tr>
+                    <td><input type="text" name="addmore[0][name_kz]" placeholder="Названание на казахском "
+                               class="form-control"/></td>
+                    <td><input type="text" name="addmore[0][name_ru]" placeholder="Названание на русском"
+                               class="form-control"/></td>
+                    <td><input type="number" name="addmore[0][sort_number]" placeholder="Сортировочный номер"
+                               class="form-control"/></td>
+                    <td>
+                        <button type="button" name="add" id="add" class="btn btn-success">Добавить больше</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="btn btn-group float-right">
+            <button type="submit" class="btn btn-success">
+                Добавить
+            </button>
         </div>
         {!! Form::close() !!}
-        <div class="modal fade" id="addSections" tabindex="-1" role="dialog"
-             aria-hidden="true">
-            <div class="modal-dialog" style="max-width: 800px;" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Добавить тему</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    {!! Form::open(['route' => 'course.section', 'method' => 'post']); !!}
-                    <div class="modal-body">
-                        @csrf
-                        <label for="name_kz">
-                            Названание на казахском *
-                        </label>
-                        {!! Form::text('name_kz', null,['class' => 'form-control']); !!}
-
-                        <label for="name_ru">
-                            Названание на русском *
-                        </label>
-                        {!! Form::text('name_ru', null,['class' => 'form-control']); !!}
-
-                        <label for="sort_number">
-                            Сортировочный номер *
-                        </label>
-                        {!! Form::number('sort_number', null,['class' => 'form-control']); !!}
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                        <button type="submit" class="btn btn-primary">Добавить тему</button>
-                    </div>
-                    {!! Form::close(); !!}
-                </div>
-            </div>
-        </div>
     </div>
 @stop
+@section('js')
+    <script>
+        var i = 0;
+
+        $("#add").click(function () {
+            ++i;
+            $("#dynamicTable").append('<tr><td><input type="text" name="addmore[' + i + '][name_kz]" placeholder="Названание на казахском" class="form-control" /></td><td><input type="text" name="addmore[' + i + '][name_ru]" placeholder="Названание на русском" class="form-control" /></td><td><input type="number" name="addmore[' + i + '][sort_number]" placeholder="Сортировочный номер" class="form-control" /></td><td><button type="button" class="btn btn-danger remove-tr">Удалить</button></td></tr>');
+        });
+
+        $(document).on('click', '.remove-tr', function () {
+            $(this).parents('tr').remove();
+        });
+    </script>
+@endsection

@@ -26,56 +26,6 @@ class LessonController extends Controller
         return view('admin.lesson.create');
     }
 
-    public function tempVideoSave(VideoStoreRequest $request)
-    {
-        $sessionId = \session()->getId();
-        $key = sprintf('%s-%s', 'lesson_video', $sessionId);
-        Session::forget($key);
-        Session::push($key . '.title_kz', $request->title_kz);
-        Session::push($key . '.title_ru', $request->title_ru);
-        Session::push($key . '.path', $request->path);
-        Session::push($key . '.sort_number', $request->sort_number);
-
-        return redirect(route('lesson.create'))->with([
-            'success' => 'Вы успешно добавили видео',
-        ]);
-    }
-
-    public function videoReset()
-    {
-        $sessionId = \session()->getId();
-        $key = sprintf('%s-%s', 'lesson_video', $sessionId);
-        Session::forget($key);
-        return redirect(route('lesson.create'))->with([
-            'success' => 'Вы успешно сбросили видео',
-        ]);
-
-    }
-
-    public function tempConspectusesSave(ConspectusStoreRequest $request)
-    {
-        $sessionId = \session()->getId();
-        $key = sprintf('%s-%s', 'lesson_conspectus', $sessionId);
-        Session::forget($key);
-        Session::push($key . '.body', $request->body);
-
-        return redirect(route('lesson.create'))->with([
-            'success' => 'Вы успешно добавили конспект',
-        ]);
-    }
-
-    public function conspectusReset()
-    {
-        $sessionId = \session()->getId();
-        $key = sprintf('%s-%s', 'lesson_conspectus', $sessionId);
-        Session::forget($key);
-        return redirect(route('lesson.create'))->with([
-            'success' => 'Вы успешно сбросили конспект',
-        ]);
-
-    }
-
-
     public function store(LessonStoreRequest $request)
     {
         $result = (new \App\Models\Lesson)->store($request);

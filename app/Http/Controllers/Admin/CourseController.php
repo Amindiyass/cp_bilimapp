@@ -55,14 +55,15 @@ class CourseController extends Controller
 
     public function update(CourseStoreRequest $request, Course $course)
     {
-        $course->fill($request->all());
-        if ($course->save()) {
+        $result = (new \App\Models\Course)->store($request, $course);
+
+        if ($result['success']) {
             return redirect(route('course.index'))
                 ->with('success', 'Вы успешно изменили курс');
         }
 
         return redirect(route('course.index'))
-            ->with('success', 'Ошибка при сохранение курс');
+            ->with('error', $result['message']);
     }
 
     public function tempSectionSave(SectionStoreRequest $request)

@@ -189,10 +189,11 @@
             });
         }
 
-        let templateHtml = $('.questions').html();
         function addQuestion() {
-            let template = $(templateHtml)
+            let template = $('.questions:last-child').clone();
             let newId = parseInt(template.first().attr('id')) + 1;
+            template.find('input').val('')
+            template.find('textarea').val('')
             template.first().attr('id', newId);
             template.find('.questions').attr('id', newId)
             template.find('.question_kz').attr('name', 'question_in_kz[' + newId + ']')
