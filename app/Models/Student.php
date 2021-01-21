@@ -85,7 +85,7 @@ class Student extends Model
         $classes = EducationLevel::all()->pluck('order_number', 'id')->toArray();
         $languages = Language::all()->pluck('name_ru', 'id')->toArray();
         $subscriptions = Subscription::where(['is_active' => true])->get()->pluck('name', 'id');
-        sort($classes);
+        ksort($classes);
 
         $regions = Region::all()->pluck('name_ru', 'id')->toArray();
         $schools = School::all()->pluck('name_ru', 'id')->toArray();
