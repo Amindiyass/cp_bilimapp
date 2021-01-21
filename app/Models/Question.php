@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class Question
@@ -59,5 +60,10 @@ class Question extends Model
     public function getMultipleAttribute()
     {
         return is_array($this->right_variant_id) ? count($this->right_variant_id) > 1 : false;
+    }
+
+    public function getPhotoAttribute($value)
+    {
+        return Storage::url($value);
     }
 }

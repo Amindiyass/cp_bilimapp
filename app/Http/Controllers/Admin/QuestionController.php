@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\QuestionStoreRequest;
 use App\Http\Requests\Admin\QuestionUpdateRequest;
 use App\Models\Question;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class QuestionController extends BaseController
 {
@@ -33,9 +34,12 @@ class QuestionController extends BaseController
 
     public function update(QuestionUpdateRequest $request, Question $question)
     {
-
+        $photo = $request->file('photo');
         $question->order_number = 0;
         $question->fill($request->all());
+        if ($photo) {
+            $question->photo = Storage::putFile('/', $photo, 'public');
+        }
         $question->save();
 
         return redirect(route('question.edit', $question->id))

@@ -179,6 +179,7 @@
             $('#' + type).find('option')
                 .remove()
                 .end();
+            $('#' + type).append('<option value="" disabled selected>Выберите</option>')
 
             $.each(data, function (index, value) {
                 length = Object.keys(data).length;
@@ -188,10 +189,12 @@
                         .text(value));
             });
         }
+        let templateHtml = $('#questions_container').html();
 
         function addQuestion() {
-            let template = $('.questions:last-child').clone();
-            let newId = parseInt(template.first().attr('id')) + 1;
+            //let template = $('.questions:last-child').clone();
+            let template = $(templateHtml)
+            let newId = $('.questions').length;
             template.find('input').val('')
             template.find('textarea').val('')
             template.first().attr('id', newId);
