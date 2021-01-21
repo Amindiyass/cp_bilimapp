@@ -90,7 +90,7 @@ class Course extends Model
 
     public function tests()
     {
-        return $this->hasMany(Test::class);
+        return $this->hasMany(Test::class)->where('order_number',10000);
     }
 
     public function education_level()
@@ -101,7 +101,7 @@ class Course extends Model
 
     public function getCountTestsAttribute()
     {
-        return Test::whereIn('lesson_id', $this->lessons()->select('lessons.id'))->count();
+        return Test::whereIn('lesson_id', $this->lessons()->select('lessons.id'))->where('order_number',10000)->count();
     }
 
     public function getCountVideosAttribute()
@@ -123,7 +123,7 @@ class Course extends Model
             foreach ($courses as $course) {
                 $sectionsIds = Section::where(['course_id' => $course->id])->get()->pluck('id')->toArray();
                 $lessonIds = Lesson::whereIn('section_id', $sectionsIds)->get()->pluck('id')->toArray();
-                $count = Test::whereIn('lesson_id', $lessonIds)->count();
+                $count = Test::whereIn('lesson_id', $lessonIds)->where('order_number',10000)->count();
                 $result[$course->id] = $count;
             }
             return $result;

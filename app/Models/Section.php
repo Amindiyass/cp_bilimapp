@@ -24,7 +24,7 @@ class Section extends Model
 
     public function tests()
     {
-        return $this->hasMany(Test::class);
+        return $this->hasMany(Test::class)->where('order_number',10000);
     }
 
     public function course()

@@ -61,12 +61,12 @@ class Lesson extends Model
 
     public function tests()
     {
-        return $this->hasMany(Test::class);
+        return $this->hasMany(Test::class)->where('order_number',10000);
     }
 
     public function test()
     {
-        return $this->hasOne(Test::class);
+        return $this->hasOne(Test::class)->where('order_number',10000);
     }
 
     public function completedRate()
