@@ -272,9 +272,9 @@ return [
             'icon' => 'fa fa-users',
         ],
         [
-            'text' => 'Настройки платформы',
-            'route' => 'configuration.show',
-            'icon' => 'fa fa-cog',
+            'text' => 'Управление задачами',
+            'route' => 'assignment.index',
+            'icon' => 'fa fa-tasks',
         ],
     ],
 
