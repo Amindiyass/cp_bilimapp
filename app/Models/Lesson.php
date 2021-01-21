@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Http\Requests\Admin\LessonStoreRequest;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -16,6 +17,9 @@ use Illuminate\Support\Facades\DB;
  */
 class Lesson extends Model
 {
+
+    use SoftDeletes;
+
     protected $casts = [
         'created_at' => 'timestamp',
         'updated_at' => 'timestamp',
@@ -27,6 +31,7 @@ class Lesson extends Model
         'section_id',
         'description_kz',
         'description_ru',
+        'order',
     ];
 
     public function assignments()
@@ -122,11 +127,20 @@ class Lesson extends Model
     }
 
 
-    public function store(LessonStoreRequest $request)
+    public function store(LessonStoreRequest $request, $lesson = null)
     {
         try {
             DB::beginTransaction();
-            $lesson = new Lesson();
+
+            if (!isset($lesson)) {
+                $lesson = new Lesson();
+                $video = new Video();
+                $conspectus = new  Conspectus();
+            } else {
+                $video = Video::where(['lesson_id' => $lesson->id])->first();
+                $conspectus = Conspectus::where(['lesson_id' => $lesson->id])->first();
+            }
+
             $lesson->fill($request->all());
             $lesson->save();
 
@@ -141,7 +155,7 @@ class Lesson extends Model
                 'sort_number' => $request->sort_number,
             ];
 
-            $video = new Video();
+
             $video->fill($videos);
             $video->save();
 
@@ -151,7 +165,7 @@ class Lesson extends Model
                 'video_id' => $video->id,
             ];
 
-            $conspectus = new  Conspectus();
+
             $conspectus->fill($conspectuses);
             $conspectus->save();
 

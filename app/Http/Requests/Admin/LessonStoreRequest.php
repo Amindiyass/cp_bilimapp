@@ -28,6 +28,12 @@ class LessonStoreRequest extends FormRequest
             'name_kz' => 'required',
             'description_kz' => 'required',
             'description_ru' => 'required',
+            'body' => 'required',
+            'title_kz' => 'required',
+            'title_ru' => 'required',
+            'path' => 'required',
+            'sort_number' => 'required'
+
         ];
     }
 }
