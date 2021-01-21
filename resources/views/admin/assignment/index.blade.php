@@ -1,5 +1,8 @@
 <?php
 /** @var \App\Models\Assignment $assignment */
+$subjects = \App\Models\Subject::all()->pluck('name_ru', 'id')->toArray();
+$sections = \App\Models\Section::all()->pluck('name_ru', 'id')->toArray();
+$lessons = \App\Models\Lesson::all()->pluck('name_ru', 'id')->toArray();
 ?>
 @extends('adminlte::page')
 
@@ -25,75 +28,45 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    {{--                    <div class="col-md-6">--}}
-                    {{--                        <div class="form-group">--}}
-                    {{--                            <label>По области.</label>--}}
-                    {{--                            {!! Form::select('area_id',$areas, session('areas') ?? null,--}}
-                    {{--                            [--}}
-                    {{--                                'class' => 'select2',--}}
-                    {{--                                'id' => 'area_id',--}}
-                    {{--                                'multiple' => 'multiple',--}}
-                    {{--                                'style' => 'width: 100%;',--}}
-                    {{--                                'data-placeholder' => 'Выберите область ...',--}}
-                    {{--                            ]); !!}--}}
-                    {{--                        </div>--}}
-                    {{--                    </div>--}}
-                    {{--                    <div class="col-md-6">--}}
-                    {{--                        <div class="form-group">--}}
-                    {{--                            <label>По региону.</label>--}}
-                    {{--                            {!! Form::select('region_id',$regions,session('regions') ?? null,--}}
-                    {{--                            [--}}
-                    {{--                                'class' => 'select2',--}}
-                    {{--                                'id' => 'region_id',--}}
-                    {{--                                'multiple' => 'multiple',--}}
-                    {{--                                'style' => 'width: 100%;',--}}
-                    {{--                                'data-placeholder' => 'Выберите регион ...',--}}
-                    {{--                            ]); !!}--}}
-                    {{--                        </div>--}}
-                    {{--                    </div>--}}
-                    {{--                    <div class="col-md-12">--}}
-                    {{--                        <div class="form-group">--}}
-                    {{--                            <label>По школе</label>--}}
-                    {{--                            {!! Form::select('school_id',$schools, session('schools') ?? null,--}}
-                    {{--                               [--}}
-                    {{--                                   'class' => 'select2',--}}
-                    {{--                                   'id' => 'school_id',--}}
-                    {{--                                   'multiple' => 'multiple',--}}
-                    {{--                                   'style' => 'width: 100%;',--}}
-                    {{--                                   'data-placeholder' => 'Выберите школу ...',--}}
-                    {{--                               ]); !!}--}}
-                    {{--                        </div>--}}
-                    {{--                    </div>--}}
-                    {{--                    <div class="col-md-6">--}}
-                    {{--                        <div class="form-group">--}}
-                    {{--                            <label>По классу</label>--}}
-                    {{--                            {!! Form::select('class_id',$classes, session('classes') ?? null,--}}
-                    {{--                                [--}}
-                    {{--                                    'class' => 'select2',--}}
-                    {{--                                    'id' => 'class_id',--}}
-                    {{--                                    'multiple' => 'multiple',--}}
-                    {{--                                    'style' => 'width: 100%;',--}}
-                    {{--                                    'data-placeholder' => 'Выберите класс ...',--}}
-                    {{--                                ]); !!}--}}
-                    {{--                        </div>--}}
-                    {{--                    </div>--}}
-                    {{--                    <div class="col-md-6">--}}
-                    {{--                        <div class="form-group">--}}
-                    {{--                            <label>По языку обучение</label>--}}
-                    {{--                            {!! Form::select('language_id',$languages, session('languages') ?? null,--}}
-                    {{--                                [--}}
-                    {{--                                    'class' => 'select2',--}}
-                    {{--                                    'id' => 'language_id',--}}
-                    {{--                                    'multiple' => 'multiple',--}}
-                    {{--                                    'style' => 'width: 100%;',--}}
-                    {{--                                    'data-placeholder' => 'Выберите язык ...',--}}
-                    {{--                                ]); !!}--}}
-                    {{--                        </div>--}}
-                    {{--                    </div>--}}
-                    {{--                    <div class="col-md-6">--}}
-                    {{--                        <label for="is_active">Удаленные</label>--}}
-                    {{--                        {!! Form::checkbox('is_active', 'value', true); !!}--}}
-                    {{--                    </div>--}}
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>По предметам.</label>
+                            {!! Form::select('subject_id',$subjects, session('subjects') ?? null,
+                            [
+                                'class' => 'select2',
+                                'id' => 'subject_id',
+                                'multiple' => 'multiple',
+                                'style' => 'width: 100%;',
+                                'data-placeholder' => 'Выберите предмет ...',
+                            ]); !!}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>По темам.</label>
+                            {!! Form::select('section_id',$sections,session('sections') ?? null,
+                            [
+                                'class' => 'select2',
+                                'id' => 'section_id',
+                                'multiple' => 'multiple',
+                                'style' => 'width: 100%;',
+                                'data-placeholder' => 'Выберите тему ...',
+                            ]); !!}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>По урокам.</label>
+                            {!! Form::select('lesson_id',$lessons, session('lessons') ?? null,
+                               [
+                                   'class' => 'select2',
+                                   'id' => 'lesson_id',
+                                   'multiple' => 'multiple',
+                                   'style' => 'width: 100%;',
+                                   'data-placeholder' => 'Выберите урок ...',
+                               ]); !!}
+                        </div>
+                    </div>
                 </div>
                 <button id="filter_btn" type="button" class="btn btn-primary float-right">Фильтровать</button>
             </div>
@@ -124,7 +97,7 @@
                     <?php
                     $subject_name = $assignment->subject ? $assignment->subject->name_ru : 'Не указано';
 
-                    $section_name = $assignment->lesson ? $assignment->lesson->name_ru : 'Не указано';
+                    $section_name = $assignment->section ? $assignment->section->name_ru : 'Не указано';
 
                     $lesson_name = $assignment->lesson ? $assignment->lesson->name_ru : 'Не указано';
 
@@ -189,25 +162,6 @@
             "autoWidth": false,
         });
 
-        $('#open_change_password').bind('click', function () {
-            var user_id = $(this).data('user_id');
-            $('input[name=user_id]').val(user_id);
-            $('#passwordModal').modal();
-
-        });
-
-        $('#open_add_subscription').bind('click', function () {
-            var user_id = $(this).data('user_id');
-            $('input[name=user_id]').val(user_id);
-            $('#addSubscription').modal();
-        });
-
-        $('#open_extend_subscription').bind('click', function () {
-            var user_id = $(this).data('user_id');
-            $('input[name=user_id]').val(user_id);
-            $('#extendSubscription').modal();
-        });
-
 
         function ajax(item_id, type) {
             $.ajaxSetup({
@@ -242,22 +196,16 @@
         }
 
         $('#filter_btn').click(function () {
-            url = '/admin/students/filter?';
+            url = '/admin/assignment/filter?';
 
-            area = $('#area_id').val();
-            url = set_delimiter(url, area, 'area');
+            area = $('#subject_id').val();
+            url = set_delimiter(url, area, 'subjects');
 
-            region = $('#region_id').val();
-            url = set_delimiter(url, region, 'region');
+            region = $('#section_id').val();
+            url = set_delimiter(url, region, 'sections');
 
-            school = $('#school_id').val();
-            url = set_delimiter(url, school, 'school');
-
-            langauge = $('#language_id').val();
-            url = set_delimiter(url, langauge, 'language');
-
-            classes = $('#class_id').val();
-            url = set_delimiter(url, classes, 'class');
+            school = $('#lesson_id').val();
+            url = set_delimiter(url, school, 'lessons');
 
             console.log(url);
             window.location = url;

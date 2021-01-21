@@ -73,7 +73,7 @@ $lessons = \App\Models\Lesson::all()->pluck('name_ru', 'id')->toArray();
 
 
                 <button type="submit" class="btn btn-success float-right">
-                    Добавить
+                    Изменить
                 </button>
             </div>
         </form>

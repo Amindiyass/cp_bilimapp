@@ -130,38 +130,32 @@ class Lesson extends Model
             $lesson->fill($request->all());
             $lesson->save();
 
-            $video_key = sprintf('%s-%s', 'lesson_video', session()->getId());
-            $videos = session()->get($video_key);
             $course = Course::where(['id' => $request->course_id])->first();
-            $subject_id = $course->subject->id;
+            $subject = $course->subject;
             $videos = [
-                'title_kz' => $videos['title_kz'][0],
-                'title_ru' => $videos['title_ru'][0],
-                'path' => $videos['path'][0],
-                'sort_number' => $videos['sort_number'][0],
+                'title_kz' => $request->title_kz,
+                'title_ru' => $request->title_ru,
                 'lesson_id' => $lesson->id,
-                'subject_id' => $subject_id,
+                'subject_id' => $subject->id,
+                'path' => $request->path,
+                'sort_number' => $request->sort_number,
             ];
-
 
             $video = new Video();
             $video->fill($videos);
             $video->save();
 
-            $conspectus_key = sprintf('%s-%s', 'lesson_conspectus', session()->getId());
-            $conspectus = session()->get($conspectus_key);
-            $conspectus = [
-                'body' => $conspectus['body'][0],
+            $conspectuses = [
+                'body' => $request->body,
                 'lesson_id' => $lesson->id,
                 'video_id' => $video->id,
             ];
 
-            DB::table('conspectuses')->insert($conspectus);
+            $conspectus = new  Conspectus();
+            $conspectus->fill($conspectuses);
+            $conspectus->save();
 
             DB::commit();
-
-            session()->forget($conspectus_key);
-            session()->forget($video_key);
 
             return [
                 'success' => true,

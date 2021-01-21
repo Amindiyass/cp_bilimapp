@@ -276,11 +276,6 @@ return [
             'route' => 'assignment.index',
             'icon' => 'fa fa-tasks',
         ],
-        [
-            'text' => 'Настройки платформы',
-            'route' => 'configuration.show',
-            'icon' => 'fa fa-cog',
-        ],
     ],
 
     /*

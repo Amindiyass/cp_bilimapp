@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Filters\QueryFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
@@ -23,6 +25,12 @@ class Assignment extends Model
         'section_id',
         'subject_id',
     ];
+
+    public function scopeFilter(Builder $builder, QueryFilter $filters)
+    {
+        return $filters->apply($builder);
+    }
+
 
     public function solution()
     {
@@ -53,6 +61,20 @@ class Assignment extends Model
     public function section()
     {
         return $this->belongsTo(Section::class);
+    }
+
+
+    public function get_temp_filter_items($request)
+    {
+        $sections = !empty($request->input('sections')) ? explode(',', $request->input('sections')) : [];
+        $lessons = !empty($request->input('lessons')) ? explode(',', $request->input('lessons')) : [];
+        $subjects = !empty($request->input('subjects')) ? explode(',', $request->input('subjects')) : [];
+
+        return [
+            'sections' => $sections,
+            'lessons' => $lessons,
+            'subjects' => $subjects,
+        ];
     }
 
     public static function store($request, $assignment = null)

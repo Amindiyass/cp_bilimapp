@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Filters\AssignmentFilter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AssignmentStoreRequest;
 use App\Models\Assignment;
@@ -59,6 +60,18 @@ class AssignmentController extends Controller
         if ($assignment->delete()) {
             return redirect(route('assignment.index'))->with('success', 'Вы успешно удалили задание !');
         }
+    }
+
+    public function filter(AssignmentFilter $filters, Request $request)
+    {
+        $items = (new \App\Models\Assignment())->get_temp_filter_items($request);
+        $assignments = Assignment::filter($filters)->get();
+
+        return redirect(route('assignment.index'))
+            ->with('assignments', $assignments)
+            ->with('subjects', $items['subjects'])
+            ->with('sections', $items['sections'])
+            ->with('lessons', $items['lessons']);
     }
 
     public function get_sections($item_id)

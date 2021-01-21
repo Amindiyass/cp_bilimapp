@@ -17,19 +17,8 @@ $conspectusArray = session()->get($key);
 
 @section('content')
     <div class="card card-danger">
-        <div class="card-body">
-            <div class="btn-group float-left">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addVideos">
-                    Добавить видео
-                    &nbsp;
-                    <i class="fa fa-video"></i>
-                </button>
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#addConspectuses">
-                    Добавить конспект
-                    &nbsp;
-                    <i class="fa fa-pen"></i>
-                </button>
-            </div>
+        <div class="card-header">
+            <h3>Урок</h3>
         </div>
         {!! Form::open(['route' => 'lesson.store','method' => 'POST']) !!}
         @csrf
@@ -93,261 +82,48 @@ $conspectusArray = session()->get($key);
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-8">
-                    <div class="card-body">
-                        <h3>Видео</h3>
-                        <table style="" id="example1" class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th>Название на казахском</th>
-                                <th>Название на русском</th>
-                                <th>Url-адрес</th>
-                                <th>Сорт номер</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                @if(!empty($videoArray))
-                                    <td>{{$videoArray['title_kz'][0]}}</td>
-                                    <td>{{$videoArray['title_ru'][0]}}</td>
-                                    <td>{{$videoArray['path'][0]}}</td>
-                                    <td>{{$videoArray['sort_number'][0]}}</td>
-                                    <td>
-                                        <div class="btn-group" style="position: relative;">
-                                            <button type="button" class="btn btn-danger dropdown-toggle"
-                                                    data-toggle="dropdown"
-                                                    aria-haspopup="true" aria-expanded="false">
-                                                Действие
-                                            </button>
-                                            <div class="dropdown-menu" style="position: absolute;">
-                                                <button class="dropdown-item"
-                                                        type="button"
-                                                        data-toggle="modal"
-                                                        data-target="#editVideos">
-                                                    Редактировать
-                                                    &nbsp;
-                                                    <i class="fa fa-edit"></i>
-                                                </button>
-                                                <a href="{{ route('lesson.video.reset')}}" class="dropdown-item">
-                                                    Сбросить
-                                                    &nbsp;
-                                                    <i class=" fa fa-trash"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                @endif
-                            </tr>
-                            </tbody>
-                            <tfoot>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="card-body">
-                        <h3>Конспект</h3>
-                        <table style="" id="example1" class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th>Конспект</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                @if(!empty($conspectusArray))
-                                    {{--                                    <td>{{$conspectusArray['body'][0]}}</td>--}}
-                                    <td>Конспект</td>
-                                    <td>
-                                        <div class="btn-group" style="position: relative;">
-                                            <button type="button" class="btn btn-danger dropdown-toggle"
-                                                    data-toggle="dropdown"
-                                                    aria-haspopup="true" aria-expanded="false">
-                                                Действие
-                                            </button>
-                                            <div class="dropdown-menu" style="position: absolute;">
-                                                <button type="button" onclick="show_conspect()" class="dropdown-item">
-                                                    Посмотреть
-                                                    &nbsp;
-                                                    <i class="fa fa-eye"></i>
-                                                </button>
 
-                                                <button type="button" onclick="edit_conspect()" class="dropdown-item">
-                                                    Редактировать
-                                                    &nbsp;
-                                                    <i class="fa fa-edit"></i>
-                                                </button>
+        </div>
+        <div class="card-header">
+            <h3>Видео</h3>
+        </div>
+        <div class="card-body">
+            <label for="title_kz">
+                Название на казахском *
+            </label>
+            {!! Form::text('title_kz',null , ['class' => 'form-control']); !!}
 
-                                                <a href="{{ route('lesson.conspectus.reset')}}" class="dropdown-item">
-                                                    Сбросить
-                                                    &nbsp;
-                                                    <i class=" fa fa-trash"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                @endif
-                            </tr>
-                            </tbody>
-                            <tfoot>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="btn btn-group float-right">
-                <button type="submit" class="btn btn-success">
-                    Создать
-                </button>
-            </div>
+            <label for="title_ru">
+                Название на русском *
+            </label>
+            {!! Form::text('title_ru', null,['class' => 'form-control']); !!}
+
+            <label for="path">
+                Url-адрес
+            </label>
+            {!! Form::text('path', null,['class' => 'form-control']); !!}
+
+            <label for="sort_number">
+                Сортировочный номер
+            </label>
+            {!! Form::number('sort_number', null,['class' => 'form-control']); !!}
+        </div>
+
+        <div class="card-header">
+            <h3>Конспект</h3>
+        </div>
+        <div class="card-body">
+            <label for="body">
+                Конспект
+            </label>
+            {!! Form::textarea('body', null,['class' => 'form-control','id' => 'summernote', 'cols' => 30, 'rows' => 20]); !!}
+        </div>
+        <div class="btn btn-group float-right">
+            <button type="submit" class="btn btn-success">
+                Создать
+            </button>
         </div>
         {!! Form::close() !!}
-
-    </div>
-    <div class="modal fade" id="addVideos" tabindex="-1" role="dialog"
-         aria-hidden="true">
-        <div class="modal-dialog" style="max-width: 800px;" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Добавить видео</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                {!! Form::open(['route' => 'lesson.video', 'method' => 'post']); !!}
-                <div class="modal-body">
-                    @csrf
-                    <label for="title_kz">
-                        Ответ на казахском *
-                    </label>
-                    {!! Form::text('title_kz',null , ['class' => 'form-control']); !!}
-
-                    <label for="title_ru">
-                        Ответ на русском *
-                    </label>
-                    {!! Form::text('title_ru', null,['class' => 'form-control']); !!}
-
-                    <label for="path">
-                        Url-адрес
-                    </label>
-                    {!! Form::text('path', null,['class' => 'form-control']); !!}
-
-                    <label for="sort_number">
-                        Сортировочный номер
-                    </label>
-                    {!! Form::number('sort_number', null,['class' => 'form-control']); !!}
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                    <button type="submit" class="btn btn-primary">Добавить видео</button>
-                </div>
-                {!! Form::close(); !!}
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="editVideos" tabindex="-1" role="dialog"
-         aria-hidden="true">
-        <div class="modal-dialog" style="max-width: 800px;" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Изменить видео</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                @if(!empty($videoArray))
-                    {!! Form::open(['route' => 'lesson.video', 'method' => 'post']); !!}
-                    <div class="modal-body">
-                        @csrf
-                        <label for="title_kz">
-                            Ответ на казахском *
-                        </label>
-                        {!! Form::text('title_kz',$videoArray['title_kz'][0] , ['class' => 'form-control']); !!}
-
-                        <label for="title_ru">
-                            Ответ на русском *
-                        </label>
-                        {!! Form::text('title_ru', $videoArray['title_ru'][0],['class' => 'form-control']); !!}
-
-                        <label for="path">
-                            Url-адрес
-                        </label>
-                        {!! Form::text('path', $videoArray['path'][0],['class' => 'form-control']); !!}
-
-                        <label for="sort_number">
-                            Сортировочный номер
-                        </label>
-                        {!! Form::number('sort_number', $videoArray['sort_number'][0],['class' => 'form-control']); !!}
-
-                    </div>
-                @endif
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                    <button type="submit" class="btn btn-primary">Изменить видео</button>
-                </div>
-                {!! Form::close(); !!}
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="addConspectuses" tabindex="-1" role="dialog"
-         aria-hidden="true">
-        <div class="modal-dialog" style="max-width: 800px;" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Добавить конспект</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                {!! Form::open(['route' => 'lesson.conspectuses', 'method' => 'post']); !!}
-                <div class="modal-body">
-                    @csrf
-                    <label for="body">
-                        Конспект
-                    </label>
-                    {!! Form::textarea('body', null,['class' => 'form-control','id' => 'summernote', 'cols' => 30, 'rows' => 20]); !!}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                    <button type="submit" class="btn btn-primary">Добавить конспект</button>
-                </div>
-                {!! Form::close(); !!}
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="editConspectuses" tabindex="-1" role="dialog"
-         aria-hidden="true">
-        <div class="modal-dialog" style="max-width: 800px;" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Изменить конспект</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                @if(!empty($conspectusArray))
-                    {!! Form::open(['route' => 'lesson.conspectuses', 'method' => 'post']); !!}
-                    <div class="modal-body">
-                        @csrf
-                        <label for="body">
-                            Конспект
-                        </label>
-                        {!! Form::textarea('body', $conspectusArray['body'][0],['class' => 'form-control','id' => 'summernote2', 'cols' => 30, 'rows' => 20]); !!}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                        <button id="save_conspectus_button" type="submit" class="btn btn-primary">Изменить конспект
-                        </button>
-                    </div>
-                    {!! Form::close(); !!}
-                @endif
-            </div>
-        </div>
     </div>
 @stop
 @section('plugins.Summernote', true)
@@ -355,17 +131,6 @@ $conspectusArray = session()->get($key);
 
     <script>
         $('#summernote').summernote()
-        $('#summernote2').summernote()
-
-        function show_conspect() {
-            $('#save_conspectus_button').addClass('d-none');
-            $('#editConspectuses').modal();
-        }
-
-        function edit_conspect() {
-            $('#save_conspectus_button').removeClass('d-none');
-            $('#editConspectuses').modal();
-        }
 
         $('#subject_id').bind('change', function () {
             ajax(this.value, 'get_sections');
