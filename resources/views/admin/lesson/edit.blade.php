@@ -1,6 +1,10 @@
 <?php
+/** @var \App\Models\Lesson $lesson */
 $courses = \App\Models\Course::all()->pluck('name_ru', 'id')->toArray();
 $sections = \App\Models\Section::all()->pluck('name_ru', 'id')->toArray();
+$sections = \App\Models\Section::all()->pluck('name_ru', 'id')->toArray();
+$video = \App\Models\Video::where(['lesson_id' => $lesson->id])->first();
+$conspectus = \App\Models\Conspectus::where(['lesson_id' => $lesson->id])->first();
 ?>
 @extends('adminlte::page')
 
@@ -17,7 +21,7 @@ $sections = \App\Models\Section::all()->pluck('name_ru', 'id')->toArray();
         </div>
         <form action="{{route('lesson.update', ['lesson' => $lesson->id])}}" method="POST">
             @csrf
-            @method('UPDATE')
+            @method('PUT')
             <div class="card-body">
                 <div class="form-group">
                     <label>Название на казахском *</label>
@@ -46,7 +50,7 @@ $sections = \App\Models\Section::all()->pluck('name_ru', 'id')->toArray();
 
                 <div class="form-group">
                     <label>Выберите тему *</label>
-                    {!! Form::select('section_id',[], null,
+                    {!! Form::select('section_id',$sections, $lesson->section->id,
                         [
                              'class' => 'form-control select2bs4',
                              'id' => 'section_id',
@@ -59,12 +63,14 @@ $sections = \App\Models\Section::all()->pluck('name_ru', 'id')->toArray();
                 <div class="form-group">
                     <label for="">Описание на русском *</label>
                     <textarea class="form-control" name="description_ru" cols="30" rows="5">
+                        {{$lesson->description_ru}}
                 </textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="">Описание на казахском *</label>
                     <textarea class="form-control" name="description_kz" cols="30" rows="5">
+                        {{$lesson->description_kz}}
                 </textarea>
                 </div>
 
@@ -74,7 +80,7 @@ $sections = \App\Models\Section::all()->pluck('name_ru', 'id')->toArray();
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fa fa-sort"></i></span>
                         </div>
-                        <input name="order" value="100" type="text" class="form-control">
+                        <input name="order" value="{{$lesson->order}}" type="text" class="form-control">
                     </div>
                 </div>
 
@@ -87,22 +93,22 @@ $sections = \App\Models\Section::all()->pluck('name_ru', 'id')->toArray();
                 <label for="title_kz">
                     Название на казахском *
                 </label>
-                {!! Form::text('title_kz',null , ['class' => 'form-control']); !!}
+                {!! Form::text('title_kz',($video ?$video->title_kz:''), ['class' => 'form-control']); !!}
 
                 <label for="title_ru">
                     Название на русском *
                 </label>
-                {!! Form::text('title_ru', null,['class' => 'form-control']); !!}
+                {!! Form::text('title_ru',($video ?$video->title_ru:''),['class' => 'form-control']); !!}
 
                 <label for="path">
                     Url-адрес
                 </label>
-                {!! Form::text('path', null,['class' => 'form-control']); !!}
+                {!! Form::text('path', ($video ?$video->path:''),['class' => 'form-control']); !!}
 
                 <label for="sort_number">
                     Сортировочный номер
                 </label>
-                {!! Form::number('sort_number', null,['class' => 'form-control']); !!}
+                {!! Form::number('sort_number', ($video ?$video->sort_number:''),['class' => 'form-control']); !!}
             </div>
 
             <div class="card-header">
@@ -112,7 +118,7 @@ $sections = \App\Models\Section::all()->pluck('name_ru', 'id')->toArray();
                 <label for="body">
                     Конспект
                 </label>
-                {!! Form::textarea('body', null,['class' => 'form-control','id' => 'summernote', 'cols' => 30, 'rows' => 20]); !!}
+                {!! Form::textarea('body', isset($conspectus) ? $conspectus->body : '',['class' => 'form-control','id' => 'summernote', 'cols' => 30, 'rows' => 20]); !!}
             </div>
             <div class="btn btn-group float-right">
                 <button type="submit" class="btn btn-success">

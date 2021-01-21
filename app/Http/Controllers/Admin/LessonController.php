@@ -68,9 +68,15 @@ class LessonController extends Controller
     }
 
     public
-    function update(Request $request, $id)
+    function update(LessonStoreRequest $request, Lesson $lesson)
     {
-        //
+        $result = (new \App\Models\Lesson)->store($request, $lesson);
+        if ($result['success']) {
+            return redirect(route('lesson.index'))
+                ->with('success', 'Вы успешно изменили урок!');
+        }
+        return redirect(route('lesson.index'))
+            ->with('error', $result['message']);
     }
 
     public
