@@ -64,6 +64,9 @@ class Question extends Model
 
     public function getPhotoAttribute($value)
     {
-        return Storage::url($value);
+        if ($value) {
+            return Storage::url($value);
+        }
+        return null;
     }
 }

@@ -77,7 +77,7 @@ class Test extends Model
             $test->save();
             Question::insert([
                 'test_id' => $test->id,
-                'right_variant_id' => json_encode([]),
+                'right_variant_id' => [],
                 'order_number' => 0,
                 'created_at' => date('Y-m-d H:i:s'),
                 'body_kz' => $request['question_kz'],
