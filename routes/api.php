@@ -51,6 +51,7 @@ Route::get('course/{course}/details', [CourseController::class, 'details']);
 Route::get('v2/course/{course}/details', [V2CourseController::class, 'details']);
 Route::post('application', [ApplicationController::class, 'store']);
 Route::post('restore', [AuthController::class, 'restore']);
+Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('api.subscriptions');
 Route::post('restore-confirm', [AuthController::class, 'restoreConfirm']);
 
 /**Route for details user API */
@@ -103,7 +104,6 @@ Route::group(['middleware' => [
     });
 
     Route::get('user/subscriptions', [SubscriptionController::class, 'user'])->name('api.user.subscriptions');
-    Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('api.subscriptions');
     Route::get('user/subscription/expiry', [SubscriptionController::class, 'expiry'])->name('api.user.subscription.expiry');
 
     Route::get('notifications', [NotificationController::class, 'index']);
