@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Mail\Send;
 use App\Http\Requests\Api\AuthRegisterRequest;
+use App\Http\Requests\Api\AuthRestoreRequest;
 use App\Http\Requests\Api\ReconfirmCodeRequest;
 use App\Http\Requests\Api\UpdatePasswordRequest;
 use App\Models\Promocode;
@@ -19,30 +20,40 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends BaseController
 {
-
-    public function sendConfirmationPhone(AuthRegisterRequest $request)
+    public function restore(AuthRestoreRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'area_id' => 'required|exists:areas,id',
-            'region_id' => 'required|int|exists:regions,id',
-            'school_id' => 'required|int|exists:schools,id',
-            'class_id' => 'required|int|exists:education_levels,id',
-            'language_id' => 'required|int|exists:languages,id',
-            'email' => 'required|email|unique:users',
-            'phone' => 'required|unique:users',
-            'password' => 'required',
-            'inviter_id' => 'int',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['success' => false, 'message' => $validator->errors()], 400);
-        }
-
         $phone = $request->phone;
         $code = rand(1000, 9999);
         $message = sprintf("Код для регистраций на bilim.app, Код: %s", $code);
-        $response = Send::request($phone, $message);
+        Send::request($phone, $message);
+
+        $user = auth()->user();
+        $user->associateRedisCodeAndPhone($phone, $code);
+
+        return $this->sendResponse([]);
+    }
+
+    public function restoreConfirm(ReconfirmCodeRequest $request)
+    {
+        /** @var User $user */
+        $user = auth()->user();
+        if ($user->checkCode($request->input('phone'), $request->input('code'))) {
+            $user = Auth::user();
+            $token = $user->createToken('AppName')->accessToken;
+
+            return response()->json(['success' => true, 'data' => [
+                'user_id' => $user->id,
+                'token' => $token,
+            ]]);
+        }
+    }
+
+    public function sendConfirmationPhone(AuthRegisterRequest $request)
+    {
+        $phone = $request->phone;
+        $code = rand(1000, 9999);
+        $message = sprintf("Код для регистраций на bilim.app, Код: %s", $code);
+        Send::request($phone, $message);
 
         #TODO if response error
         $this->redisSet($request->all(), $code);
@@ -61,7 +72,7 @@ class AuthController extends BaseController
         ]);
     }
 
-    public function confirmAndRegister(Request $request)
+    public function confirmAndRegister(Request $request) // TODO validate
     {
 
         $phone = $request->phone;

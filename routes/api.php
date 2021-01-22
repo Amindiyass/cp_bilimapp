@@ -50,6 +50,8 @@ Route::get('course/{course}', [CourseController::class, 'show'])->name('course.s
 Route::get('course/{course}/details', [CourseController::class, 'details']);
 Route::get('v2/course/{course}/details', [V2CourseController::class, 'details']);
 Route::post('application', [ApplicationController::class, 'store']);
+Route::post('restore', [AuthController::class, 'restore']);
+Route::post('restore-confirm', [AuthController::class, 'restoreConfirm']);
 
 /**Route for details user API */
 Route::group(['middleware' => [
