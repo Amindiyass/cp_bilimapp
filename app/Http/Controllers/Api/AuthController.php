@@ -27,7 +27,7 @@ class AuthController extends BaseController
         $message = sprintf("Код для регистраций на bilim.app, Код: %s", $code);
         Send::request($phone, $message);
 
-        $user = auth()->user();
+        $user = User::where('phone', $phone)->first();
         $user->associateRedisCodeAndPhone($phone, $code);
 
         return $this->sendResponse([]);
