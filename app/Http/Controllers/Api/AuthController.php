@@ -39,7 +39,6 @@ class AuthController extends BaseController
         $phone = $request->phone;
         $user = User::where('phone', $phone)->first();
         if ($user->checkCode($request->input('phone'), $request->input('code'))) {
-            $user = Auth::user();
             $token = $user->createToken('AppName')->accessToken;
 
             return response()->json(['success' => true, 'data' => [

@@ -6,6 +6,8 @@
     <h1 class="m-0 text-dark">Добавить тест</h1>
 @stop
 
+@dd(old('question_in_kz'))
+
 @section('content')
     <div class="card card-danger">
         {!! Form::open(['route' => 'test.store','method' => 'POST', 'files' => true]) !!}
