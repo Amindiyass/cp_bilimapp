@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Subscription;
+use App\Models\UserSubscription;
 use App\Order;
 use Dosarkz\Paybox\Facades\Paybox;
 use GuzzleHttp\Client;
@@ -19,7 +20,7 @@ class OrderController extends BaseController
         $order = Order::create([
             'user_id' => $user->id,
             'subscription_id' => $subscription->id,
-            'amount' => $subscription->price,
+            'amount' => 30,
             'status' => Order::STATUS_CREATED
         ]);
         $request = [
@@ -30,6 +31,8 @@ class OrderController extends BaseController
             'pg_payment_system' => 'EPAYKZT',
             'pg_description' => 'Описание заказа',
             'pg_result_url' => route('api.paybox.payment.result'),
+            'pg_success_url' => 'https://bilim.app/order/'.$order->id,
+            'pg_request_method' => 'POST'
             //'pg_testing_mode' => 1
         ];
 
@@ -41,8 +44,6 @@ class OrderController extends BaseController
 
         unset($request[0], $request[1]);
 
-        $query = http_build_query($request);
-        // dd($request);
         $client = new Client();
         $response = $client->post('https://api.paybox.money/init_payment.php', [
             'form_params' => $request,
@@ -52,14 +53,12 @@ class OrderController extends BaseController
         ]);
         $response = $response->getBody()->getContents();
         $response = simplexml_load_string($response);
-        // dd($response->pg_redirect_url);
         if ((string)$response->pg_status === 'ok') {
             return $this->sendResponse([
                 'redirect_url' => (string) $response->pg_redirect_url,
                 'payment_id'   => (string) $response->pg_payment_id,
             ]);
         }
-        dd($response);
         Log::error($response);
         abort(500, 'Payment system error');
 //        return Paybox::generate([
@@ -89,23 +88,30 @@ class OrderController extends BaseController
 //        ]);
     }
 
-    public function check(Order $order, $paymentId)
+    public function check(Order $order)
     {
-        $info = Paybox::paymentInfo($paymentId);
-        Log::info($info);
-        if (isset($info->response->status->code)) {
-            $status = $info->response->status->code;
-            if ($status === 'ok') {
-                $order->status = Order::STATUS_SUCCESS;
-                $order->save();
-            }
+        if (auth()->user()->id !== $order->user_id) {
+            abort(403);
         }
         return $this->sendResponse($order);
     }
 
     public function checkResult(Request $request)
     {
-        Log::info('Paybox result');
-        Log::info($request->all());
+        $responseData = $request->all();
+        Log::info('Paybox result:');
+        Log::info(print_r($responseData,1));
+        /** @var Order $order */
+        $order = Order::find($responseData['pg_order_id']);
+        if ($responseData['pg_result']) {
+            $order->status = Order::STATUS_SUCCESS;
+            $order->save();
+
+            UserSubscription::create([
+                'user_id' => $order->user_id,
+                'subscription_id' => $order->subscription_id,
+                'is_active' => 1
+            ]);
+        }
     }
 }

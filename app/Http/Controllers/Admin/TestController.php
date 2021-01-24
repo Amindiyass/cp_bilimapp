@@ -18,7 +18,7 @@ class TestController extends BaseController
 {
     public function index()
     {
-        $tests = Test::all();
+        $tests = Test::orderBy('id', 'desc')->get();
         $tests = $tests->loadCount('questions');
 
         return view('admin.test.index', [
@@ -44,27 +44,28 @@ class TestController extends BaseController
         $test = new Test();
         $test->fill($request->all());
         $test->save();
+        $questions = json_decode($request->input('questions'));
+        $photo = $request->file('files');
 
-        for ($i = 0; $i < count($request->question_in_kz);$i++) {
+        for ($i = 0; $i < count($questions);$i++) {
             $rightVariants = [];
-            $photo = $request->file('photos');
             $question = Question::create([
                 'test_id' => $test->id,
-                'body_kz' => $request->question_in_kz[$i],
-                'body_ru' => $request->question_in_ru[$i],
+                'body_kz' => $questions[$i]->name_ru,
+                'body_ru' => $questions[$i]->name_kz,
                 'right_variant_id' => [],
                 'order_number' => 1,
                 'photo' => isset($photo[$i]) ? Storage::putFile('question-photos/' . auth()->id(), $photo[$i], 'public') : null
             ]);
-            for ($j = 0; $j < count($request->variant_in_kz[$i]);$j++) {
+            for ($j = 0; $j < count($questions[$i]->variants);$j++) {
                 $variant = TestVariant::create([
-                    'variant_in_kz' => $request->variant_in_kz[$i][$j],
-                    'variant_in_ru' => $request->variant_in_ru[$i][$j],
+                    'variant_in_kz' => $questions[$i]->variants[$j]->name_kz,
+                    'variant_in_ru' => $questions[$i]->variants[$j]->name_ru,
                     'question_id' => $question->id,
                     'test_id' => $test->id,
                     'order_number' => 1
                 ]);
-                if (isset($request->variant[$i][$j]) && $request->variant[$i][$j] == 'on') {
+                if ($questions[$i]->variants[$j]->right_answer) {
                     $rightVariants[] = $variant->id;
                 }
             }
