@@ -27,7 +27,8 @@ class Video extends Model
         'has_conspectus',
         'conspectus',
         'video_url',
-        'start_from'
+        'start_from',
+        'video_id'
     ];
 
     public function completedRate()
@@ -75,6 +76,16 @@ class Video extends Model
             return $this->path;
         }
         return $this->path . "#t" . $progress->rate;
+    }
+
+    public function getVideoIdAttribute()
+    {
+        $pathParts = explode('/', $this->path);
+        $lastPart = $pathParts[count($pathParts) - 1];
+        if (!$lastPart and !empty($pathParts[count($pathParts) - 2])){
+            $lastPart = $pathParts[count($pathParts) - 2];
+        }
+        return $lastPart;
     }
 
     public function getStartFromAttribute()
