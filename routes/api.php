@@ -52,6 +52,7 @@ Route::get('v2/course/{course}/details', [V2CourseController::class, 'details'])
 Route::post('application', [ApplicationController::class, 'store']);
 Route::post('restore', [AuthController::class, 'restore']);
 Route::post('restore-confirm', [AuthController::class, 'restoreConfirm']);
+Route::post('check-paybox-order', [OrderController::class, 'checkResult'])->name('api.paybox.payment.result');
 
 /**Route for details user API */
 Route::group(['middleware' => [
@@ -81,8 +82,7 @@ Route::group(['middleware' => [
     Route::post('profile', [StudentController::class, 'update']);
     Route::post('profile/reconfirm_code', [AuthController::class, 'reconfirmCode']);
     Route::post('order/{subscription}', [OrderController::class, 'order']);
-    Route::get('order/check-payment/{order}/{id}', [OrderController::class, 'check'])->name('api.payment.check');
-    Route::get('order/check-for-paybox', [OrderController::class, 'checkResult'])->name('api.paybox.payment.result');
+    Route::get('order/check-payment/{order}', [OrderController::class, 'check'])->name('api.payment.check');
 
     Route::get('solutions/{course}/categories',[SolutionController::class, 'categories']);
     Route::get('solutions/{course}',[SolutionController::class, 'courseSolutions']);

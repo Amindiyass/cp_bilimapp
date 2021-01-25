@@ -19,7 +19,8 @@
         "laravel/tinker": "^2.5",
         "laravelcollective/html": "^6.2",
         "league/flysystem-aws-s3-v3": "*",
-        "spatie/laravel-permission": "^3.17"
+        "spatie/laravel-permission": "^3.17",
+      "ext-json": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

@@ -29,8 +29,7 @@ class TestStoreRequest extends FormRequest
             'course_id' => 'required|int',
             'section_id' => 'required|int',
             'order_number' => 'required|int',
-
-
+            'questions' => 'required'
         ];
     }
 

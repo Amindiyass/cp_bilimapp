@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\Ajax\LessonController;
+use App\Http\Controllers\Admin\Ajax\SectionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -52,6 +54,9 @@ Route::group([
 
     Route::resource('course', 'CourseController')->except('show');
     Route::post('course/section', 'CourseController@tempSectionSave')->name('course.section');
+
+    Route::get('sections/ajax', [SectionController::class, 'index']);
+    Route::get('lessons/ajax', [LessonController::class, 'index']);
 
     Route::resource('lesson', 'LessonController');
     Route::post('lesson/video', 'LessonController@tempVideoSave')->name('lesson.video');
