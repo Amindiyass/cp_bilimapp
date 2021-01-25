@@ -106,6 +106,9 @@ class Test extends Model
     public function getNextAttribute()
     {
         $nextTest = self::where('id', '>', $this->id)->first();
+        if (!$nextTest){
+            return null;
+        }
         return route('api.test', ['test' => $nextTest->id]);
     }
 

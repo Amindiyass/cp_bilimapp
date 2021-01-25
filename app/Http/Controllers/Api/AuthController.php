@@ -27,7 +27,7 @@ class AuthController extends BaseController
         $message = sprintf("Код для регистраций на bilim.app, Код: %s", $code);
         Send::request($phone, $message);
 
-        $user = auth()->user();
+        $user = User::where('phone', $phone)->first();
         $user->associateRedisCodeAndPhone($phone, $code);
 
         return $this->sendResponse([]);
@@ -36,9 +36,9 @@ class AuthController extends BaseController
     public function restoreConfirm(ReconfirmCodeRequest $request)
     {
         /** @var User $user */
-        $user = auth()->user();
+        $phone = $request->phone;
+        $user = User::where('phone', $phone)->first();
         if ($user->checkCode($request->input('phone'), $request->input('code'))) {
-            $user = Auth::user();
             $token = $user->createToken('AppName')->accessToken;
 
             return response()->json(['success' => true, 'data' => [
