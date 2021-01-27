@@ -24,7 +24,15 @@ class Section extends Model
 
     public function tests()
     {
-        return $this->hasMany(Test::class)->where('order_number',10000);
+        try {
+            $user = auth('api')->user();
+            if ($user->id == 35 || $user->id == 19){
+                return $this->hasMany(Test::class);
+            }
+        }catch (\Exception $e){
+
+        }
+        return $this->hasMany(Test::class);
     }
 
     public function course()
