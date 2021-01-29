@@ -51,6 +51,7 @@ Route::group([
 
 
     Route::resource('subject', 'SubjectController');
+    Route::resource('solution', 'SolutionController');
 
     Route::resource('course', 'CourseController')->except('show');
     Route::post('course/section', 'CourseController@tempSectionSave')->name('course.section');

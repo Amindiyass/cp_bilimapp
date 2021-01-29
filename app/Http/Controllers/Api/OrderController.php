@@ -57,6 +57,7 @@ class OrderController extends BaseController
             return $this->sendResponse([
                 'redirect_url' => (string) $response->pg_redirect_url,
                 'payment_id'   => (string) $response->pg_payment_id,
+                'order_id'     => $order->id
             ]);
         }
         Log::error($response);
@@ -112,6 +113,9 @@ class OrderController extends BaseController
                 'subscription_id' => $order->subscription_id,
                 'is_active' => 1
             ]);
+        } else {
+            $order->status = Order::STATUS_FAILURE;
+            $order->save();
         }
     }
 }
