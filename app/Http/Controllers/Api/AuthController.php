@@ -8,6 +8,7 @@ use App\Http\Requests\Api\AuthRestoreRequest;
 use App\Http\Requests\Api\ReconfirmCodeRequest;
 use App\Http\Requests\Api\UpdatePasswordRequest;
 use App\Models\Promocode;
+use App\Models\School;
 use App\Models\Student;
 use App\Models\UserSubscription;
 use App\User;
@@ -111,6 +112,15 @@ class AuthController extends BaseController
 
             $user->assignRole('student');
 
+            if (empty($result['school_id']) && !empty($result['school_name'])) {
+                $school = new School();
+                $school->name_kz = $result['school_name'];
+                $school->name_ru = $result['school_name'];
+                $school->region_id = $result['region_id'];
+                $school->save();
+                $result['school_id'] = $school->id;
+            }
+
             $new_student = $result;
             $new_student['user_id'] = $user->id;
 
@@ -190,7 +200,12 @@ class AuthController extends BaseController
         Redis::hSet($phone, 'last_name', $array['last_name']);
         Redis::hSet($phone, 'area_id', $array['area_id']);
         Redis::hSet($phone, 'region_id', $array['region_id']);
-        Redis::hSet($phone, 'school_id', $array['school_id']);
+        if (!empty($array['school_id'])){
+            Redis::hSet($phone, 'school_id', $array['school_id']);
+        }
+        if (!empty($array['school_name'])){
+            Redis::hSet($phone, 'school_name', $array['school_name']);
+        }
         Redis::hSet($phone, 'class_id', $array['class_id']);
         Redis::hSet($phone, 'language_id', $array['language_id']);
         Redis::hSet($phone, 'email', $array['email']);
@@ -206,6 +221,7 @@ class AuthController extends BaseController
             'area_id' => Redis::hGet($phone, 'area_id'),
             'region_id' => Redis::hGet($phone, 'region_id'),
             'school_id' => Redis::hGet($phone, 'school_id'),
+            'school_name' => Redis::hGet($phone, 'school_name'),
             'class_id' => Redis::hGet($phone, 'class_id'),
             'language_id' => Redis::hGet($phone, 'language_id'),
             'email' => Redis::hGet($phone, 'email'),
