@@ -76,7 +76,9 @@ $conspectus = \App\Models\Conspectus::where(['lesson_id' => $lesson->id])->first
 
                 <div class="form-group">
                     <label>Файл решения</label>
+                    @if ($lesson->solutions_file_url)
                     <a href="{{ \Illuminate\Support\Facades\Storage::url($lesson->solutions_file_url) }}">Ссылка</a>
+                    @endif
                     <div class="input-group">
                         <input name="solutions_file_url" type="file" class="form-control-file">
                     </div>
