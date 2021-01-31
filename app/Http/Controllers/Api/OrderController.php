@@ -20,7 +20,7 @@ class OrderController extends BaseController
         $order = Order::create([
             'user_id' => $user->id,
             'subscription_id' => $subscription->id,
-            'amount' => 30,
+            'amount' => $subscription->price,
             'status' => Order::STATUS_CREATED
         ]);
         $request = [
