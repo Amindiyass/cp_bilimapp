@@ -257,6 +257,11 @@ return [
             'icon' => 'fa fa-book',
         ],
         [
+            'text' => 'Решения',
+            'route' => 'solution.index',
+            'icon' => 'fa fa-book',
+        ],
+        [
             'text' => 'Курсы',
             'route' => 'course.index',
             'icon' => 'fa fa-book-reader',

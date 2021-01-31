@@ -49,12 +49,12 @@ class Question extends Model
     public function getRightAnswersAttribute()
     {
         if (empty($this->right_variant_id)) {
-            return $this->variants();
+            return $this->variants()->get()->toArray();
         }
         if (is_array($this->right_variant_id)) {
-            return $this->variants()->whereIn('id', $this->right_variant_id)->get();
+            return $this->variants()->whereIn('id', $this->right_variant_id)->get()->toArray();
         }
-        return $this->variants()->where('id', $this->right_variant_id)->get();
+        return $this->variants()->where('id', $this->right_variant_id)->get()->toArray();
     }
 
     public function getMultipleAttribute()
