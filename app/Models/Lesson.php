@@ -6,6 +6,7 @@ use App\Http\Requests\Admin\LessonStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class Lesson
@@ -145,7 +146,7 @@ class Lesson extends Model
 
             $lesson->fill($request->all());
             if ($request->file('solutions_file_url')) {
-                $lesson->solutions_file_url = $request->file('solutions_file_url')->move('solutions');
+                $lesson->solutions_file_url = Storage::putFile('solutions/' . auth()->id(), $request->file('solutions_file_url'), 'public');
             }
             $lesson->save();
 
