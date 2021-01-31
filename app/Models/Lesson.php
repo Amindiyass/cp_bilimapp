@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
  * @property Lesson $previous
  * @property Section $section
  * @property Test[] $tests
+ * @property string $solutions_file_url
  */
 class Lesson extends Model
 {
@@ -32,6 +33,7 @@ class Lesson extends Model
         'description_kz',
         'description_ru',
         'order',
+        'solutions_file_url'
     ];
 
     public function assignments()
@@ -61,27 +63,11 @@ class Lesson extends Model
 
     public function tests()
     {
-        try {
-            $user = auth('api')->user();
-            if ($user->id == 35 || $user->id == 19){
-                return $this->hasMany(Test::class);
-            }
-        }catch (\Exception $e){
-        }
         return $this->hasMany(Test::class)->where('order_number',10000);
     }
 
     public function test()
     {
-        try {
-            $user = auth('api')->user();
-            if ($user->id == 35 || $user->id == 19){
-                return $this->hasOne(Test::class);
-            }
-        }catch (\Exception $e){
-
-        }
-
         return $this->hasOne(Test::class)->where('order_number',10000);
     }
 
@@ -158,7 +144,11 @@ class Lesson extends Model
             }
 
             $lesson->fill($request->all());
+            if ($request->file('solutions_file_url')) {
+                $lesson->solutions_file_url = $request->file('solutions_file_url')->move('solutions');
+            }
             $lesson->save();
+
 
             $course = Course::where(['id' => $request->course_id])->first();
             $subject = $course->subject;
@@ -181,9 +171,10 @@ class Lesson extends Model
                 'video_id' => $video->id,
             ];
 
-
-            $conspectus->fill($conspectuses);
-            $conspectus->save();
+            if ($conspectus) {
+                $conspectus->fill($conspectuses);
+                $conspectus->save();
+            }
 
             DB::commit();
 

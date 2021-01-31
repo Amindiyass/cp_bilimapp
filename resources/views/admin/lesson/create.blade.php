@@ -20,7 +20,7 @@ $conspectusArray = session()->get($key);
         <div class="card-header">
             <h3>Урок</h3>
         </div>
-        {!! Form::open(['route' => 'lesson.store','method' => 'POST']) !!}
+        {!! Form::open(['route' => 'lesson.store','method' => 'POST', 'files' => true]) !!}
         @csrf
         <div class="card-body">
             <div class="form-group">
@@ -79,6 +79,12 @@ $conspectusArray = session()->get($key);
                         <span class="input-group-text"><i class="fa fa-sort"></i></span>
                     </div>
                     <input name="order" value="100" type="text" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Файл решения</label>
+                <div class="input-group">
+                    <input name="solutions_file_url" type="file" class="form-control-file">
                 </div>
             </div>
 
