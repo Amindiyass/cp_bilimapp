@@ -6,6 +6,7 @@ use App\Http\Requests\Admin\LessonStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class Lesson
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\DB;
  * @property Lesson $previous
  * @property Section $section
  * @property Test[] $tests
+ * @property string $solutions_file_url
  */
 class Lesson extends Model
 {
@@ -32,6 +34,7 @@ class Lesson extends Model
         'description_kz',
         'description_ru',
         'order',
+        'solutions_file_url'
     ];
 
     public function assignments()
@@ -142,6 +145,9 @@ class Lesson extends Model
             }
 
             $lesson->fill($request->all());
+            if ($request->file('solutions_file_url')) {
+                $lesson->solutions_file_url = Storage::putFile('solutions/' . auth()->id(), $request->file('solutions_file_url'), 'public');
+            }
             $lesson->save();
 
             $course = Course::where(['id' => $request->course_id])->first();
@@ -165,9 +171,10 @@ class Lesson extends Model
                 'video_id' => $video->id,
             ];
 
-
-            $conspectus->fill($conspectuses);
-            $conspectus->save();
+            if ($conspectus) {
+                $conspectus->fill($conspectuses);
+                $conspectus->save();
+            }
 
             DB::commit();
 

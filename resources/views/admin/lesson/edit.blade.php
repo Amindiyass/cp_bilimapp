@@ -19,7 +19,7 @@ $conspectus = \App\Models\Conspectus::where(['lesson_id' => $lesson->id])->first
         <div class="card-header">
             <h3>Урок</h3>
         </div>
-        <form action="{{route('lesson.update', ['lesson' => $lesson->id])}}" method="POST">
+        <form action="{{route('lesson.update', ['lesson' => $lesson->id])}}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="card-body">
@@ -72,6 +72,14 @@ $conspectus = \App\Models\Conspectus::where(['lesson_id' => $lesson->id])->first
                     <textarea class="form-control" name="description_kz" cols="30" rows="5">
                         {{$lesson->description_kz}}
                 </textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Файл решения</label>
+                    <a href="{{ \Illuminate\Support\Facades\Storage::url($lesson->solutions_file_url) }}">Ссылка</a>
+                    <div class="input-group">
+                        <input name="solutions_file_url" type="file" class="form-control-file">
+                    </div>
                 </div>
 
                 <div class="form-group">
