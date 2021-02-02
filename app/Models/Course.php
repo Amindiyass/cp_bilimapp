@@ -90,7 +90,7 @@ class Course extends Model
 
     public function tests()
     {
-        return $this->hasMany(Test::class)->where('order_number',10000);
+        return $this->hasMany(Test::class);
     }
 
     public function education_level()

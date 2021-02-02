@@ -37,6 +37,10 @@ class Lesson extends Model
         'solutions_file_url'
     ];
 
+    protected $appends = [
+        'solutions_url'
+    ];
+
     public function assignments()
     {
         return $this->hasMany(Assignment::class);
@@ -64,12 +68,12 @@ class Lesson extends Model
 
     public function tests()
     {
-        return $this->hasMany(Test::class)->where('order_number',10000);
+        return $this->hasMany(Test::class);
     }
 
     public function test()
     {
-        return $this->hasOne(Test::class)->where('order_number',10000);
+        return $this->hasOne(Test::class);
     }
 
     public function completedRate()
@@ -214,5 +218,10 @@ class Lesson extends Model
                 'message' => $exception->getMessage()
             ];
         }
+    }
+
+    public function getSolutionsUrlAttribute()
+    {
+        return $this->solutions_file_url ? Storage::url($this->solutions_file_url) : '';
     }
 }
