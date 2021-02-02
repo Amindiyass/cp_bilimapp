@@ -96,7 +96,9 @@ class TestVariant extends Model
             $right_variants_id = $question->right_variant_id;
 
             if ($request->is_right) {
-                $right_variants_id[count($right_variants_id)] = $variant->id;
+                if (!in_array($variant->id, $right_variants_id)) {
+                    $right_variants_id[count($right_variants_id)] = $variant->id;
+                }
             } else {
                 if (($key = array_search($variant->id, $right_variants_id)) !== false) {
                     unset($right_variants_id[$key]);
