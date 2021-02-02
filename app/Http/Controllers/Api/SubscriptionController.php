@@ -33,7 +33,7 @@ class SubscriptionController extends BaseController
 
     public function index()
     {
-        return $this->sendResponse(Subscription::all());
+        return $this->sendResponse(Subscription::orderBy('id','asc')->get());
     }
 
     public function addForDev()

@@ -125,13 +125,6 @@ class AuthController extends BaseController
             $new_student['user_id'] = $user->id;
 
             Student::create($new_student);
-            UserSubscription::create([
-                'user_id' => $user->id,
-                'subscription_id' => 1,
-                'is_active' => 1,
-                'created_at' => '2021-01-17 11:11:11',
-                'updated_at' => '2021-01-17 11:11:11'
-            ]);
 
             DB::commit();
 

@@ -64,27 +64,11 @@ class Lesson extends Model
 
     public function tests()
     {
-        try {
-            $user = auth('api')->user();
-            if ($user->id == 35 || $user->id == 19){
-                return $this->hasMany(Test::class);
-            }
-        }catch (\Exception $e){
-        }
         return $this->hasMany(Test::class)->where('order_number',10000);
     }
 
     public function test()
     {
-        try {
-            $user = auth('api')->user();
-            if ($user->id == 35 || $user->id == 19){
-                return $this->hasOne(Test::class);
-            }
-        }catch (\Exception $e){
-
-        }
-
         return $this->hasOne(Test::class)->where('order_number',10000);
     }
 
@@ -165,6 +149,7 @@ class Lesson extends Model
                 $lesson->solutions_file_url = Storage::putFile('solutions/' . auth()->id(), $request->file('solutions_file_url'), 'public');
             }
             $lesson->save();
+
 
             $course = Course::where(['id' => $request->course_id])->first();
             $subject = $course->subject;
