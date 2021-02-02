@@ -26,9 +26,9 @@ class LessonStoreRequest extends FormRequest
         return [
             'name_ru' => 'required',
             'name_kz' => 'required',
-            'description_kz' => 'required',
-            'description_ru' => 'required',
-            'body' => 'required',
+//            'description_kz' => 'required',
+//            'description_ru' => 'required',
+//            'body' => 'required',
             'title_kz' => 'required',
             'title_ru' => 'required',
             'path' => 'required',
