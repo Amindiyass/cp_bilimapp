@@ -24,14 +24,6 @@ class Section extends Model
 
     public function tests()
     {
-        try {
-            $user = auth('api')->user();
-            if ($user->id == 35 || $user->id == 19){
-                return $this->hasMany(Test::class);
-            }
-        }catch (\Exception $e){
-
-        }
         return $this->hasMany(Test::class);
     }
 
