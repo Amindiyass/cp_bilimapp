@@ -164,7 +164,7 @@ class Test extends Model
             'wrong_answered' => $wrongAnswers,
             'right_answered' => $rightAnswers,
             'answers' => $answers,
-            'passed' => ($rightAnswers * 100 / $questions->count()) > 70
+            'passed' => ($rightAnswers * 100 / $questions->count()) > 59
         ]);
     }
 
@@ -200,7 +200,7 @@ class Test extends Model
             $this->completedRate()->create([
                 'rate' => $rightAnswers * 100 / $questions->count(),
                 'user_id' => auth()->user()->id,
-                'is_checked' => ($rightAnswers * 100 / $questions->count()) > 10
+                'is_checked' => ($rightAnswers * 100 / $questions->count()) > 59
             ]);
         }
         return $this->results()->create([
@@ -209,7 +209,7 @@ class Test extends Model
             'wrong_answered' => $wrongAnswers,
             'right_answered' => $rightAnswers,
             'answers' => $answers,
-            'passed' => ($rightAnswers * 100 / $questions->count()) > 10
+            'passed' => ($rightAnswers * 100 / $questions->count()) > 59
         ]);
     }
 

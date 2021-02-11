@@ -11,7 +11,7 @@ class TestController extends BaseController
     public function show(Test $test)
     {
         $test = $test->load(['questions' => function (HasMany $query) {
-            return $query->select('body_kz', 'body_ru', 'test_id', 'id', 'right_variant_id')->orderBy('order_number');
+            return $query->select('body_kz', 'body_ru', 'test_id', 'id', 'right_variant_id', 'photo')->orderBy('order_number');
         }, 'questions.variants' => function (HasMany $query) {
             return $query->select('variant_in_kz', 'variant_in_ru', 'question_id', 'id');
         }, 'lesson.section.course'])->append('next');

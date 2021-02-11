@@ -43,7 +43,7 @@ class Question extends Model
 
     public function right_variants()
     {
-        return count($this->right_variant_id);
+        return !empty(!$this->right_variant_id) ? count($this->right_variant_id) : 0;
     }
 
     public function getRightAnswersAttribute()
