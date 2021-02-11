@@ -18,9 +18,11 @@ class TestResult extends Model
         'right_answered',
         'passed',
         'answers',
+        'answers_correctness'
     ];
     protected $casts = [
-        'answers' => 'array'
+        'answers' => 'array',
+        'answers_correctness' => 'array'
     ];
 
     public function test()

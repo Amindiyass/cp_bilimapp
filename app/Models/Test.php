@@ -141,6 +141,7 @@ class Test extends Model
         }
         $rightAnswers = 0;
         $wrongAnswers = 0;
+        $answersCorrectness = [];
         foreach ($answers as $key => $answer) {
             $answeredQuestion = $questions->where('id', $key)->first();
             if (!$answeredQuestion) {
@@ -153,8 +154,10 @@ class Test extends Model
                 $answer = (int) $answer;
             }
             if ($answer === $answeredQuestion->right_variant_id) {
+                $answersCorrectness[$key] = true;
                 $rightAnswers++;
             } else {
+                $answersCorrectness[$key] = false;
                 $wrongAnswers++;
             }
         }
@@ -163,6 +166,7 @@ class Test extends Model
             'total_question' => $questions->count(),
             'wrong_answered' => $wrongAnswers,
             'right_answered' => $rightAnswers,
+            'answers_correctness' => $answersCorrectness,
             'answers' => $answers,
             'passed' => ($rightAnswers * 100 / $questions->count()) > 59
         ]);
@@ -176,6 +180,7 @@ class Test extends Model
         }
         $rightAnswers = 0;
         $wrongAnswers = 0;
+        $answersCorrectness = [];
         foreach ($questions as $question) {
             if (!isset($answers[$question->id])){
                 abort(404, 'no answer for question: ' . $question->id);
@@ -191,8 +196,10 @@ class Test extends Model
                 }
             }
             if ($answer === $question->right_variant_id) { // TODO
+                $answersCorrectness[$question->id] = true;
                 $rightAnswers++;
             } else {
+                $answersCorrectness[$question->id] = false;
                 $wrongAnswers++;
             }
         }
@@ -209,6 +216,7 @@ class Test extends Model
             'wrong_answered' => $wrongAnswers,
             'right_answered' => $rightAnswers,
             'answers' => $answers,
+            'answers_correctness' => $answersCorrectness,
             'passed' => ($rightAnswers * 100 / $questions->count()) > 59
         ]);
     }
